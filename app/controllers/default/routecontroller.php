@@ -154,6 +154,10 @@ class RouteController {
             if($route['uri'] !== $request['REQUEST_URI']) {
                 continue;
             }
+
+            if($route['uri'] === $request['REQUEST_URI'] && !in_array($request['REQUEST_METHOD'], $route['method']) ) {
+                return 'App\Controller::invalid_method';
+            }
             
             if($route['uri'] === $request['REQUEST_URI'] && in_array($request['REQUEST_METHOD'], $route['method']) ) {
                 return $route['action'];
