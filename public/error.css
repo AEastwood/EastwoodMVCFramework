@@ -1,14 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Cabin+Sketch');
 
 html {
-	height: 100%;
+	height: 98vh;
+	overflow: hidden;
 }
 
 body {
-	min-height: 100%;
-}
-
-body {
+	min-height: 98vh;
+	overflow: hidden;
 	display: flex;
 }
 

@@ -151,7 +151,7 @@ class RouteController {
 
         foreach(self::$routes as $route) {
 
-            if($route['uri'] !== $request['REQUEST_URI']) {
+            if($route['uri'] !== $request['REQUEST_URI'] || !in_array($request['REQUEST_METHOD'], $route['method'])) {
                 continue;
             }
 
