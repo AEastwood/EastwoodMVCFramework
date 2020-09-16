@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Controller;
+use App\Exceptions\RouteAlreadyExistsException;
 
 class RouteController {
 
@@ -17,15 +18,19 @@ class RouteController {
      *  will throw error if duplicate route and duplicate method
      */
     public function addRoute($methods, $uri, $action) {
-
-        foreach(self::$routes as $route) {
-            if($route['uri'] === $uri && count(array_intersect($route['method'], $methods)) > 0) {
-                return;
-                throw new RouteAlreadyExistsException;
+        try {
+            foreach(self::$routes as $route) {
+                if($route['uri'] === $uri && count(array_intersect($route['method'], $methods)) > 0) {
+                    $invalidRoute = $route['uri'];
+                    throw new RouteAlreadyExistsException($invalidRoute, implode(', ', $methods));
+                }
             }
+    
+            array_push(self::$routes, self::GenerateRoute($methods, $uri, $action));
         }
-
-        array_push(self::$routes, self::GenerateRoute($methods, $uri, $action));
+        catch (RouteAlreadyExistsException $e){
+            die($e);
+        }
     }
 
     /**
@@ -150,11 +155,10 @@ class RouteController {
                 continue;
             }
             
-            if(!in_array($request['REQUEST_METHOD'], $route['method'])){
-                return 'App\Controller::invalid_method';
+            if($route['uri'] === $request['REQUEST_URI'] && in_array($request['REQUEST_METHOD'], $route['method']) ) {
+                return $route['action'];
             }
-
-            return $route['action'];
+            
         }
 
         return $action;

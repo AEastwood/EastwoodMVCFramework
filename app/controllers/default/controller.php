@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Controller\ViewController;
+use Core\Request;
 use Core\Templates\TemplateEngine;
 
 class Controller {
@@ -17,9 +18,17 @@ class Controller {
     /**
      *  @return HTML processed by blade engine
      */
-    public function GenerateView($view) {
+    public function GenerateView($view, $params = null) {
+        $pageParams = null;
+
         ob_start();
         include($view);
+
+        if(!is_null($params)){
+            foreach($params as $k => $v) {
+                $_SESSION[$k] = $v;
+            }
+        }
 
         $blade = ob_get_contents();
         $templateVariables = preg_match_all('/\^[A-Z]{1,3}\,(.)*/', $blade, $templateVars);
@@ -42,14 +51,15 @@ class Controller {
     /**
      *  Throws error for invalid method
      */
-    public function invalid_method() {
-        return self::view('errors/405');
+    public function invalid_method() { 
+        Request::httpResponseCode(405);
+        return self::view('errors/405', ['expected' => 'POST']);
     }
 
     /**
      *  returns view
      */
-    public function view($view = null) {
+    public function view($view = null, $params = null) {
         $view = self::parseViewPath($view);
         $view = __DIR__."/../../../views/$view";
 
@@ -57,7 +67,7 @@ class Controller {
             ? $view 
             : __DIR__."/../../../views/errors/404.blade.tpl";
 
-        return self::GenerateView($view);
+        return self::GenerateView($view, $params);
     }
 
     /**

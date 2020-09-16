@@ -19,6 +19,7 @@ class Loader extends Request {
      *  Class construct
      */
     public function __construct($request = '/') {
+        session_start();
         $this->request = $_SERVER;
     }
 

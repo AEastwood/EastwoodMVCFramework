@@ -4,23 +4,24 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        ^TI,AdamEastwood;
-
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-
+        ^TI,AdamEastwood :: 404;
         <!-- Styles -->
-        ^CSS,style.css;
+        ^CSS,error.css;
 
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
+        <div class="site">
             
-            <div class="content">
-                <div class="title m-b-md">
-                    404 File Not Found
-                </div>
+            <div class="sketch">
+                <div class="bee-sketch red"></div>
+                <div class="bee-sketch blue"></div>
             </div>
+
+            <h1>
+                404:
+                <small>Page Not Found</small>
+            </h1>
+
         </div>
     </body>
 </html>

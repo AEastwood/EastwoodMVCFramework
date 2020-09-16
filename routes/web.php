@@ -1,9 +1,14 @@
 <?php
 
 use App\RouteController as Route;
+use Core\Request;
 
 Route::get('/', 'ViewController::index');
 Route::get('/r', 'ViewController::random');
+
+Route::post('/r', function() {
+    echo "banter";
+});
 
 Route::get('/hi', function() {
     $test = array( "hi" => "there", "PHP" => "is fun :)");
@@ -14,7 +19,7 @@ Route::get('/a/{first}', function() {
     echo $first;
 });
 
-Route::options('/debug', function() {
+Route::post('/debug', function() {
     header('Content-Type: application/json');
     
     $debug = array(
@@ -22,5 +27,5 @@ Route::options('/debug', function() {
         "routes" => Route::dd()
     );
     
-    echo json_encode($debug);
+    echo Request::json($debug, 200);
 });

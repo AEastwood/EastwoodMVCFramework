@@ -135,6 +135,12 @@ class TemplateEngine {
                     $templateData->dataValue
                 ); 
 
+            case "UP":
+                return TemplateVariables::TemplateBuilder(
+                    $templateData->dataType, 
+                    $templateData->dataValue
+                );
+
             case "URL": # URL
                 return TemplateVariables::TemplateBuilder(
                     $templateData->dataType, 

@@ -105,6 +105,9 @@ class TemplateVariables {
                 return isset($datavalue)
                 ? "<script src=\"$datavalue\"></script>"
                 : "INVALID_EJS";
+
+            case "UP":
+                    return isset($_SESSION[$datavalue]) ? htmlspecialchars($_SESSION[$datavalue]) : '';
             
             case "URL":
                 $protection = '';
