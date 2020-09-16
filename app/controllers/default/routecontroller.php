@@ -151,18 +151,21 @@ class RouteController {
 
         foreach(self::$routes as $route) {
 
-            if($route['uri'] !== $request['REQUEST_URI'] || !in_array($request['REQUEST_METHOD'], $route['method'])) {
+            if($route['uri'] !== $request['REQUEST_URI'] && !in_array($request['REQUEST_METHOD'], $route['method'])) {
                 continue;
             }
-
-            if($route['uri'] === $request['REQUEST_URI'] && !in_array($request['REQUEST_METHOD'], $route['method']) ) {
-                return 'App\Controller::invalid_method';
-            }
-            
-            if($route['uri'] === $request['REQUEST_URI'] && in_array($request['REQUEST_METHOD'], $route['method']) ) {
-                return $route['action'];
-            }
-            
+            else {
+                
+                if($route['uri'] === $request['REQUEST_URI'] && !in_array($request['REQUEST_METHOD'], $route['method']) ) {
+                    $action = 'App\Controller::invalid_method';
+                    continue;
+                }
+                
+                if($route['uri'] === $request['REQUEST_URI'] && in_array($request['REQUEST_METHOD'], $route['method']) ) {
+                    $action = $route['action'];
+                    break;
+                }
+            }  
         }
 
         return $action;
