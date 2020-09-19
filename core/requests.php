@@ -16,7 +16,9 @@ class Request {
      *  @param $httpStatusCode
      */
     public function httpResponseCode($httpStatusCode) {
-        return (isset($httpStatusCode)) ? $httpStatusCode : http_response_code();
+        $httpStatusCode = (isset($httpStatusCode)) ? $httpStatusCode : http_response_code();
+        self::addHeader("HTTP/1.1 $httpStatusCode", true, $httpStatusCode);
+        return $httpStatusCode;
     }
 
     /**
@@ -26,7 +28,11 @@ class Request {
      *  @param @httpStatusCode
      */
     public function json($data, $httpStatusCode = null) {
-        $httpStatusCode = (isset($httpStatusCode)) ? $httpStatusCode : http_response_code();
+
+        if(isset($httpStatusCode)){ 
+            self::httpResponseCode($httpStatusCode);
+        } 
+
         return json_encode($data);
     }
 

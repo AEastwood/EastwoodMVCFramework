@@ -11,7 +11,6 @@ use Core\Templates\TemplateVariables;
 
 class Loader extends Request {
 
-    private $request;
     private $Variables = array();
     private $varRegex;
 
@@ -20,7 +19,6 @@ class Loader extends Request {
      */
     public function __construct($request = '/') {
         session_start();
-        $this->request = $_SERVER;
     }
 
     /**
@@ -45,8 +43,9 @@ class Loader extends Request {
      *  Renders route
      */
     public function render() {
+        $request = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         Request::addHeader('Powered-By: EastwoodTPLEngine');
-        echo RouteController::RunUserAction($this->request);
+        echo RouteController::RunUserAction($request);
     }
 
     /**

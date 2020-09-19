@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Controller;
+use Core\Request;
+use Core\Route;
 
 class ViewController extends Controller {
 

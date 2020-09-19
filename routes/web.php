@@ -6,16 +6,12 @@ use Core\Request;
 Route::get('/', 'ViewController::index');
 Route::get('/r', 'ViewController::random');
 
-Route::post('/r', function() {
-    echo "banter";
-});
-
 Route::get('/hi', function() {
-    $test = array( "hi" => "there", "PHP" => "is fun :)");
+    $test = array( "hi" => "there");
     echo '<pre>' . print_r($test, true) . '</pre>';
 });
 
-Route::get('/a/{first}', function() {
+Route::get('/a/{first}/{b}/{second}', function() {
     echo $first;
 });
 
@@ -24,8 +20,8 @@ Route::post('/debug', function() {
     
     $debug = array(
         "request" => $_SERVER,
-        "routes" => Route::dd()
+        "routes" => Route::$routes
     );
     
-    echo Request::json($debug, 200);
+    echo Request::json($debug, 404);
 });

@@ -2,6 +2,7 @@
 
 require_once __DIR__.'/app/controllers/default/controller.php';
 require_once __DIR__.'/app/controllers/viewcontroller.php';
+require_once __DIR__.'/core/route.php';
 require_once __DIR__.'/app/controllers/default/routecontroller.php';
 
 require_once __DIR__.'/app/exceptions/RouteAlreadyExistsException.php';
