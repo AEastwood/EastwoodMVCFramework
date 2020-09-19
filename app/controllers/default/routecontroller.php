@@ -138,9 +138,13 @@ class RouteController {
                             }
                         }
                     }
-                    if($validRoute) {
+                    if($validRoute && !$corruptRoute) {
                         return $route->action;
                     }
+                }
+                if($corruptRoute) {
+                    $action = route::$invalidRoute;
+                    return $action;
                 }
         
             }
@@ -156,8 +160,6 @@ class RouteController {
                 }
                 
                 if($route->routePath === $request && in_array($_SERVER['REQUEST_METHOD'], $route->methods)) {
-                                       
-                    
                     return $route->action;
                 }
             }  
