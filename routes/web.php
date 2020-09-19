@@ -11,7 +11,7 @@ Route::get('/hi', function() {
     echo '<pre>' . print_r($test, true) . '</pre>';
 });
 
-Route::get('/a/{first}/b/{second}', function() {
+Route::post('/a/{first}/b/{second}', function() {
     echo Request::routeParameter('first') . " is a " . Request::routeParameter('second');
 });
 
