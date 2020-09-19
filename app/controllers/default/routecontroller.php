@@ -119,7 +119,7 @@ class RouteController {
                     $corruptRoute = true;
                 }
 
-                if($route->hasParameters && in_array($_SERVER['REQUEST_METHOD'], $route->methods) && $routeComponentsCount === $requestComponentsCount && !$corruptRoute) {
+                if(in_array($_SERVER['REQUEST_METHOD'], $route->methods) && $routeComponentsCount === $requestComponentsCount && !$corruptRoute) {
                     
                     $validRoute = true;
 

@@ -52,7 +52,6 @@ class Request {
         }
         else {
             foreach($parameters as $parameter => $value) {
-                
                 if($parameter == $requestedParam){
                     return $value;
                 }
