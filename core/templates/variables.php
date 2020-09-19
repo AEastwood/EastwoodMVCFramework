@@ -43,10 +43,6 @@ class TemplateVariables {
     public function SessionVariable($datatype, $datavalue): string{
         switch($datatype){
             case "SE":
-                if (session_status() == PHP_SESSION_NONE) {
-                    session_start();
-                }
-
                 return isset($_SESSION[$datavalue]) 
                 ? htmlspecialchars($_SESSION[$datavalue])
                 : "SESSION_NULL";

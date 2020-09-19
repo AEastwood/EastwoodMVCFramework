@@ -1,7 +1,5 @@
 <?php
 
-$_SESSION['last'] = 'https://adameastwood.com/r';
-
 $random = [
     "0" => ["Solway Firth" => "V3ADK6gsDGg"],
     "1" => ["Unsainted" => "VpATBBRajP8"],

@@ -10,6 +10,11 @@ class Route {
     public static $default;
 
     /**
+     *  default action for not found
+     */
+    public static $invalidRoute;
+
+    /**
      *  Fully compiled route
      */
     public $url;
@@ -75,6 +80,11 @@ class Route {
     public $middleware;
 
     /**
+     *  boolean if route has paramaters
+     */
+    public $hasParameters;
+
+    /**
      *  Route parameters
      */
     public $parameters;
@@ -86,6 +96,15 @@ class Route {
 
     public function __construct() {
         self::$default = 'App\Controller::not_found';
+        self::$invalidRoute = 'App\Controller::invalid_method';
+    }
+
+    public function bindParameters($route){
+        $_SESSION['routeParameters'] = array();
+
+        foreach($route->parameters as $parameter => $v) {
+            array_push($_SESSION['routeParameters'], $v);
+        }
     }
 
     /**
@@ -95,15 +114,17 @@ class Route {
         return false;
     }
 
+    /**
+     *  if route has parameters then it will return and array of them
+     *  if false then it will return null
+     *  @return $args
+     */
     public function hasParameters($args = null) {
         if(count($args) > 0) {
-            return array(
-                "count" => count($args),
-                "vars" => $args
-            );
+            return true;
         }
         else{
-            return null;
+            return false;
         }
     }
 

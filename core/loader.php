@@ -43,19 +43,7 @@ class Loader extends Request {
      *  Renders route
      */
     public function render() {
-        $request = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-        Request::addHeader('Powered-By: EastwoodTPLEngine');
-        echo RouteController::RunUserAction($request);
-    }
-
-    /**
-     * parse path from url
-     * 
-     * @return Path
-     */
-    private function parseUrl($url) {
-        $url = parse_url($url);
-        
-        return $url['path'];
+        Request::resetRouteParameters();
+        echo RouteController::RunUserAction();
     }
 }

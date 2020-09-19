@@ -4,6 +4,7 @@ namespace App;
 
 use App\Controller;
 use App\Exceptions\RouteAlreadyExistsException;
+use Core\Loader;
 use Core\Request;
 use Core\Route;
 
@@ -73,7 +74,8 @@ class RouteController {
         $route->query = isset($route->url['query']) ? $route->url['query'] : null;
         $route->fragment = null;
         $route->middleware = Route::hasMiddleware();
-        $route->parameters = Route::hasParameters($parameters);
+        $route->hasParameters = Route::hasParameters($parameters);
+        $route->parameters = $parameters;
         $route->props = null;
 
         return $route;
@@ -82,7 +84,9 @@ class RouteController {
     /** 
      *  runs function from users route
      */
-    public function RunUserAction($request) {        
+    public function RunUserAction() {    
+        $request = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
         $route = self::ReturnRoute($request);
         return $route();
     }
@@ -96,7 +100,50 @@ class RouteController {
         $action = Route::$default;
         $request = parse_url($request)['path'];
         
+        // old code
         foreach(self::$routes as $route) {
+
+            if($route->hasParameters) {
+                $routeComponents = explode('/', $route->url['path']);
+                $requestComponents = explode('/', $request);
+                
+                $corruptRoute = false;
+                $validRoute = false;
+
+                $routeComponentsCount = count($routeComponents);
+                $requestComponentsCount = count($requestComponents);
+                
+                $dynamicIndexes = array();
+
+                if(!in_array($_SERVER['REQUEST_METHOD'], $route->methods)){
+                    $corruptRoute = true;
+                }
+
+                if($route->hasParameters && in_array($_SERVER['REQUEST_METHOD'], $route->methods) && $routeComponentsCount === $requestComponentsCount && !$corruptRoute) {
+                    
+                    $validRoute = true;
+
+                    foreach($route->parameters as $component) {
+                        array_push($dynamicIndexes, $component['index']);
+                    }
+
+                    for ($i = 0; $i < $routeComponentsCount; $i++) {
+                        if(in_array($i, $dynamicIndexes)){
+                            $_SESSION['routeParameters'][trim($routeComponents[$i], "{}")] = $requestComponents[$i];
+                            continue;
+                        }
+                        else {
+                            if($requestComponents[$i] !== $routeComponents[$i]){
+                                $validRoute = false;
+                            }
+                        }
+                    }
+                    if($validRoute) {
+                        return $route->action;
+                    }
+                }
+        
+            }
 
             if($route->routePath !== $request && !in_array($_SERVER['REQUEST_METHOD'], $route->methods)) {
                 continue;
@@ -108,7 +155,9 @@ class RouteController {
                     continue;
                 }
                 
-                if($route->routePath === $request && in_array($_SERVER['REQUEST_METHOD'], $route->methods) ) {
+                if($route->routePath === $request && in_array($_SERVER['REQUEST_METHOD'], $route->methods)) {
+                                       
+                    
                     return $route->action;
                 }
             }  
@@ -126,6 +175,13 @@ class RouteController {
         }
 
         return $data;
+    }
+
+    /**
+     *  Add all methods and associated action to execute
+     */
+    public function any($uri, $action) {
+        self::addRoute(['CONNECT', 'DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PATCH', 'PUT', 'TRACE']);
     }
 
     /**

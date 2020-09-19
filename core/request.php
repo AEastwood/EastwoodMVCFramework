@@ -36,4 +36,28 @@ class Request {
         return json_encode($data);
     }
 
+    public function resetRouteParameters(){
+        $_SESSION['routeParameters'] = array();
+    }
+
+    /**
+     *  returns specified route parameter
+     */
+    public function routeParameter($requestedParam) {
+
+        $parameters = $_SESSION['routeParameters'];
+        
+        if(count($parameters) === 0){
+            return 0;
+        }
+        else {
+            foreach($parameters as $parameter => $value) {
+                
+                if($parameter == $requestedParam){
+                    return $value;
+                }
+            }
+        }
+    }
+
 }
