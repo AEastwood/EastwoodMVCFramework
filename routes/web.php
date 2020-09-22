@@ -11,12 +11,12 @@ Route::get('/hi', function() {
     echo '<pre>' . print_r($test, true) . '</pre>';
 });
 
-Route::post('/a/{first}/b/{second}', function() {
-    echo Request::routeParameter('first') . " is a " . Request::routeParameter('second');
+Route::get('/a/{first}/b/{second}', function() {
+    echo Request::routeParameter('first') . " -> " . Request::routeParameter('second');
 });
 
 Route::get('/debug', function() {
-    header('Content-Type: application/json');
+    Request::addHeader('Content-Type: application/json');
     
     $debug = array(
         "request" => $_SERVER,
@@ -24,5 +24,5 @@ Route::get('/debug', function() {
         "session" => $_SESSION
     );
     
-    echo Request::json($debug, 404);
+    echo Request::json($debug, 418);
 });

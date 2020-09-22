@@ -23,7 +23,7 @@ class RouteAlreadyExistsException extends \Exception {
      *  Construct method
      */
     public function __construct($message, $methodType, $code = 0, Exception $previous = null) {
-        $this->errorMessage = $message;
+        $this->errorMessage = implode(', ', $message);
         $this->methodType = $methodType;
         $this->errorCode = $code;
     }
@@ -32,7 +32,7 @@ class RouteAlreadyExistsException extends \Exception {
      *  @return $error
      */
     public function __toString() {
-        $error = "Warning [{$this->code}]: Route ({$this->errorMessage}) already has an existing route with the HTTP method: {$this->methodType}\n";
+        $error = "Error [{$this->code}]: Route ({$this->errorMessage}) already has an existing route with the HTTP method: {$this->methodType}\n";
         return $error;
     }
 

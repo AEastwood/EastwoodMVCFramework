@@ -24,7 +24,8 @@ class RouteController {
 
         try {
             foreach(self::$routes as $route) {
-                if($route->url === $uri && count(array_intersect($route->methods, $methods)) > 0) {
+
+                if($route->url['path'] === $uri && count(array_intersect($route->methods, $methods)) > 0) {
                     $invalidRoute = $route->url;
                     throw new RouteAlreadyExistsException($invalidRoute, implode(', ', $methods));
                 }
