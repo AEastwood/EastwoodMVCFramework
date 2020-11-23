@@ -1,0 +1,8 @@
+{
+  "require": {
+    "filp/whoops": "dev-master",
+    "vlucas/phpdotenv": "^5.2",
+    "pragmarx/random": "^0.2.2",
+    "defuse/php-encryption": "^2.2"
+  }
+}
