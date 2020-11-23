@@ -2,38 +2,26 @@
 
 namespace MVC\Classes;
 
-use MVC\App\Exceptions\ViewDoesntExistException;
+use MVC\Classes\App;
 
-abstract class Controller
+class Controller
 {
     /*
-     *  Create view from file
+     *  Create and compile view
      */
-    public function view($view_name)
+    public function view(string $view, array $variables = []): void
     {
-        $view = '../resources/views/' . $view_name . '.view.php';
-
-        if(file_exists($view)){
-            echo file_get_contents($view);
-            return;
-        }
-
-        throw new ViewDoesntExistException($view_name . '.view.php');
+        $templateEngine = new TemplateEngine($view);
+        $templateEngine->init($variables)->render();
     }
 
     /*  
-    *   Create and return error view
+    *   Create and compile error view
     */
-    public function error($error_name)
+    public function error(string $view, array $variables = []): void
     {
-        $view = '../resources/views/errors/' . $error_name . '.view.php';
-
-        if(file_exists($view)){
-            echo file_get_contents($view);
-            exit;
-        }
-
-        throw new ViewDoesntExistException($error_name . '.view.php');
+        $templateEngine = new TemplateEngine('errors/' . $view);
+         $templateEngine->init($variables)->render();
     }
 
 }

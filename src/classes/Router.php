@@ -3,7 +3,6 @@
 
 namespace MVC\Classes;
 
-use Exception;
 use MVC\App\Exceptions\DuplicateRouteException;
 use MVC\Models\Route;
 

@@ -27,14 +27,6 @@ class Middleware {
         foreach($this->middlewares as $middleware) {
             $this->attach($middleware);
         }
-    }  
-
-    // temporary debug function
-    public function debug(): void
-    {
-        $test = $this->middlewares;
-        echo '<pre>' . print_r($test, true) . '</pre>';
-        exit;
     }
 
     /*
@@ -42,13 +34,13 @@ class Middleware {
     */
     private function attach(string $middleware): void
     {
-        $this->getProviderAction($middleware);
+        $this->runProviderAction($middleware);
     }
 
     /*
     *   get provider action
     */
-    public function getProviderAction(string $index): void
+    private function runProviderAction(string $index): void
     {
         if(!array_key_exists($index, $this->appServiceProvider->providers)){
             throw new InvalidProviderActionException($index);

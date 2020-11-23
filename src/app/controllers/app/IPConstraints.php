@@ -4,7 +4,6 @@ namespace MVC\App\Controllers\App;
 
 use MVC\Classes\App;
 use MVC\Classes\Controller;
-use MVC\App\Exceptions\NonWhitelistedIPException;
 
 class IPConstraints {
 

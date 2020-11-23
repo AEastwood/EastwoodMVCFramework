@@ -2,9 +2,9 @@
 
 namespace MVC\App\Controllers\Auth;
 
-class Web {
+use MVC\Classes\App;
 
-    private static bool $authed = false;
+class Web {
 
     /*
     *   returns authorisation status
@@ -21,7 +21,7 @@ class Web {
     */
     public function authenticated_web(): void
     {
-        if(!self::$authed) {
+        if(App::user()->authed) {
             header('Location: /login');
         }
     }

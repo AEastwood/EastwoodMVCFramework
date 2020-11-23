@@ -4,7 +4,6 @@ namespace MVC\Classes;
 
 use Defuse\Crypto\Crypto;
 use Defuse\Crypto\Key;
-use MVC\Classes\Cookie;
 use PragmaRX\Random\Random;
 
 class CSRF {

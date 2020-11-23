@@ -2,8 +2,8 @@
 
 namespace MVC\App\ServiceProviders;
 
-use MVC\App\Controllers\App\IPConstraints;
 use App\MVC\Classes\Middleware;
+use MVC\App\Controllers\App\IPConstraints;
 use MVC\App\Controllers\Auth\Web;
 
 class AppServiceProvider {
