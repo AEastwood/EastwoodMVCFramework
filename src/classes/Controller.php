@@ -21,7 +21,7 @@ class Controller
     public function error(string $view, array $variables = []): void
     {
         $templateEngine = new TemplateEngine('errors/' . $view);
-         $templateEngine->init($variables)->render();
+        $templateEngine->init($variables)->render();
     }
 
 }

@@ -1,7 +1,5 @@
 .env
 /vendor
 /etc/key.txt
-.idea
-.idea/EastwoodMVC.iml
-.idea/modules.xml
-.idea/workspace.xml
+/.idea
+/.vscode

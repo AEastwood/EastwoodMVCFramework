@@ -2,6 +2,7 @@
 
 namespace MVC\App\Exceptions;
 
+
 use Exception;
 
 class InvalidRouteException extends Exception

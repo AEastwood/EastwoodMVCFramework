@@ -1,8 +1,19 @@
 {
-  "require": {
-    "filp/whoops": "dev-master",
-    "vlucas/phpdotenv": "^5.2",
-    "pragmarx/random": "^0.2.2",
-    "defuse/php-encryption": "^2.2"
-  }
+    "autoload": {
+        "psr-4": {
+            "MVC\\Classes\\": "src/classes/",
+            "MVC\\App\\ServiceProviders\\": "src/app/serviceproviders/",
+            "MVC\\App\\Controllers\\": "src/app/controllers/",
+            "MVC\\App\\Exceptions\\": "src/app/exceptions/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true
+    },
+    "require": {
+        "filp/whoops": "dev-master",
+        "vlucas/phpdotenv": "^5.2",
+        "pragmarx/random": "^0.2.2",
+        "defuse/php-encryption": "^2.2"
+    }
 }

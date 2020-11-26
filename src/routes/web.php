@@ -2,7 +2,7 @@
 
 use MVC\Classes\App;
 use MVC\Classes\Router as Route;
-use MVC\Controllers\DefaultController;
+use MVC\App\Controllers\DefaultController;
 
 Route::get('/', [DefaultController::class, 'index']);
 

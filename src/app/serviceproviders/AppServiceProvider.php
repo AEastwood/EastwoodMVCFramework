@@ -16,10 +16,10 @@ class AppServiceProvider {
     public function __construct()
     {
         $this->providers = [
-            'auth:api' => [Web::class, 'authenticated_api'],
-            'auth:web' => [Web::class, 'authenticated_web'],
-            'ip:blacklist' => [IPConstraints::class, 'blacklisted'],
-            'ip:whitelist' => [IPConstraints::class, 'whitelisted'],
+            'auth:api'      => [Web::class, 'authenticated_api'],
+            'auth:web'      => [Web::class, 'authenticated_web'],
+            'ip:blacklist'  => [IPConstraints::class, 'blacklisted'],
+            'ip:whitelist'  => [IPConstraints::class, 'whitelisted'],
         ];
     }
 

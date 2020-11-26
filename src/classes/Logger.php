@@ -25,13 +25,13 @@ class Logger
 
     /**
      *      delete logs older than $hours
-     *      @param $path log path
+     *      @param $scope log path
      *      @param $hours hours to
      */
-    public function purge(string $path, int $hours): object
+    public function purge(string $scope, float $hours): object
     {
         $hours = time() - ($hours * 3600);
-        $logFiles = glob('../storage/logs/' . $path . '/*.txt');
+        $logFiles = glob('../storage/logs/' . $scope . '/*.txt');
 
         foreach($logFiles as $logfile) {
             $modifiedTime = filemtime($logfile);

@@ -1,6 +1,8 @@
 <?php
 
+
 namespace MVC\App\Exceptions;
+
 
 use Exception;
 

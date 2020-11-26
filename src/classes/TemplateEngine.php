@@ -4,7 +4,6 @@
 namespace MVC\Classes;
 
 use MVC\App\Exceptions\ViewDoesntExistException;
-use MVC\Classes\App;
 
 class TemplateEngine
 {
@@ -33,17 +32,10 @@ class TemplateEngine
         $this->viewPath = '../resources/views/';
     }
 
-    public function fileOutput($file): object
-    {
-        file_put_contents($file, $this->view);
-
-        return ($this);
-    }
-
     /*
      *  strip {{}} from dynamic indexes in the active view
      */
-    private function getType(string $match): string
+    private function format(string $match): string
     {
         $chars = ' ';
         $match = preg_replace('/[{}]/', '', $match);
@@ -69,6 +61,7 @@ class TemplateEngine
             eval('?>'. $view);
             $view = ob_get_clean();
             ob_flush();
+            
             $this->view = $view;
 
             return ($this);
@@ -84,12 +77,12 @@ class TemplateEngine
     private function process($view): string
     {
         if(!preg_match_all($this->pattern, $view, $matches)) {
-            return '';
+            return $view;
         }
 
         if (count($matches) > 0) {
             foreach ($matches[0] as $match) {
-                $function = $this->getType($match);
+                $function = $this->format($match);
                 $view = str_replace($match, eval("return $function;"), $view);
             }
         }

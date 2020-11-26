@@ -4,7 +4,7 @@ namespace MVC\Classes;
 
 class App
 {
-    private static App $debug;
+    private static App $app;
     private static Auth $user;
 
     private Auth $auth;
@@ -15,16 +15,8 @@ class App
     public Router $router;
 
     public array $env;
-    public string $fragment;
-    public string $host;
     public string $locale;
-    public string $password;
-    public int $port;
-    public string $query;
-    public string $routePath;
-    public string $scheme;
     public array $session;
-    public string $username;
 
     /*
      *  constructor
@@ -45,7 +37,7 @@ class App
 
         $this->env = $_ENV;
         $this->locale = 'en';
-        $this->logger->purge('app', 1)->log();
+        $this->logger->purge('app', $_ENV['LOGGER_LIMIT'])->log();
 
         if(!isset($_SESSION)) {
             session_start();
@@ -53,7 +45,7 @@ class App
 
         $this->session = $_SESSION;
 
-        self::$debug = $this;
+        self::$app = $this;
         self::$user = $this->auth;
     }
 
@@ -62,14 +54,14 @@ class App
     */
     public static function body()
     {
-        return self::$debug;
+        return self::$app;
     }
 
     /*
     *   dd: Die and Debug
-    *   @param  dynamic  $data
+    *   @param  mixed  $data
     */
-    public static function dd($data)
+    public static function dd($data): object
     {
         die('<pre>' . print_r($data, true) . '</pre>');
     }

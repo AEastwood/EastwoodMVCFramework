@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\Controllers;
+namespace MVC\App\Controllers;
 
 use MVC\Classes\Controller;
 

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace MVC\Classes;
 
 use MVC\App\Exceptions\DuplicateRouteException;
