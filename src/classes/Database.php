@@ -19,6 +19,7 @@ class Database {
     private string $state;
     private int $timeout;
     private array $table_list;
+    private bool $users_exists;
 
     /**
      *  constructor
@@ -44,18 +45,9 @@ class Database {
             if($this->isPersistent() && !$this->databaseExists($this->database_name)) {
                 $this->createDatabase();
             }
-            
-            $this->createTable('users', '
-                `id` INT(1) AUTO_INCREMENT PRIMARY_KEY,
-                `name` VARCHAR(60) NOT NULL,
-                `email` VARCHAR(60) NOT NULL,
-                `username` VARCHAR(60) NOT NULL,
-                `password` VARCHAR(60) NOT NULL,
-                `created_at` DATE NOT NULL,
-                `updated_at` DATE NOT NULL,'
-            );
 
             $this->table_list = $this->listTables();
+            $this->users_exists = $this->tableExists('users');
         }
     }
 
@@ -93,7 +85,7 @@ class Database {
     private function connect(): void
     {
         try {
-            $dsn = $this->connection . ":host=" . $this->host. ';dbname=INFORMATION_SCHEMA';
+            $dsn = $this->connection . ":host=" . $this->host. ';dbname=' . $this->database_name;
 
             self::$dbh = new \PDO(
                 $dsn, 
@@ -130,7 +122,7 @@ class Database {
     /**
      *  create table in database
      */
-    public function createTable(string $table_name, string $schema): bool
+    private function createTable(string $table_name, string $schema = ''): bool
     {
         if(!$this->databaseExists($this->database_name)){
             throw new DatabaseDoesntExistException($this->database_name);
@@ -141,7 +133,6 @@ class Database {
         }
 
         self::$dbh->prepare('CREATE TABLE ' . $table_name . '(' . $schema . ');');
-
         self::$dbh->execute();
 
         return true;
@@ -209,8 +200,10 @@ class Database {
     {
         if($this->state === 'connected') {
             $table_names = self::$dbh->prepare('SHOW TABLES');
+            $table_names->execute();
+            $table_names = $table_names->fetchAll(\PDO::FETCH_COLUMN);
 
-            return ($table_names->fetchAll(\PDO::FETCH_COLUMN));
+            return ($table_names);
         }
 
         return [];
@@ -220,9 +213,13 @@ class Database {
      *  check table exists
      *  @returns bool
      */
-    private function tableExists(): bool
+    private function tableExists($table_name): bool
     {
+        if($this->state === 'connected' && in_array($table_name, $this->table_list)) {
+            return true;
+        }
 
+        return false;
     }
 
 }
