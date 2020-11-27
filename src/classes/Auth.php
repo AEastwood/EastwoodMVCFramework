@@ -15,7 +15,6 @@ class Auth
     public bool $active;
     public int $created_at;
     public int $updated_at;
-
     private int $maxAge;
 
     /*
@@ -40,6 +39,9 @@ class Auth
         }
     }
 
+    /**
+     *  returns array if session[$key] exists
+     */
     private function getSession($key): array
     {
         if($this->hasSession($key)) {
@@ -59,14 +61,6 @@ class Auth
         }
 
         return false;
-    }
-
-    /*
-     *  returns static instance of the user
-     */
-    public static function user(): object
-    {
-        return self::$user;
     }
 
     /*

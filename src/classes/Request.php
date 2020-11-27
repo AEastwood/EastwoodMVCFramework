@@ -31,12 +31,14 @@ class Request
         $timestamp = new DateTime();
         $this->timestamp = $timestamp->getTimestamp();
 
-        $this->request_url = $_SERVER['REQUEST_URI'];
-        $this->host = $_SERVER['HTTP_HOST'];
-        $this->user_agent = $_SERVER['HTTP_USER_AGENT'];
-        $this->port = $_SERVER['SERVER_PORT'];
-        $this->method = $_SERVER['REQUEST_METHOD'];
-        $this->headers = apache_request_headers();
+        $this->request_url  = $_SERVER['REQUEST_URI'];
+        $this->host         = $_SERVER['HTTP_HOST'] ?? $_ENV['BASE_URL'];
+        $this->user_agent   = $_SERVER['HTTP_USER_AGENT'];
+        $this->port         = $_SERVER['SERVER_PORT'];
+        $this->method       = $_SERVER['REQUEST_METHOD'];
+        $this->headers      = apache_request_headers();
     }
+
+    
 
 }

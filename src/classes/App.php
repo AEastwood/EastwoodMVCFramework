@@ -9,6 +9,7 @@ class App
 
     private Auth $auth;
     public CSRF $csrf;
+    public Database $database;
     public Logger $logger;
     public Request $request;
     public Response $response;
@@ -30,6 +31,7 @@ class App
 
         $this->auth = new Auth(24);
         $this->csrf = new CSRF();
+        $this->database = new Database();
         $this->request = new Request();
         $this->response = new Response();
         $this->router = new Router();
@@ -37,7 +39,7 @@ class App
 
         $this->env = $_ENV;
         $this->locale = 'en';
-        $this->logger->purge('app', $_ENV['LOGGER_LIMIT'])->log();
+        $this->logger->purge('app', $_ENV['LOGGER_PURGE_TIME'])->log();
 
         if(!isset($_SESSION)) {
             session_start();

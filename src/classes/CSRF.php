@@ -11,7 +11,7 @@ class CSRF {
     /**
      *  CSRF token
      */
-    public string $token;
+    public string $csrf_token;
 
     /**
      *  App secret, decryption key
@@ -27,7 +27,7 @@ class CSRF {
         $key = file_get_contents('../../' . $key);
         
         $this->key = Key::loadFromAsciiSafeString($key);
-        $this->token = $this->getCSRF();
+        $this->csrf_token = $this->getCSRF();
     }
 
     /**
@@ -38,9 +38,9 @@ class CSRF {
     {
         if(Cookie::getCookie('X-CSRF-TOKEN') !== null) {
             $cookie = Cookie::getCookie('X-CSRF-TOKEN');
-            $token = Crypto::decrypt($cookie, $this->key);
+            $csrf_token = Crypto::decrypt($cookie, $this->key);
             
-            return ($token);
+            return ($csrf_token);
         }
 
         return $this->generateNewToken();
@@ -51,11 +51,11 @@ class CSRF {
      */
     private function generateNewToken(): string
     {
-        $token = (new Random)->size(128)->get();
+        $csrf_token = (new Random)->size(128)->get();
         $expiry = time() + 86400;
-        Cookie::setCookie('X-CSRF-TOKEN', Crypto::encrypt($token, $this->key), $expiry, '/');
+        Cookie::setCookie('X-CSRF-TOKEN', Crypto::encrypt($csrf_token, $this->key), $expiry, '/');
         
-        return ($token);
+        return ($csrf_token);
     }
 
 
