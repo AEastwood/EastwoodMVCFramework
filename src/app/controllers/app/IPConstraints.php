@@ -19,7 +19,9 @@ class IPConstraints {
                 'code' => 401,
                 'message' => 'Sorry, you are unable to visit this website currently.'
             ]);
+            exit;
         }
+
     }
     
     /*
@@ -34,6 +36,7 @@ class IPConstraints {
                 'code' => 401,
                 'message' => 'Sorry, you are unable to visit this website currently.'
             ]);
+            exit;
         }
     }
 

@@ -95,7 +95,6 @@ class TemplateEngine
     public function render(): void
     {
         echo $this->view;
-        exit;
     }
 
 }

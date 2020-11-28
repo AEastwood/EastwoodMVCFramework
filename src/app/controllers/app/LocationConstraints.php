@@ -19,7 +19,9 @@ class LocationConstraints {
                 'code' => 401,
                 'message' => 'Sorry, you are unable to visit this website from your country.'
             ]);
+            exit;
         }
+        
     }
     
     /*
@@ -34,7 +36,9 @@ class LocationConstraints {
                 'code' => 401,
                 'message' => 'Sorry, you are unable to visit this website from your country.'
             ]);
+            exit;
         }
+        
     }
 
 }
