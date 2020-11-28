@@ -6,7 +6,6 @@ use MVC\Models\User;
 
 class Auth
 {
-
     public int $id;
     public string $name;
     public string $email;

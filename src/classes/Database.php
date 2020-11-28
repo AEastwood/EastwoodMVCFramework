@@ -42,7 +42,7 @@ class Database {
             
             $this->connect();
 
-            if($this->isPersistent() && !$this->databaseExists($this->database_name)) {
+            if($this->state === 'connected' && $this->isPersistent() && !$this->databaseExists($this->database_name)) {
                 $this->createDatabase();
             }
 
@@ -98,7 +98,7 @@ class Database {
             $this->state = 'connected';
         }
         catch(PDOEXception $e) {
-            throw new DatabaseConnectionError($e);
+            throw new DatabaseConnectionError($e->getMessage());
         }
     }
 
@@ -213,7 +213,7 @@ class Database {
      *  check table exists
      *  @returns bool
      */
-    private function tableExists($table_name): bool
+    private function tableExists(string $table_name): bool
     {
         if($this->state === 'connected' && in_array($table_name, $this->table_list)) {
             return true;

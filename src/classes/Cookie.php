@@ -19,7 +19,7 @@ class Cookie {
     */
     public static function setCookie(string $name, $value, int $expiration, $accessor = '/')
     {
-        setcookie($name, $value, $expiration);
+        setcookie($name, $value, $expiration, $accessor);
     }
 
 }

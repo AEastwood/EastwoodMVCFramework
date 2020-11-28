@@ -7,6 +7,7 @@ class App
     private static App $app;
     private static Auth $user;
 
+    private Session $session;
     private Auth $auth;
     public CSRF $csrf;
     public Database $database;
@@ -17,7 +18,6 @@ class App
 
     public array $env;
     public string $locale;
-    public array $session;
 
     /*
      *  constructor
@@ -27,8 +27,11 @@ class App
      */
     public function __construct()
     {
+        $this->setup();
+
         require_once '../../Autoloader.php';
 
+        $this->session = new Session();
         $this->auth = new Auth(24);
         $this->csrf = new CSRF();
         $this->database = new Database();
@@ -40,12 +43,6 @@ class App
         $this->env = $_ENV;
         $this->locale = 'en';
         $this->logger->purge('app', $_ENV['LOGGER_PURGE_TIME'])->log();
-
-        if(!isset($_SESSION)) {
-            session_start();
-        }
-
-        $this->session = $_SESSION;
 
         self::$app = $this;
         self::$user = $this->auth;
@@ -66,6 +63,7 @@ class App
     public static function dd($data): object
     {
         die('<pre>' . print_r($data, true) . '</pre>');
+        exit;
     }
 
     /*
@@ -74,6 +72,14 @@ class App
     public function run(): void
     {
         $this->response->get($this);
+    }
+
+    /**
+     *  change some initial run time configuration settings
+     */
+    private function setup(): void
+    {
+        ini_set('session.use_strict_mode', 1);
     }
 
     /*
