@@ -1,10 +1,10 @@
 <?php 
 
-namespace MVC\App\Controllers\Auth;
+namespace MVC\App\Middleware;
 
 use MVC\Classes\App;
 
-class Web {
+class Auth {
 
     /*
     *   returns authorisation status

@@ -31,18 +31,15 @@ class App
 
         require_once '../../Autoloader.php';
 
-        $this->session = new Session();
-        $this->auth = new Auth(24);
-        $this->csrf = new CSRF();
+        $this->session  = new Session();
+        $this->auth     = new Auth(24);
+        $this->csrf     = new CSRF();
         $this->database = new Database();
-        $this->request = new Request();
+        $this->request  = new Request();
         $this->response = new Response();
-        $this->router = new Router();
-        $this->logger = new Logger($this, 'app/' . $this->request->timestamp . '.txt');
-
-        $this->env = $_ENV;
-        $this->locale = 'en';
-        $this->logger->purge('app', $_ENV['LOGGER_PURGE_TIME'])->log();
+        $this->router   = new Router();
+        $this->env      = $_ENV;
+        $this->locale   = 'en';
 
         self::$app = $this;
         self::$user = $this->auth;

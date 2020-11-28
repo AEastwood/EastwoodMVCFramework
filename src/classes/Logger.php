@@ -33,6 +33,8 @@ class Logger
         $hours = time() - ($hours * 3600);
         $logFiles = glob('../storage/logs/' . $scope . '/*.txt');
 
+        $logfileCount = count($logFiles);
+
         foreach($logFiles as $logfile) {
             $modifiedTime = filemtime($logfile);
 

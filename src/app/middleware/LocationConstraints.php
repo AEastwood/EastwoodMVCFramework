@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\App\Controllers\App;
+namespace MVC\App\Middleware;
 
 use MVC\Classes\App;
 use MVC\Classes\Controller;

@@ -3,8 +3,8 @@
 namespace MVC\App\ServiceProviders;
 
 use App\MVC\Classes\Middleware;
-use MVC\App\Controllers\App\IPConstraints;
-use MVC\App\Controllers\App\LocationConstraints;
+use MVC\App\Middleware\IPConstraints;
+use MVC\App\Middleware\LocationConstraints;
 use MVC\App\Controllers\Auth\Web;
 
 class AppServiceProvider {
