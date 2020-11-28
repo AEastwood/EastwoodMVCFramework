@@ -8,4 +8,4 @@ Route::get('/', [DefaultController::class, 'index']);
 
 Route::get('/debug', function () {
     App::dd(App::body());
-})->middleware(['ip:whitelist']);
+})->middleware(['location:whitelist', 'ip:whitelist']);

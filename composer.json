@@ -4,6 +4,7 @@
             "MVC\\Classes\\": "src/classes/",
             "MVC\\App\\ServiceProviders\\": "src/app/serviceproviders/",
             "MVC\\App\\Controllers\\": "src/app/controllers/",
+            "MVC\\App\\Controllers\\App\\": "src/app/controllers/app",
             "MVC\\App\\Exceptions\\": "src/app/exceptions/"
         }
     },

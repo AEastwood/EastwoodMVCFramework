@@ -10,24 +10,30 @@ class IPConstraints {
     /*
     *   Refuses access to blacklisted IP addresses
     */
-    public function blacklisted(): void
+    public function ipBlacklisted(): void
     {
         $blacklist = explode(',', APP::body()->env['IP_BLACKLIST']);
 
         if(in_array(App::body()->request->headers['CF-Connecting-IP'], $blacklist)) {
-            Controller::error('iprejected');
+            Controller::error('error', [
+                'code' => 401,
+                'message' => 'Sorry, you are unable to visit this website currently.'
+            ]);
         }
     }
     
     /*
     *   Only allows whitelisted IP addresses to continue
     */
-    public function whitelisted(): void
+    public function ipWhitelisted(): void
     {
         $whitelist = explode(',', APP::body()->env['IP_WHITELIST']);
 
         if(!in_array(App::body()->request->headers['CF-Connecting-IP'], $whitelist)) {
-            Controller::error('iprejected');
+            Controller::error('error', [
+                'code' => 401,
+                'message' => 'Sorry, you are unable to visit this website currently.'
+            ]);
         }
     }
 

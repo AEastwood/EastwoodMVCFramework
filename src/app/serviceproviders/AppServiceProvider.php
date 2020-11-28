@@ -4,6 +4,7 @@ namespace MVC\App\ServiceProviders;
 
 use App\MVC\Classes\Middleware;
 use MVC\App\Controllers\App\IPConstraints;
+use MVC\App\Controllers\App\LocationConstraints;
 use MVC\App\Controllers\Auth\Web;
 
 class AppServiceProvider {
@@ -18,8 +19,10 @@ class AppServiceProvider {
         $this->providers = [
             'auth:api'      => [Web::class, 'authenticated_api'],
             'auth:web'      => [Web::class, 'authenticated_web'],
-            'ip:blacklist'  => [IPConstraints::class, 'blacklisted'],
-            'ip:whitelist'  => [IPConstraints::class, 'whitelisted'],
+            'ip:blacklist'  => [IPConstraints::class, 'ipBlacklisted'],
+            'ip:whitelist'  => [IPConstraints::class, 'ipWhitelisted'],
+            'location:blacklist'  => [LocationConstraints::class, 'locationBlacklisted'],
+            'location:whitelist'  => [LocationConstraints::class, 'locationWhitelisted'],
         ];
     }
 
