@@ -25,22 +25,14 @@ class Middleware {
     public function run(): void
     {
         foreach($this->middlewares as $middleware) {
-            $this->attach($middleware);
+            $this->runMiddlewareAction($middleware);
         }
-    }
-
-    /*
-    *   Check provider exists, if so run provider(s)
-    */
-    private function attach(string $middleware): void
-    {
-        $this->runProviderAction($middleware);
     }
 
     /*
     *   get provider action
     */
-    private function runProviderAction(string $index): void
+    private function runMiddlewareAction(string $index): void
     {
         if(!array_key_exists($index, $this->appServiceProvider->providers)){
             throw new InvalidProviderActionException($index);

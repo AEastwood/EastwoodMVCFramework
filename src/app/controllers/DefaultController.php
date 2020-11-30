@@ -9,7 +9,7 @@ class DefaultController extends Controller
     /*
      *  default index callback function for default route
      */
-    public function index()
+    public static function index()
     {
         Controller::view(
             'index',

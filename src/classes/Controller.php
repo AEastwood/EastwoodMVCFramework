@@ -9,7 +9,7 @@ class Controller
     /*
      *  Create and compile view
      */
-    public function view(string $view, array $variables = []): void
+    public static function view(string $view, array $variables = []): void
     {
         $templateEngine = new TemplateEngine($view);
         $templateEngine->init($variables)->render();
@@ -18,7 +18,7 @@ class Controller
     /*  
     *   Create and compile error view
     */
-    public function error(string $view, array $variables = []): void
+    public static function error(string $view, array $variables = []): void
     {
         $templateEngine = new TemplateEngine('errors/' . $view);
         $templateEngine->init($variables)->render();

@@ -1,15 +1,21 @@
 {
+    "name": "EastwoodMVC",
+    "description": "Custom MVC framework",
+    "config": {
+        "optimize-autoloader": true,
+        "platform": {
+            "php": "8.0"
+        },
+        "sort-packages": true
+    },
     "autoload": {
         "psr-4": {
             "MVC\\Classes\\": "src/classes/",
             "MVC\\App\\ServiceProviders\\": "src/app/serviceproviders/",
             "MVC\\App\\Controllers\\": "src/app/controllers/",
-            "MVC\\App\\Controllers\\App\\": "src/app/controllers/app",
-            "MVC\\App\\Exceptions\\": "src/app/exceptions/"
+            "MVC\\App\\Exceptions\\": "src/app/exceptions/",
+            "MVC\\App\\Middleware\\": "src/app/middleware/"
         }
-    },
-    "config": {
-        "optimize-autoloader": true
     },
     "require": {
         "filp/whoops": "dev-master",

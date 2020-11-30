@@ -3,6 +3,7 @@
 namespace MVC\App\Middleware;
 
 use MVC\Classes\App;
+use MVC\Classes\Cookie;
 use MVC\Classes\Controller;
 
 class LocationConstraints {
@@ -10,11 +11,12 @@ class LocationConstraints {
     /*
     *   Refuses access to blacklisted IP addresses
     */
-    public function locationBlacklisted(): void
+    public static function locationBlacklisted(): void
     {
         $blacklist = explode(',', APP::body()->env['LOCATION_BLACKLIST']);
+        $cuc = Cookie::getCookie('_cuc') ?? App::getCountry();
 
-        if(in_array(App::body()->request->headers['CF-IPCountry'], $blacklist)) {
+        if(in_array($cuc, $blacklist)) {
             Controller::error('error', [
                 'code' => 401,
                 'message' => 'Sorry, you are unable to visit this website from your country.'
@@ -27,11 +29,12 @@ class LocationConstraints {
     /*
     *   Only allows whitelisted IP addresses to continue
     */
-    public function locationWhitelisted(): void
+    public static function locationWhitelisted(): void
     {
         $whitelist = explode(',', APP::body()->env['LOCATION_WHITELIST']);
+        $cuc = Cookie::getCookie('_cuc') ?? App::getCountry();
 
-        if(!in_array(App::body()->request->headers['CF-IPCountry'], $whitelist)) {
+        if(!in_array($cuc, $whitelist)) {
             Controller::error('error', [
                 'code' => 401,
                 'message' => 'Sorry, you are unable to visit this website from your country.'

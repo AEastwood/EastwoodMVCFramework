@@ -3,7 +3,7 @@
 namespace MVC\Classes;
 
 use Defuse\Crypto\Crypto;
-use Defuse\Crypto\Key;
+use MVC\Classes\App;
 use PragmaRX\Random\Random;
 
 class CSRF {
@@ -12,33 +12,24 @@ class CSRF {
      *  CSRF token
      */
     public string $csrf_token;
-
-    /**
-     *  App secret, decryption key
-     */
-    public Key $key;
+    public string $name;
 
     /**
      *  constructor
      */
     public function __construct()
-    {        
-        $key = $_ENV['SECRET'];
-        $key = file_get_contents('../../' . $key);
-        
-        $this->key = Key::loadFromAsciiSafeString($key);
-        $this->csrf_token = $this->getCSRF();
+    {
+        $this->name = 'X-CSRF-TOKEN';
     }
 
     /**
      *  get CSRF token from cookie
-     *  Cookie is encrypted
+     *  Cookie is encrypted, return new csrf token if csrf token is modified in anyway
      */
     private function getCSRF(): string
     {
-        if(Cookie::getCookie('X-CSRF-TOKEN') !== null) {
-            $cookie = Cookie::getCookie('X-CSRF-TOKEN');
-            $csrf_token = Crypto::decrypt($cookie, $this->key);
+        if(Cookie::getCookie($this->name) !== null) {
+            $csrf_token = Cookie::getCookie($this->name);            
             
             return ($csrf_token);
         }
@@ -51,11 +42,29 @@ class CSRF {
      */
     private function generateNewToken(): string
     {
+        $this->purge($this->name);
+
         $csrf_token = (new Random)->size(128)->get();
         $expiry = time() + 86400;
-        Cookie::setCookie('X-CSRF-TOKEN', Crypto::encrypt($csrf_token, $this->key), $expiry, '/');
+        Cookie::setCookie($this->name, $csrf_token, $expiry, '/');
         
         return ($csrf_token);
+    }
+
+    /**
+     *  load csrf token
+     */
+    public function load(): void
+    {
+        $this->csrf_token = $this->getCSRF();
+    }
+
+    /**
+     *  purge existing CSRF cookies
+     */
+    private function purge($name): void
+    {
+        Cookie::delete($name);
     }
 
 
