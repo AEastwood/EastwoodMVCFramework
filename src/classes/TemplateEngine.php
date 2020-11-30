@@ -5,30 +5,22 @@ namespace MVC\Classes;
 use MVC\App\Exceptions\ViewDoesntExistException;
 
 class TemplateEngine
-{
-    /*
-     *  pattern to match
-     */
-    private string $pattern;
-
-    /*
-     *  view contents passed as string
-     */
+{    
     private string $view;
-
-    /*
-     *  DIR of views
-     */
-    private string $viewPath;
+    private string $view_name;
+    private string $escapeRegex;
+    private string $noneEscapeRegex;
 
     /*
      *  constructor
      */
     public function __construct($view)
     {
-        $this->pattern = '/[{{]{2}(.*?)[}}]{2}/';
-        $this->view = $view;
-        $this->viewPath = '../resources/views/';
+        $this->escapeRegex    = '~\{{\s*(.+?)\s*\}}~is';
+        $this->noneEscapeRegex = '~\{!!\s*(.+?)\s*\!!}~is';
+        
+        $this->view_name = $view;
+        $this->view = '../resources/views/' . $view . '.view.php';
     }
 
     /*
@@ -49,52 +41,59 @@ class TemplateEngine
      */
     public function init(array $variables = []): object
     {
-        $view = $this->viewPath . $this->view . '.view.php';
-
-        if (file_exists($view)) {
-
-            $view = file_get_contents($view);
-            $view = $this->process($view);
-
-            ob_start() && extract($variables, EXTR_SKIP);
-            eval('?>'. $view);
-            $view = ob_get_clean();
+        if (file_exists($this->view)) {
+            $this->view = file_get_contents($this->view);
+            $this->view = $this->escape()->nonEscaped()->asString();
+            
+            ob_start();
+            extract($variables, EXTR_SKIP);
+            eval('?>'. $this->view);
+            $this->view = ob_get_clean();
             ob_flush();
             
-            $this->view = $view;
-
             return ($this);
         }
 
-        throw new ViewDoesntExistException('View does not exist');
+        throw new ViewDoesntExistException($this->view);
     }
 
-    /*
-     *  find and replace all dynamic indexes from the view and replace with
-     *  appropriate function call(s)
+    /**
+     *  return view as string
      */
-    private function process($view): string
+    public function asString(): string
     {
-        if(!preg_match_all($this->pattern, $view, $matches)) {
-            return $view;
-        }
-
-        if (count($matches) > 0) {
-            foreach ($matches[0] as $match) {
-                $function = $this->format($match);
-                $view = str_replace($match, eval("return $function;"), $view);
-            }
-        }
-
-        return ($view);
+        return $this->view;
     }
 
-    /*
-     *  render view after processing
+    /**
+     *  echo $var wrapped in htmlspecialchars
      */
-    public function render(): void
+    private function escape(): object
     {
-        echo $this->view;
+        $this->view = preg_replace($this->escapeRegex, '<?php echo htmlspecialchars($1, ENT_QUOTES) ?>', $this->view);
+        
+        return ($this);
+    }
+    
+    /**
+     *  echo $var without wrapping
+     */
+    private function nonEscaped(): object 
+    {
+        $this->view = preg_replace($this->noneEscapeRegex, '<?php echo $1 ?>', $this->view);
+        
+        return ($this);
+    }
+    
+    /**
+     *  render the view
+     */
+    public function render(array $variables = []): void
+    {
+        $file = '../storage/cache/' . $this->view_name . '.view.php';
+        file_put_contents($file, $this->view);
+        
+        die(include ($file));
     }
 
 }

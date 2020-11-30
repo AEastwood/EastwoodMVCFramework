@@ -121,7 +121,7 @@ class App
     {
         ini_set('session.use_strict_mode', 1);
 
-        self::$app = $this;
+        self::$app      = $this;
         $this->key      = $this->loadKey();
         $this->request  = new Request();
         $this->session  = new Session();

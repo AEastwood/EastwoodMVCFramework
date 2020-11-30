@@ -1,3 +1,10 @@
-<div>Date: {{ Date("F j, Y, g:i a") }}</div>
-<div>Host: {{ MVC\Classes\App::body()->request->host }}</div>
+<?php
+$test = '<marquee>test</marquee>';
+?>
+
+<div>Unix: {!! time() !!}</div>
 <div>Unix: {{ time() }}</div>
+<div>Unix: {{ $age }}</div>
+<div>Unix: {{ strtoupper($name) }}</div>
+<div>Unix: {{ $test }}</div>
+<div>Unix: {!! $test !!}</div>
