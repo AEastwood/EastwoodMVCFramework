@@ -87,8 +87,14 @@ class TemplateEngine
 
         $maxCache = $_ENV['RENDER_MAX'] * 60;
 
-        if(file_exists($this->view_cache) && (time() - filemtime($this->view_cache)) < $maxCache) {
-            return (true);
+        if(file_exists($this->view_cache)){
+            
+            if(time() - filemtime($this->view_cache) < $maxCache) {
+                return (true);
+            }
+            else {
+                return (false);
+            }
         }
 
         return (false);

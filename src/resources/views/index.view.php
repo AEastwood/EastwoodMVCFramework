@@ -9,5 +9,3 @@ $test = 'abv';
 <div>Age: {{ $age }}</div>
 <div>Age: {{ $test }}</div>
 <div>Name: {{ strtoupper($name) }}</div>
-
-sdfjhksdghfsdfgfd
