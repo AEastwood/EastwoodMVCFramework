@@ -88,7 +88,7 @@ class TemplateEngine
     /**
      *  render the view
      */
-    public function render(array $variables = []): void
+    public function render(): void
     {
         $file = '../storage/cache/' . $this->view_name . '.view.php';
         file_put_contents($file, $this->view);
