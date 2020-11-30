@@ -20,6 +20,7 @@ class TemplateEngine
         $this->escapeRegex     = '~\{{\s*(.+?)\s*\}}~is';
         $this->noneEscapeRegex = '~\{!!\s*(.+?)\s*\!!}~is';
         $this->view_name       = $view;
+        
         $this->view            = '../resources/views/' . $view . '.view.php';
         $this->view_cache      = '../storage/cache/' . $view . '.view.php';
     }
@@ -83,18 +84,12 @@ class TemplateEngine
      *  check age of a file in the cache repository, if file is older than RENDER_CACHE then it will generate
      *  a new version
      */
-    private function hasValidCacheFile(): bool {
+    private function hasValidCacheFile(): bool 
+    {
+        $maxCache = App::body()->env['RENDER_MAX'] * 60;
 
-        $maxCache = $_ENV['RENDER_MAX'] * 60;
-
-        if(file_exists($this->view_cache)){
-            
-            if(time() - filemtime($this->view_cache) < $maxCache) {
-                return (true);
-            }
-            else {
-                return (false);
-            }
+        if(file_exists($this->view_cache) && (filemtime($this->view_cache) > (time() - $maxCache))) {
+            return (true);
         }
 
         return (false);
@@ -105,14 +100,14 @@ class TemplateEngine
      */
     public function init(array $variables = []): object
     {
-        if($_ENV['RENDER_CACHE'] == true && $this->hasValidCacheFile()) {
+        if(App::body()->env['RENDER_CACHE'] === 'true' && $this->hasValidCacheFile()) {
             $this->loadCacheFile();
-
+                
             return ($this);
         }
 
         $this->generateNew($variables);
-
+            
         return ($this);
     }
 
