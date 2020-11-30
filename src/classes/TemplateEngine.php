@@ -7,6 +7,7 @@ use MVC\App\Exceptions\ViewDoesntExistException;
 class TemplateEngine
 {    
     private string $view;
+    private string $view_cache;
     private string $view_name;
     private string $escapeRegex;
     private string $noneEscapeRegex;
@@ -16,11 +17,29 @@ class TemplateEngine
      */
     public function __construct($view)
     {
-        $this->escapeRegex    = '~\{{\s*(.+?)\s*\}}~is';
+        $this->escapeRegex     = '~\{{\s*(.+?)\s*\}}~is';
         $this->noneEscapeRegex = '~\{!!\s*(.+?)\s*\!!}~is';
+        $this->view_name       = $view;
+        $this->view            = '../resources/views/' . $view . '.view.php';
+        $this->view_cache      = '../storage/cache/' . $view . '.view.php';
+    }
+
+    /**
+     *  return view as string
+     */
+    public function asString(): string
+    {
+        return ($this->view);
+    }
+
+    /**
+     *  echo $var wrapped in htmlspecialchars
+     */
+    private function escape(): object
+    {
+        $this->view = preg_replace($this->escapeRegex, '<?php echo htmlspecialchars($1, ENT_QUOTES) ?>', $this->view);
         
-        $this->view_name = $view;
-        $this->view = '../resources/views/' . $view . '.view.php';
+        return ($this);
     }
 
     /*
@@ -36,10 +55,11 @@ class TemplateEngine
         return ($match);
     }
 
-    /*
-     *  run template engine against view contents
+    /**
+     *  generate fresh version of the template
+     *  create cache file if cache is enabled
      */
-    public function init(array $variables = []): object
+    private function generateNew(array $variables = []): object
     {
         if (file_exists($this->view)) {
             $this->view = file_get_contents($this->view);
@@ -50,6 +70,8 @@ class TemplateEngine
             eval('?>'. $this->view);
             $this->view = ob_get_clean();
             ob_flush();
+
+            file_put_contents($this->view_cache, $this->view);
             
             return ($this);
         }
@@ -58,21 +80,42 @@ class TemplateEngine
     }
 
     /**
-     *  return view as string
+     *  check age of a file in the cache repository, if file is older than RENDER_CACHE then it will generate
+     *  a new version
      */
-    public function asString(): string
+    private function hasValidCacheFile(): bool {
+
+        $maxCache = $_ENV['RENDER_MAX'] * 60;
+
+        if(file_exists($this->view_cache) && (time() - filemtime($this->view_cache)) < $maxCache) {
+            return (true);
+        }
+
+        return (false);
+    }
+
+    /*
+     *  run template engine against view contents
+     */
+    public function init(array $variables = []): object
     {
-        return $this->view;
+        if($_ENV['RENDER_CACHE'] == true && $this->hasValidCacheFile()) {
+            $this->loadCacheFile();
+
+            return ($this);
+        }
+
+        $this->generateNew($variables);
+
+        return ($this);
     }
 
     /**
-     *  echo $var wrapped in htmlspecialchars
+     *  load file from cache
      */
-    private function escape(): object
+    private function loadCacheFile(): void
     {
-        $this->view = preg_replace($this->escapeRegex, '<?php echo htmlspecialchars($1, ENT_QUOTES) ?>', $this->view);
-        
-        return ($this);
+        $this->view = file_get_contents($this->view_cache);
     }
     
     /**
@@ -90,10 +133,7 @@ class TemplateEngine
      */
     public function render(): void
     {
-        $file = '../storage/cache/' . $this->view_name . '.view.php';
-        file_put_contents($file, $this->view);
-        
-        die(include ($file));
+        echo $this->view;
     }
 
 }
