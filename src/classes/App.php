@@ -15,7 +15,6 @@ class App
     public CSRF $csrf;
     public Database $database;
     public Key $key;
-    public Logger $logger;
     public Request $request;
     public Response $response;
     public Router $router;
@@ -53,7 +52,6 @@ class App
     public static function dd($data): object
     {
         die('<pre>' . print_r($data, true) . '</pre>');
-        exit;
     }
 
     /**
@@ -91,8 +89,6 @@ class App
                 return $_SERVER[$key]; 
             } 
         }        
-   
-        throw new UnableToObtainCIPException();
    }
 
     /**
@@ -131,6 +127,7 @@ class App
         $this->database = new Database();
         $this->response = new Response();
         $this->router   = new Router();
+
         $this->env      = $_ENV;
         $this->locale   = 'en';
 

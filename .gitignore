@@ -3,5 +3,8 @@
 /etc/key.txt
 /.idea
 /.vscode
-/src/storage/logs
-/src/storage/cache
+/src/public/assets/
+/src/public/css
+/src/public/imgs
+*.cache
+*.log

@@ -23,7 +23,7 @@ class TemplateEngine
         $this->view_name       = $view;
         
         $this->view            = '../resources/views/' . $view . '.view.php';
-        $this->view_cache      = '../storage/cache/' . $view . '.view.php';
+        $this->view_cache      = '../storage/cache/' . $view . '.view.cache';
     }
 
     /**
@@ -32,6 +32,36 @@ class TemplateEngine
     public function asString(): string
     {
         return ($this->view);
+    }
+
+    /**
+     *  set cache file owner to www-data
+     */
+    private function changeOwner(): object
+    {
+        chown($this->view_cache, 'www-data');
+
+        return ($this);
+    }
+
+    /**
+     *  set cache file permissions to 0644
+     */
+    private function changePermissions(): object
+    {
+        chmod($this->view_cache, 0600);
+
+        return ($this);
+    }
+
+    /**
+     *  create cached version of the view
+     */
+    private function createCache(): object
+    {
+        file_put_contents($this->view_cache, $this->view);
+
+        return ($this);
     }
 
     /**
@@ -73,8 +103,6 @@ class TemplateEngine
             $this->view = ob_get_clean();
             ob_flush();
 
-            file_put_contents($this->view_cache, $this->view);
-            
             return ($this);
         }
 
@@ -104,13 +132,19 @@ class TemplateEngine
      */
     public function init(array $variables = []): object
     {
-        if(App::body()->env['RENDER_CACHE'] === 'true' && $this->hasValidCacheFile()) {
+        $use_cache = (App::body()->env['RENDER_CACHE'] === 'true') ? true : false;
+
+        if($use_cache && $this->hasValidCacheFile()) {
             $this->loadCacheFile();
                 
             return ($this);
         }
 
         $this->generateNew($variables);
+
+        if($use_cache) {
+            $this->createCache()->changeOwner()->changePermissions();
+        }
             
         return ($this);
     }
@@ -138,8 +172,7 @@ class TemplateEngine
      */
     public function render(): void
     {
-        echo $this->view;
-        exit;
+        die($this->view);
     }
 
 }

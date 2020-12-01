@@ -3,6 +3,7 @@
 namespace MVC\Classes;
 
 use MVC\App\Exceptions\DuplicateRouteException;
+use MVC\Classes\Error;
 use MVC\Models\Route;
 
 class Router
@@ -41,7 +42,7 @@ class Router
      *
      *  @returns $new_route
      */
-    public function addRoute($methods, $url, $action): object
+    public function addRoute(array $methods, string $url, callable $action): object
     {
         $this->checkDuplicateRoute($url, $methods);
 
@@ -58,11 +59,11 @@ class Router
     /*
     *   Checks for duplicate routes
     */
-    private function checkDuplicateRoute($route, $methods)
+    private function checkDuplicateRoute(string $route, array $methods)
     {
         foreach ($this->routes as $route) {
             if ($route == $route->url && count(array_intersect($methods, $route->methods)) > 0) {
-                throw new DuplicateRouteException($url);
+                Error::handle(new DuplicateRouteException($url));
             }
         }
     }
@@ -70,7 +71,7 @@ class Router
     /*
      *  add [GET, HEAD] method route
      */
-    public function get($url, $action): object
+    public function get(string $url, callable $action): object
     {
         $route = $this->addRoute(['GET', 'HEAD'], $url, $action);
         return ($route);
@@ -79,7 +80,7 @@ class Router
     /*
      *  Add ANY Route and associated action to execute
      */
-    public function any($url, $action): object
+    public function any(string $url, callable $action): object
     {
         $route = $this->addRoute(['CONNECT', 'DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PATCH', 'PUT', 'TRACE'], $url, $action);
         return ($route);
@@ -88,7 +89,7 @@ class Router
     /*
      *  Add CONNECT Route and associated action to execute
      */
-    public function connect($url, $action): object
+    public function connect(string $url, callable $action): object
     {
         $route = $this->addRoute(['CONNECT'], $url, $action);
         return ($route);
@@ -97,7 +98,7 @@ class Router
     /*
      *  Add DELETE Route and associated action to execute
      */
-    public function delete($url, $action): object
+    public function delete(string $url, callable $action): object
     {
         $route = $this->addRoute(['DELETE'], $url, $action);
         return ($route);
@@ -106,7 +107,7 @@ class Router
     /*
      *  Add OPTIONS Route and associated action to execute
      */
-    public function options($url, $action): object
+    public function options(string $url, callable $action): object
     {
         $route = $this->addRoute(['OPTIONS'], $url, $action);
         return ($route);
@@ -115,7 +116,7 @@ class Router
     /*
      *  Add POST Route and associated action to execute
      */
-    public function post($url, $action): object
+    public function post(string $url, callable $action): object
     {
         $route = $this->addRoute(['POST'], $url, $action);
         return ($route);
@@ -124,7 +125,7 @@ class Router
     /*
      *  Add PATCH Route and associated action to execute
      */
-    public function patch($url, $action): object
+    public function patch(string $url, callable $action): object
     {
         $route = $this->addRoute(['PATCH'], $url, $action);
         return ($route);
@@ -133,7 +134,7 @@ class Router
     /*
      *  Add PUT Route and associated action to execute
      */
-    public function put($url, $action): object
+    public function put(string $url, callable $action): object
     {
         $route = $this->addRoute(['PUT'], $url, $action);
         return ($route);
@@ -142,7 +143,7 @@ class Router
     /*
      *  Add TRACE Route and associated action to execute
      */
-    public function trace($url, $action): object
+    public function trace(string $url, callable $action): object
     {
         $route = $this->addRoute(['TRACE'], $url, $action);
         return ($route);
@@ -151,7 +152,7 @@ class Router
     /*
      *  add middleware to the route
      */
-    public function middleware($middleware): object
+    public function middleware(array $middleware): object
     {
         $this->hasMiddleware = true;
         $this->middleware = $middleware;
@@ -162,7 +163,7 @@ class Router
     /*
      *  prematurely declare parameters
      */
-    public function parameters($parameters): object
+    public function parameters(array $parameters): object
     {
         $this->hasParameters = true;
         $this->parameters[] = $parameters;
