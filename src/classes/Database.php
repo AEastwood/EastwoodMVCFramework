@@ -28,7 +28,7 @@ class Database {
     {
         $this->connection = $_ENV['DATABASE_CONNECTION'];
         $this->exists     = false;
-        $this->persistent = $_ENV['DATABASE_PERSIST'] ?? false;
+        $this->persistent = (bool)$_ENV['DATABASE_PERSIST'] ?? false;
         $this->table_list = [];
         $this->timeout    = $_ENV['DATABASE_TIMEOUT'] ?? 15;
 

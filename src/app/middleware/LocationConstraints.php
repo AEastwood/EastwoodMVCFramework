@@ -22,7 +22,6 @@ class LocationConstraints {
                 'message' => 'Sorry, you are unable to visit this website from your country.'
             ]);
         }
-        
     }
     
     /*
@@ -39,7 +38,6 @@ class LocationConstraints {
                 'message' => 'Sorry, you are unable to visit this website from your country.'
             ]);
         }
-        
     }
 
 }

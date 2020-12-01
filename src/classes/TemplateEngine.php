@@ -2,6 +2,7 @@
 
 namespace MVC\Classes;
 
+use MVC\Classes\Controller;
 use MVC\App\Exceptions\ViewDoesntExistException;
 
 class TemplateEngine
@@ -77,14 +78,17 @@ class TemplateEngine
             return ($this);
         }
 
-        throw new ViewDoesntExistException($this->view);
+        Controller::error('error', [
+            'code' => 404,
+            'message' => 'The page you are looking for doesn\'t exist.'
+        ]);
     }
 
     /**
      *  check age of a file in the cache repository, if file is older than RENDER_CACHE then it will generate
      *  a new version
      */
-    private function hasValidCacheFile(): bool 
+    private function hasValidCacheFile(): bool
     {
         $maxCache = App::body()->env['RENDER_MAX'] * 60;
 
@@ -135,6 +139,7 @@ class TemplateEngine
     public function render(): void
     {
         echo $this->view;
+        exit;
     }
 
 }
