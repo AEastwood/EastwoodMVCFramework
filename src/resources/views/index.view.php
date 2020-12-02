@@ -12,7 +12,8 @@
     <link rel="icon" href="imgs/favicon.ico">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/8bf1f276fe.js" crossorigin="anonymous"></script>
-    <link href="css/main.css" rel="stylesheet">
+    <script src="js/main.js" crossorigin="anonymous"></script>
+    <link href="css/main.css?{{ rand(0, getrandmax()) }}" rel="stylesheet">
 </head>
 
 <body>
@@ -71,31 +72,49 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <div id="modal-status">
+                    
+                </div>
+
+                <form id="messageForm">
                     <div class="form-group">
                         <label for="sender-name" class="col-form-label">Your name</label>
-                        <input type="text" class="form-control" id="sender-name">
+                        <input type="text" class="form-control" id="sender-name" minlength="3" maxlength="100" required>
+                        <small id="messageHelp" class="form-text text-muted">Min: 3, Max: 100</small>
                     </div>
                     <div class="form-group">
                         <label for="sender-email" class="col-form-label">Your email</label>
-                        <input type="email" class="form-control" id="sender-email">
+                        <input 
+                            type="email" 
+                            class="form-control" 
+                            id="sender-email"
+                            minlength="5"
+                            maxlength="100"
+                            required
+                        >
+                        <small id="messageHelp" class="form-text text-muted">Min: 5, Max: 100</small>
                     </div>
                     <div class="form-group">
                         <label for="message-text" class="col-form-label">Message:</label>
-                        <textarea class="form-control" id="message-text" rows="6"></textarea>
+                        <textarea class="form-control" id="message-text" rows="6" minlength="5" maxlength="1000" required></textarea>
+                        <small id="messageHelp" class="form-text text-muted">Min: 10, Max: 1000</small>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Send message</button>
+                <button type="submit" class="btn btn-primary" id="sendMessageButton">Send message</button>
             </div>
             </div>
         </div>
     </div>
 
     <!-- /.container -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script
+        src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous">
+    </script>
     <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
 
 </html>

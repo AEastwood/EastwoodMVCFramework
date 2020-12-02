@@ -79,7 +79,10 @@ class Response
             }
         }
        
-        return Controller::error('not_found');
+        Controller::error('error', [
+            'code'    => 404,
+            'message' => 'not found'
+        ]);
     }
 
     /*
@@ -87,12 +90,12 @@ class Response
     *   @param  array   $data
     *   @param  int     $code
     */
-    public static function json(array $data, int $code = null)
+    public static function json(array $data, int $code = 200)
     {
         header('Content-Type: application/json');
         
-        if($code !== -1) {
-            header('HTTP1.1 ' . $code);
+        if($code !== 200) {
+            header('HTTP/1.1 ' . $code);
         }
 
         $data = json_encode($data);

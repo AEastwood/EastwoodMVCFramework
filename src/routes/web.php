@@ -6,6 +6,5 @@ use MVC\App\Controllers\DefaultController;
 
 Route::get('/', [DefaultController::class, 'index']);
 
-Route::get('/debug', function () {
-    App::dd(App::body());
-})->middleware(['location:whitelist', 'ip:whitelist']);
+Route::post('/debug', [DefaultController::class, 'debug'])->middleware(['location:whitelist', 'ip:whitelist']);
+Route::post('/message/send', [DefaultController::class, 'sendMessage'])->middleware([]);

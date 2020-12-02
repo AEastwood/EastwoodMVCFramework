@@ -91,7 +91,7 @@ class TemplateEngine
      *  generate fresh version of the template
      *  create cache file if cache is enabled
      */
-    private function generateNew(array $variables = []): object
+    private function generateNew(array $variables = [])
     {
         if (file_exists($this->view)) {
             $this->view = file_get_contents($this->view);
@@ -105,11 +105,6 @@ class TemplateEngine
 
             return ($this);
         }
-
-        Controller::error('error', [
-            'code' => 404,
-            'message' => 'The page you are looking for doesn\'t exist.'
-        ]);
     }
 
     /**
@@ -172,7 +167,7 @@ class TemplateEngine
      */
     public function render(): void
     {
-        die($this->view);
+        echo $this->view;
     }
 
 }

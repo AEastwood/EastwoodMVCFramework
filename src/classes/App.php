@@ -51,6 +51,7 @@ class App
     */
     public static function dd($data): object
     {
+        header('Content-Type: application/json');
         die('<pre>' . print_r($data, true) . '</pre>');
     }
 
