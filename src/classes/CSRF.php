@@ -52,6 +52,18 @@ class CSRF {
     }
 
     /**
+     *  returns true if CSRF is valid
+     */
+    public function hasValidCSRF(): bool
+    {
+        if($_POST['csrf'] === $this->csrf_token) {
+            return (true);
+        }
+
+        return (false);
+    }
+
+    /**
      *  load csrf token
      */
     public function load(): void

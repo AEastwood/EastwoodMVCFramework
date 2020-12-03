@@ -35,22 +35,27 @@ class DefaultController extends Controller
      */
     public static function sendMessage()
     {
-        $posts = ['name', 'email', 'message'];
+        $posts = ['name', 'email', 'message', 'csrf'];
+
+        if(!App::body()->csrf->hasValidCSRF()) {
+            App::dd($_POST);
+            Response::json(['code' => 400, 'message' => 'Invalid CSRF token'], 200);
+        }
 
         foreach($posts as $post) {
             if(empty($_POST[$post])) {
                 Response::json(['code' => 400, 'message' => 'Please complete all form fields and try again'], 200);
             }
-        }        
+        }
 
         $name    = htmlspecialchars($_POST['name']);
         $email   = htmlspecialchars($_POST['email']);
         $message = htmlspecialchars($_POST['message']);
 
-        $Headers = "From: noreply@adameastwood.com\r\n";
-        $Headers .= "MIME-Version: 1.0\r\n";
-        $Headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-        $Headers .= 'Reply-To: "'.$email.'"<'.$email.'>';
+        $headers = "From: noreply@adameastwood.com\r\n";
+        $headers .= "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+        $headers .= 'Reply-To: "'.$email.'"<'.$email.'>';
 
         try{
             $emailContents = file_get_contents('../storage/emails/message.txt');
@@ -59,7 +64,7 @@ class DefaultController extends Controller
             $emailContents = str_replace("{{ email }}", $email, $emailContents);
             $emailContents = str_replace("{{ message }}", $message, $emailContents);
 
-            mail($_ENV['APP_EMAIL'], "New message from $name ($email)", $emailContents, $Headers);
+            mail($_ENV['APP_EMAIL'], "New message from $name ($email)", $emailContents, $headers);
             Response::json(['code' => 200, 'message' => 'Message has been sent'], 200);
         }
         catch(Exception $Error) {

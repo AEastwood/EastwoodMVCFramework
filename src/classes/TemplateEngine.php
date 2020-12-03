@@ -2,6 +2,7 @@
 
 namespace MVC\Classes;
 
+use MVC\Classes\Cookie;
 use MVC\Classes\Controller;
 use MVC\App\Exceptions\ViewDoesntExistException;
 
@@ -64,6 +65,19 @@ class TemplateEngine
         return ($this);
     }
 
+    private function directives(): object
+    {
+        $directives = [
+            '@csrf' => '<input type="hidden" id="CSRFToken" value="' . Cookie::getCookie('X-CSRF-TOKEN') .'">',
+        ];
+
+        foreach($directives as $directive => $value) {
+            $this->view = str_replace($directive, $value, $this->view);
+        }
+
+        return ($this);
+    }
+
     /**
      *  echo $var wrapped in htmlspecialchars
      */
@@ -95,7 +109,7 @@ class TemplateEngine
     {
         if (file_exists($this->view)) {
             $this->view = file_get_contents($this->view);
-            $this->view = $this->escape()->nonEscaped()->asString();
+            $this->view = $this->directives()->escape()->nonEscaped()->asString();
             
             ob_start();
             extract($variables, EXTR_SKIP);

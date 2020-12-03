@@ -1,4 +1,5 @@
 var email = {
+    csrf: null,
     name: null,
     email: null,
     message: null
@@ -13,6 +14,7 @@ function addEventListeners() {
 
         $('#modal-status').val();
 
+        email.csrf = $('#CSRFToken').val();
         email.name = $('#sender-name').val();
         email.email = $('#sender-email').val();
         email.message = $('#message-text').val();
@@ -26,8 +28,6 @@ function addEventListeners() {
             },
             dataType: 'JSON'
         });
-
-        document.getElementById("messageForm").reset();
     });
 }
 
@@ -51,6 +51,7 @@ function handleResponse(response) {
 
     switch (response.code) {
         case 200:
+            document.getElementById("messageForm").reset();
             createAlert('success', response.message);
             break;
 

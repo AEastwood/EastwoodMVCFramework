@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/8bf1f276fe.js" crossorigin="anonymous"></script>
     <script src="js/main.js" crossorigin="anonymous"></script>
-    <link href="css/main.css?{{ rand(0, getrandmax()) }}" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
 </head>
 
 <body>
@@ -47,6 +47,9 @@
             <p class="lead">Just me.</p>
             
             <p class="lead pt-2">
+            <a class="clean-link" href="https://www.instagram.com/aeasywood/" target="_blank" title="instagram">
+                    <i class="text-dark clean-link fab fa-instagram pr-3 h3"></i>
+                </a>
                 <a class="clean-link" href="https://twitter.com/adeastwood" target="_blank" title="twitter">
                     <i class="text-dark clean-link fab fa-twitter pr-3 h3"></i>
                 </a>
@@ -77,13 +80,14 @@
                 </div>
 
                 <form id="messageForm">
+                    @csrf
                     <div class="form-group">
-                        <label for="sender-name" class="col-form-label">Your name</label>
+                        <label for="sender-name" class="col-form-label">Your name:</label>
                         <input type="text" class="form-control" id="sender-name" minlength="3" maxlength="100" required>
                         <small id="messageHelp" class="form-text text-muted">Min: 3, Max: 100</small>
                     </div>
                     <div class="form-group">
-                        <label for="sender-email" class="col-form-label">Your email</label>
+                        <label for="sender-email" class="col-form-label">Your email:</label>
                         <input 
                             type="email" 
                             class="form-control" 
@@ -95,7 +99,7 @@
                         <small id="messageHelp" class="form-text text-muted">Min: 5, Max: 100</small>
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="col-form-label">Message:</label>
+                        <label for="message-text" class="col-form-label">Your message:</label>
                         <textarea class="form-control" id="message-text" rows="6" minlength="5" maxlength="1000" required></textarea>
                         <small id="messageHelp" class="form-text text-muted">Min: 10, Max: 1000</small>
                     </div>
