@@ -12,6 +12,7 @@ class App
 
     private Session $session;
     private Auth $auth;
+    public Client $client;
     public CSRF $csrf;
     public Database $database;
     public Key $key;
@@ -121,10 +122,12 @@ class App
     private function setup(): void
     {
         ini_set('session.use_strict_mode', 1);
+        $this->env      = $_ENV;
+        $this->locale   = 'en';
 
         self::$app      = $this;
         $this->key      = $this->loadKey();
-        $this->request  = new Request();
+        $this->client   = new Client();
         $this->session  = new Session();
 
         $this->auth     = new Auth(24);
@@ -132,9 +135,7 @@ class App
         $this->database = new Database();
         $this->response = new Response();
         $this->router   = new Router();
-
-        $this->env      = $_ENV;
-        $this->locale   = 'en';
+        $this->request  = new Request();
 
         self::$user = $this->auth;
     }

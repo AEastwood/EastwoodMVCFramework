@@ -7,9 +7,13 @@ use MVC\Classes\Cookie;
 
 class TemplateEngine
 {    
+    private int $cache_length;
+    private bool $use_cache;
+
     private string $view;
     private string $view_cache;
     private string $view_name;
+    
     private string $escapeRegex;
     private string $noneEscapeRegex;
 
@@ -22,6 +26,9 @@ class TemplateEngine
         $this->noneEscapeRegex = '~\{!!\s*(.+?)\s*\!!}~is';
         $this->view_name       = str_replace('.', '/', $view);
 
+        $this->cache_length    = App::body()->env['RENDER_MAX'] * 60;
+        $this->use_cache       = (App::body()->env['RENDER_CACHE'] === 'true') ? true : false;
+        
         $this->view            = '../resources/views/' . $this->view_name . '.view.php';
         $this->view_cache      = '../storage/cache/' . $this->view_name . '.view.cache';
     }
@@ -59,7 +66,7 @@ class TemplateEngine
      */
     private function createCache(): object
     {
-        if($_ENV['RENDER_CACHE'] === 'true') {
+        if($this->use_cache) {
             file_put_contents($this->view_cache, $this->view);
         }
         
@@ -128,9 +135,7 @@ class TemplateEngine
      */
     private function hasValidCacheFile(): bool
     {
-        $maxCache = App::body()->env['RENDER_MAX'] * 60;
-
-        if(file_exists($this->view_cache) && (filemtime($this->view_cache) > (time() - $maxCache))) {
+        if(file_exists($this->view_cache) && (filemtime($this->view_cache) > (time() - $$this->cache_length))) {
             return (true);
         }
 
@@ -142,9 +147,7 @@ class TemplateEngine
      */
     public function init(array $variables = []): object
     {
-        $use_cache = (App::body()->env['RENDER_CACHE'] === 'true') ? true : false;
-
-        if($use_cache && $this->hasValidCacheFile()) {
+        if($this->use_cache && $this->hasValidCacheFile()) {
             $this->loadCacheFile();
                 
             return ($this);
@@ -152,7 +155,7 @@ class TemplateEngine
 
         $this->generateNew($variables);
 
-        if($use_cache) {
+        if($this->use_cache) {
             $this->createCache()->changeOwner()->changePermissions();
         }
             

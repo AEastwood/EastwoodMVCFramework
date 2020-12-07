@@ -3,9 +3,8 @@
 namespace MVC\Classes;
 
 use DateTime;
-use MVC\App\Exceptions\UnableToGetClientException;
-use MVC\Classes\Cookie;
-use MVC\Classes\Error;
+use Exception;
+use MVC\Classes\Controller;
 
 
 class Request
@@ -35,30 +34,12 @@ class Request
     {
         $timestamp = new DateTime();
         $this->timestamp    = $timestamp->getTimestamp();
-        $this->client       = $this->getClient();
-
         $this->request_url  = $_SERVER['REQUEST_URI'];
         $this->host         = $_SERVER['HTTP_HOST'] ?? $_ENV['BASE_URL'];
         $this->user_agent   = $_SERVER['HTTP_USER_AGENT'];
         $this->port         = $_SERVER['SERVER_PORT'];
         $this->method       = $_SERVER['REQUEST_METHOD'];
         $this->headers      = apache_request_headers();
-    }
-
-    /**
-     *  return object containing client
-     */
-    private function getClient()
-    {
-        $client = file_get_contents('http://www.geoplugin.net/json.gp');
-        $client = json_decode($client);
-
-        unset($client->geoplugin_credit);
-
-        if($client->geoplugin_status === 200) {
-            
-            return ($client);
-        }
     }
 
 }

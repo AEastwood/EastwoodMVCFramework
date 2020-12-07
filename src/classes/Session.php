@@ -40,10 +40,6 @@ class Session {
         $this->session = $_SESSION;
         $this->state = 'has_session';
 
-        if($this->id === 'CREATED_SESSION') {
-            $this->id = $_COOKIE['PHPSESSID'];
-        }
-
         if($this->state === 'has_session') {
             $_SESSION['EMVC.app.expires'] = Carbon::now()->addDay()->toDateTimeString();
             $_SESSION['EMVC.app.valid_country'] = App::getCountry();

@@ -4,6 +4,7 @@ namespace MVC\Classes;
 
 use Closure;
 use MVC\Classes\App;
+use MVC\Classes\Middleware;
 
 class Response
 {
@@ -81,7 +82,7 @@ class Response
 
         $data = json_encode($data);
 
-        return function() {
+        return function() use($data) {
             echo $data;
         };
     }
