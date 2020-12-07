@@ -1,12 +1,11 @@
 <?php
 
-use MVC\Classes\App;
 use MVC\Classes\Router as Route;
 use MVC\App\Controllers\DefaultController;
 
 # GET routes
-Route::get('/', [DefaultController::class, 'index']);
+Route::get('/', [DefaultController::class, 'index'])->name('Index');
+Route::get('/product/{id}', [DefaultController::class, 'showProduct'])->name('ShowProduct');
 
 # POST routes
-Route::post('/debug', [DefaultController::class, 'debug'])->middleware(['location:whitelist', 'ip:whitelist']);
-Route::post('/message/send', [DefaultController::class, 'sendMessage']);
+Route::get('/debug', [DefaultController::class, 'debug'])->name('Debug');

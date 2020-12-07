@@ -12,6 +12,7 @@ class Route extends Router
     public bool $hasParameters;
     public array $methods;
     public array $middleware;
+    public string $name;
     public array $parameters;
     public string $target;
     public string $url;
@@ -24,7 +25,6 @@ class Route extends Router
         $this->hasMiddleware = false;
         $this->middleware = array();
         $this->hasParameters = false;
-        $this->parameters = array();
         $this->target = 'web';
     }
 
@@ -34,12 +34,12 @@ class Route extends Router
     public function __serialize(): array
     {
         $data = [
-            'url' => $this->url,
+            'url'           => $this->url,
             'hasMiddleware' => $this->hasMiddleware,
             'hasParameters' => $this->hasParameters,
-            'methods' => $this->methods,
-            'middleware' => $this->middleware,
-            'parameters' => $this->parameters,
+            'methods'       => $this->methods,
+            'middleware'    => $this->middleware,
+            'parameters'    => $this->parameters,
         ];
 
         return ($data);

@@ -2,9 +2,8 @@
 
 namespace MVC\Classes;
 
+use Closure;
 use MVC\Classes\Cookie;
-use MVC\Classes\Controller;
-use MVC\App\Exceptions\ViewDoesntExistException;
 
 class TemplateEngine
 {    
@@ -21,10 +20,10 @@ class TemplateEngine
     {
         $this->escapeRegex     = '~\{{\s*(.+?)\s*\}}~is';
         $this->noneEscapeRegex = '~\{!!\s*(.+?)\s*\!!}~is';
-        $this->view_name       = $view;
-        
-        $this->view            = '../resources/views/' . $view . '.view.php';
-        $this->view_cache      = '../storage/cache/' . $view . '.view.cache';
+        $this->view_name       = str_replace('.', '/', $view);
+
+        $this->view            = '../resources/views/' . $this->view_name . '.view.php';
+        $this->view_cache      = '../storage/cache/' . $this->view_name . '.view.cache';
     }
 
     /**
@@ -60,8 +59,10 @@ class TemplateEngine
      */
     private function createCache(): object
     {
-        file_put_contents($this->view_cache, $this->view);
-
+        if($_ENV['RENDER_CACHE'] === 'true') {
+            file_put_contents($this->view_cache, $this->view);
+        }
+        
         return ($this);
     }
 
@@ -179,9 +180,11 @@ class TemplateEngine
     /**
      *  render the view
      */
-    public function render(): void
+    public function render(): Closure
     {
-        echo $this->view;
+        return function() {
+            echo $this->view;
+        };
     }
 
 }

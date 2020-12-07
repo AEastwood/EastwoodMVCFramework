@@ -46,13 +46,17 @@ class App
     }
 
     /*
-    *   dd: Die and Debug
+    *   Die and Debug
     *   @param  mixed  $data
     */
-    public static function dd($data): object
+    public static function dd($data)
     {
         header('Content-Type: application/json');
-        die('<pre>' . print_r($data, true) . '</pre>');
+        $action = function() use ($data) {
+            echo print_r($data, true);
+        };
+
+        return $action();
     }
 
     /**
@@ -65,12 +69,12 @@ class App
         ];
 
         foreach($keys as $key) {
-            if (array_key_exists($key, $_SERVER)) {
+            if (!empty($_SERVER[$key])) {
                 return $_SERVER[$key]; 
             } 
         }
 
-        return self::body()->request->client->geoplugin_countryCode;
+        return self::body()->request->client->geoplugin_countryCode ?? 'GB';
     }
 
     /**
@@ -86,8 +90,8 @@ class App
         ];
 
         foreach($keys as $key) {
-            if (array_key_exists($key, $_SERVER)) {
-                return $_SERVER[$key]; 
+            if (!empty($_SERVER[$key])) {
+                return $_SERVER[$key];
             } 
         }        
    }
@@ -108,7 +112,7 @@ class App
      */
     public function run(): void
     {
-        $this->response->get($this);
+        $this->response->get($this)();
     }
 
     /**

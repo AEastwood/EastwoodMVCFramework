@@ -2,7 +2,8 @@
 
 namespace MVC\Classes;
 
-use MVC\App\Route;
+use Closure;
+use MVC\Classes\App;
 
 class Response
 {
@@ -26,40 +27,21 @@ class Response
     private function applyMiddleware(array $middleware)
     {
         $middleware = new Middleware($middleware);
-        $middleware->run();
-    }
-
-    /*
-    *   Apply parameters from routes
-    *   @param  array   $parameters
-    */
-    private function applyParameters(array $parameters)
-    {
-        foreach($parameters as $parameter) {
-            $app->response->parameters[] = $parameter;
-        }
+        return $middleware->run();
     }
     
-    /*
-     *  find request in routes and run action  
-     *  @param  $action
-     */
-    private function doAction($action): void
-    {
-        $this->successful = true;
-        $action();
-    }
-
     /*
     *   Runs application
     *   @param  App $app
     *   @returns    Action|Error-view
     */
-    public function get(App $app)
+    public function get(App $app)   // TODO Refactor how responses are handled and returned
     {
-        $action = null;
-
         foreach($app->router->routes as $route) {
+
+            if($this->hasParams() && $route->hasParameters && in_array($app->request->method, $route->methods)) {
+                
+            }
 
             if($route->url !== $app->request->request_url) {
                 continue;
@@ -68,21 +50,23 @@ class Response
             if($route->url === $app->request->request_url && in_array($app->request->method, $route->methods)) {
 
                 if($route->hasMiddleware) {
-                    $this->applyMiddleware($route->middleware);
+                    return $this->applyMiddleware($route->middleware);
                 }
-
-                if($route->hasParameters) {
-                    $this->applyParameters($route->parameters);
-                }
-                
-                return $this->doAction($route->action);
+                $action = $route->action;
+                return $action();
             }
         }
        
-        Controller::error('error', [
+        return Controller::view('errors.error', [
             'code'    => 404,
             'message' => 'not found'
         ]);
+    }
+
+    private function hasParams(): object
+    {
+
+        return ($this);
     }
 
     /*
@@ -90,17 +74,16 @@ class Response
     *   @param  array   $data
     *   @param  int     $code
     */
-    public static function json(array $data, int $code = 200)
+    public static function json(array $data, int $code = 200): Closure
     {
         header('Content-Type: application/json');
-        
-        if($code !== 200) {
-            header('HTTP/1.1 ' . $code);
-        }
+        header('HTTP/1.1 ' . $code);
 
         $data = json_encode($data);
-        echo $data;
-        exit;
+
+        return function() {
+            echo $data;
+        };
     }
 
 }

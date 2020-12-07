@@ -35,10 +35,14 @@ class Session {
      */
     private function createSession(): void
     {
-        $this->id = Cookie::getCookie('PHPSESSID') ?? 'CREATED_SESSION';
+        $this->id = $_COOKIE['PHPSESSID'] ?? 'CREATED_SESSION';
 
         $this->session = $_SESSION;
         $this->state = 'has_session';
+
+        if($this->id === 'CREATED_SESSION') {
+            $this->id = $_COOKIE['PHPSESSID'];
+        }
 
         if($this->state === 'has_session') {
             $_SESSION['EMVC.app.expires'] = Carbon::now()->addDay()->toDateTimeString();
@@ -72,7 +76,7 @@ class Session {
 
         if (!isset($_SESSION[$initiated])) {
             session_regenerate_id();
-            $_SESSION[$initiated] = TRUE;
+            $_SESSION[$initiated] = true;
          }
     }
 

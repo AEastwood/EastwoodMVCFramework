@@ -2,9 +2,8 @@
 
 namespace MVC\Classes;
 
-use MVC\App\Exceptions\DuplicateRouteException;
-use MVC\Classes\Error;
 use MVC\Models\Route;
+use MVC\App\Exceptions\DuplicateRouteException;
 
 class Router
 {
@@ -40,32 +39,44 @@ class Router
     /*
      *  Adds route to accepted routes
      *
-     *  @returns $new_route
+     *  @returns $route
      */
     public function addRoute(array $methods, string $url, callable $action): object
     {
         $this->checkDuplicateRoute($url, $methods);
 
-        $new_route = new Route();
-        $new_route->methods = $methods;
-        $new_route->url = $url;
-        $new_route->action = $action;
+        $route              = new Route();
+        $route->methods     = $methods;
+        $route->url         = $this->clean($url);
+        $route->action      = $action;
+        $route->parameters  = $this->parameters($route->url);
 
-        $this->routes[] = $new_route;
+        if(is_array($route->parameters) && count($route->parameters) > 0) {
+            $route->hasParameters = true;
+        }
 
-        return ($new_route);
+        $this->routes[] = $route;
+
+        return ($route);
     }
 
     /*
     *   Checks for duplicate routes
     */
-    private function checkDuplicateRoute(string $route, array $methods)
+    private function checkDuplicateRoute(string $route, array $methods) // TODO fix duplicate routes
     {
         foreach ($this->routes as $route) {
             if ($route == $route->url && count(array_intersect($methods, $route->methods)) > 0) {
-                Error::handle(new DuplicateRouteException($url));
+                throw new DuplicateRouteException($route->url);
             }
         }
+    }
+
+    private function clean(string $url): string
+    {
+    
+        $url = trim($url);
+        return ($url);
     }
 
     /*
@@ -156,18 +167,41 @@ class Router
     {
         $this->hasMiddleware = true;
         $this->middleware = $middleware;
+        return ($this);
+    }
 
+    /**
+     *  set name of route
+     */
+    private function name(string $name): object
+    {
+        $this->name = $name;
         return ($this);
     }
 
     /*
      *  prematurely declare parameters
      */
-    public function parameters(array $parameters): object
+    public function parameters(string $url): array
     {
-        $this->hasParameters = true;
-        $this->parameters[] = $parameters;
+        preg_match_all("/\{[^}]+\}/", $url, $matches);
+        
+        $parameters = [];
+        $exploded = explode('/', $url);
+        
+        foreach($matches[0] as $match) {
+            foreach($exploded as $index => $part) {
 
-        return ($this);
+                if($part === $match) {
+                    $parameters[] = [
+                        'index' => $index,
+                        'match' => $match,
+                        'variable' => '$' . trim($match, '{}')
+                    ];
+                }
+            }
+        }
+
+        return ($parameters);
     }
 }

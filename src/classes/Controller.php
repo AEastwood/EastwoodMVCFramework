@@ -2,26 +2,17 @@
 
 namespace MVC\Classes;
 
-use MVC\Classes\App;
+use Closure;
 
 class Controller
 {
     /*
      *  Create and compile view
      */
-    public static function view(string $view, array $variables = []): void
+    public static function view(string $view, array $variables = []): Closure
     {
         $templateEngine = new TemplateEngine($view);
-        $templateEngine->init($variables)->render();
-    }
-
-    /*  
-    *   Create and compile error view
-    */
-    public static function error(string $view, array $variables = []): void
-    {
-        $templateEngine = new TemplateEngine('errors/' . $view);
-        $templateEngine->init($variables)->render();
+        return $templateEngine->init($variables)->render();
     }
 
 }
