@@ -41,11 +41,12 @@ class Session {
         $this->state = 'has_session';
 
         if($this->state === 'has_session') {
-            $_SESSION['EMVC.app.expires'] = Carbon::now()->addDay()->toDateTimeString();
+            $_SESSION['EMVC.app.expires']       = Carbon::now()->addDay()->toDateTimeString();
             $_SESSION['EMVC.app.valid_country'] = App::getCountry();
-            $_SESSION['EMVC.app.valid_ip'] = App::getIP();
-            $_SESSION['EMVC.auth'] = [];
-            $_SESSION['EMVC.validity'] = true;
+            $_SESSION['EMVC.app.valid_ip']      = App::getIP();
+            $_SESSION['EMVC.auth']              = [];
+            $_SESSION['EMVC.validity']          = true;
+            $_SESSION['EMVC.parameters']        = array();
 
             $this->valid = $_SESSION['EMVC.validity'];
         }

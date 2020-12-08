@@ -96,6 +96,19 @@ class TemplateEngine
         return ($this);
     }
 
+    private function extractParameters(array $variables): array
+    {
+        foreach($_SESSION['EMVC.parameters'] as $k => $v) {
+            $variables[$k] = $v;
+        }
+
+        foreach($variables as $k => $v) {
+            $variables[$k] = str_replace('%20', ' ', $v);
+        }
+
+        return ($variables);
+    }
+
     /*
      *  strip {{}} from dynamic indexes in the active view
      */
@@ -119,8 +132,10 @@ class TemplateEngine
             $this->view = file_get_contents($this->view);
             $this->view = $this->directives()->escape()->nonEscaped()->asString();
             
-            ob_start();
+            $variables = $this->extractParameters($variables);
             extract($variables, EXTR_SKIP);
+
+            ob_start();
             eval('?>'. $this->view);
             $this->view = ob_get_clean();
             ob_flush();
@@ -183,11 +198,9 @@ class TemplateEngine
     /**
      *  render the view
      */
-    public function render(): Closure
+    public function render()
     {
-        return function() {
-            echo $this->view;
-        };
+        echo $this->view;
     }
 
 }

@@ -5,7 +5,6 @@ namespace MVC\Classes;
 use Closure;
 use MVC\Classes\Controller;
 use MVC\App\ServiceProviders\AppServiceProvider;
-use MVC\App\Exceptions\InvalidProviderActionException;
 
 class Middleware {
 
@@ -32,7 +31,7 @@ class Middleware {
     /*
     *   run middleware on request
     */
-    public function run(): Closure
+    public function run()
     {
         foreach($this->middlewares as $middleware) {
             return $this->runMiddlewareAction($middleware);
@@ -42,7 +41,7 @@ class Middleware {
     /*
     *   get provider action
     */
-    private function runMiddlewareAction(string $index): Closure
+    private function runMiddlewareAction(string $index)
     {
         if(!array_key_exists($index, $this->appServiceProvider->providers)){
             return Controller::view('errors.error',[

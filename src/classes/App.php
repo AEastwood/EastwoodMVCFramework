@@ -2,7 +2,7 @@
 
 namespace MVC\Classes;
 
-use Defuse\Crypto\Crypto;
+use Closure;
 use Defuse\Crypto\Key;
 
 class App
@@ -53,6 +53,7 @@ class App
     public static function dd($data)
     {
         header('Content-Type: application/json');
+        
         $action = function() use ($data) {
             echo print_r($data, true);
         };
@@ -105,6 +106,7 @@ class App
         $key = $_ENV['SECRET'];
         $key = file_get_contents('../../' . $key);
         $key = rtrim($key);
+        
         return Key::loadFromAsciiSafeString($key);
     }
 
@@ -122,6 +124,7 @@ class App
     private function setup(): void
     {
         ini_set('session.use_strict_mode', 1);
+        
         $this->env      = $_ENV;
         $this->locale   = 'en';
 

@@ -23,6 +23,7 @@ class Client {
             $client = json_decode($client);
 
             if($client->geoplugin_status === 200) {
+                unset($client->geoplugin_credit);
                 return ($client);
             }
         }

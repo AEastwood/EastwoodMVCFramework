@@ -2,7 +2,6 @@
 
 namespace MVC\App\Middleware;
 
-use Closure;
 use MVC\Classes\App;
 use MVC\Classes\Cookie;
 use MVC\Classes\Controller;
@@ -13,7 +12,7 @@ class LocationConstraints extends Middleware{
     /*
     *   Refuses access to blacklisted IP addresses
     */
-    public static function locationBlacklisted(): Closure
+    public static function locationBlacklisted()
     {
         $blacklist = explode(',', APP::body()->env['LOCATION_BLACKLIST']);
         $cuc = Cookie::getCookie('_cuc') ?? App::getCountry();
@@ -31,7 +30,7 @@ class LocationConstraints extends Middleware{
     /*
     *   Only allows whitelisted IP addresses to continue
     */
-    public static function locationWhitelisted(): Closure
+    public static function locationWhitelisted()
     {
         $whitelist = explode(',', APP::body()->env['LOCATION_WHITELIST']);
         $cuc = Cookie::getCookie('_cuc') ?? App::getCountry();

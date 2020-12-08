@@ -74,8 +74,9 @@ class Router
 
     private function clean(string $url): string
     {
-    
         $url = trim($url);
+        $url = $url;
+
         return ($url);
     }
 
@@ -93,7 +94,7 @@ class Router
      */
     public function any(string $url, callable $action): object
     {
-        $route = $this->addRoute(['CONNECT', 'DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PATCH', 'PUT', 'TRACE'], $url, $action);
+        $route = $this->addRoute(['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $url, $action);
         return ($route);
     }
 
@@ -196,7 +197,7 @@ class Router
                     $parameters[] = [
                         'index' => $index,
                         'match' => $match,
-                        'variable' => '$' . trim($match, '{}')
+                        'variable' => strip_tags(trim($match, '{}'))
                     ];
                 }
             }

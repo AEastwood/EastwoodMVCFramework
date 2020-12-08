@@ -9,7 +9,7 @@ class Controller
     /*
      *  Create and compile view
      */
-    public static function view(string $view, array $variables = []): Closure
+    public static function view(string $view, array $variables = [])
     {
         $templateEngine = new TemplateEngine($view);
         return $templateEngine->init($variables)->render();
