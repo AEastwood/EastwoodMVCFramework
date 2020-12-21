@@ -16,6 +16,7 @@ class Request
     public string $connection;
     public string $content_type;
     public int $content_length;
+    public array $defined_vars;
     public array $headers;
     public string $host;
     public string $log_file;
@@ -40,6 +41,7 @@ class Request
         $this->port         = $_SERVER['SERVER_PORT'];
         $this->method       = $_SERVER['REQUEST_METHOD'];
         $this->headers      = apache_request_headers();
+        $this->defined_vars = get_defined_vars();
     }
 
 }
