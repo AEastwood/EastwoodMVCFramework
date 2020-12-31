@@ -17,10 +17,7 @@ class Router
     {
         require_once '../resources/models/Route.php';
 
-        $this->route_files = [
-            'api.php',
-            'web.php',
-        ];
+        $this->route_files = glob('../routes/*.php');
 
         $this->routes = [];
         $this->loadRouteFiles();
@@ -72,12 +69,12 @@ class Router
         }
     }
 
+    /**
+     *  trim whitespace from url
+     */
     private function clean(string $url): string
     {
-        $url = trim($url);
-        $url = $url;
-
-        return ($url);
+        return trim($url);
     }
 
     /*
