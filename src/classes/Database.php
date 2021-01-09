@@ -13,9 +13,9 @@ class Database {
     private string $username;
     private string $password;
     private string $connection;
-    private string $port;
+    private int $port;
     private string $database_name;
-    private string $persistent;
+    private bool $isPersistent;
     private string $state;
     private int $timeout;
     private array $table_list;
@@ -26,11 +26,11 @@ class Database {
      */
     public function __construct() 
     {
-        $this->connection = $_ENV['DATABASE_CONNECTION'];
-        $this->exists     = false;
-        $this->persistent = (bool)$_ENV['DATABASE_PERSIST'] ?? false;
-        $this->table_list = [];
-        $this->timeout    = $_ENV['DATABASE_TIMEOUT'] ?? 15;
+        $this->connection   = $_ENV['DATABASE_CONNECTION'];
+        $this->exists       = false;
+        $this->isPersistent = ($_ENV['DATABASE_PERSIST'] == 'true') ? true : false;
+        $this->table_list   = [];
+        $this->timeout      = $_ENV['DATABASE_TIMEOUT'] ?? 15;
 
         if($this->databaseParametersDeclared()) {
             
@@ -42,7 +42,7 @@ class Database {
             
             $this->connect();
 
-            if($this->state === 'connected' && $this->isPersistent() && !$this->databaseExists($this->database_name)) {
+            if($this->state === 'connected' && $this->isPersistent && !$this->databaseExists($this->database_name)) {
                 $this->createDatabase();
             }
 
@@ -173,19 +173,6 @@ class Database {
 
         if($stmt->fetchColumn()) {
             $this->exists = true;
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     *  checks if database is persistant
-     *  @ returns bool
-     */
-    private function isPersistent(): bool
-    {
-        if($this->persistent) {
             return true;
         }
 

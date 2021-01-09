@@ -8,3 +8,7 @@
 /src/public/imgs
 *.cache
 *.log
+src/resources/views/errors/fatal.view.php
+src/resources/views/index.view.php
+src/resources/views/test.view.php
+src/resources/views/index.view.php
