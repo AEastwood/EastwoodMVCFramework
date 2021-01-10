@@ -1,5 +1,5 @@
 {
-    "name": "EastwoodMVC",
+    "name": "aeastwood/eastwoodmvc",
     "description": "Custom MVC framework",
     "config": {
         "optimize-autoloader": true,
@@ -14,14 +14,16 @@
             "MVC\\App\\ServiceProviders\\": "src/app/serviceproviders/",
             "MVC\\App\\Controllers\\": "src/app/controllers/",
             "MVC\\App\\Exceptions\\": "src/app/exceptions/",
-            "MVC\\App\\Middleware\\": "src/app/middleware/"
+            "MVC\\App\\Middleware\\": "src/app/middleware/",
+            "MVC\\Models\\": "src/resources/models/"
         }
     },
     "require": {
-        "filp/whoops": "dev-master",
-        "vlucas/phpdotenv": "^5.2",
-        "pragmarx/random": "^0.2.2",
         "defuse/php-encryption": "^2.2",
-        "nesbot/carbon": "^2.41"
+        "filp/whoops": "dev-master",
+        "monolog/monolog": "^2.2",
+        "nesbot/carbon": "^2.41",
+        "pragmarx/random": "^0.2.2",
+        "vlucas/phpdotenv": "^5.2"
     }
 }

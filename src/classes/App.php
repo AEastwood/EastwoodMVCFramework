@@ -2,9 +2,9 @@
 
 namespace MVC\Classes;
 
-use Closure;
 use Defuse\Crypto\Key;
-
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 class App
 {
     private static App $app;
@@ -12,10 +12,10 @@ class App
 
     private Session $session;
     private Auth $auth;
-    public Client $client;
     public CSRF $csrf;
     public Database $database;
     public Key $key;
+    public Logger $logger;
     public Request $request;
     public Response $response;
     public Router $router;
@@ -23,7 +23,7 @@ class App
     public array $env;
     public string $locale;
 
-    /*
+    /**
      *  constructor
      *  creates new instances of all core components of the framework
      *  checks and creates a new session if one doesn't exist
@@ -32,13 +32,34 @@ class App
     public function __construct()
     {
         require_once '../../Autoloader.php';
-        
-        $this->setup();        
+
+        ini_set('session.use_strict_mode', 1);
+
+        $this->logger = new Logger('APP');
+        $this->logger->pushHandler(new StreamHandler('../storage/logs/app.log', Logger::WARNING));
+
+        $this->env      = $_ENV;
+        $this->locale   = $_ENV['APP_LOCALE'];
+
+        self::$app      = $this;
+
+        $this->key      = $this->loadKey();
+        $this->request  = new Request();
+        $this->session  = new Session();
+
+        $this->auth     = new Auth(24);
+        $this->csrf     = new CSRF();
+        $this->database = new Database();
+        $this->response = new Response();
+        $this->router   = new Router();
+
+        self::$user = $this->auth;
+
         $this->csrf->load();
         $this->session->createUserInstanceCookies();
     }
 
-    /*
+    /**
     *   returns App object
     */
     public static function body()
@@ -46,16 +67,17 @@ class App
         return self::$app;
     }
 
-    /*
+    /**
     *   Die and Debug
     *   @param  mixed  $data
     */
-    public static function dd($data)
+    public static function dd(mixed $data)
     {
         header('Content-Type: application/json');
         
         $action = function() use ($data) {
             echo print_r($data, true);
+            exit;
         };
 
         return $action();
@@ -72,11 +94,11 @@ class App
 
         foreach($keys as $key) {
             if (!empty($_SERVER[$key])) {
-                return $_SERVER[$key]; 
-            } 
+                return $_SERVER[$key];
+            }
         }
 
-        return self::body()->request->client->geoplugin_countryCode ?? 'GB';
+        return self::body()->request->client->getClient()->geoplugin_countryCode;
     }
 
     /**
@@ -94,8 +116,8 @@ class App
         foreach($keys as $key) {
             if (!empty($_SERVER[$key])) {
                 return $_SERVER[$key];
-            } 
-        }        
+            }
+        }
    }
 
     /**
@@ -106,11 +128,16 @@ class App
         $key = $_ENV['SECRET'];
         $key = file_get_contents('../../' . $key);
         $key = rtrim($key);
-        
-        return Key::loadFromAsciiSafeString($key);
+
+        try {
+            return Key::loadFromAsciiSafeString($key);
+        }
+        catch (\Exception $e) {
+            $this->logger->error('Unable to load encryption key from file, Error: ' . $e->getMessage());
+        }
     }
 
-    /*
+    /**
      *  Runs application
      */
     public function run(): void
@@ -119,32 +146,7 @@ class App
     }
 
     /**
-     *  change some initial run time configuration settings
-     */
-    private function setup(): void
-    {
-        ini_set('session.use_strict_mode', 1);
-        
-        $this->env      = $_ENV;
-        $this->locale   = 'en';
-
-        self::$app      = $this;
-        $this->key      = $this->loadKey();
-        $this->client   = new Client();
-        $this->session  = new Session();
-
-        $this->auth     = new Auth(24);
-        $this->csrf     = new CSRF();
-        $this->database = new Database();
-        $this->response = new Response();
-        $this->router   = new Router();
-        $this->request  = new Request();
-
-        self::$user = $this->auth;
-    }
-
-    /*
-     *  returns Auth object
+     *  returns user if logged in
      */
     public static function user(): object
     {

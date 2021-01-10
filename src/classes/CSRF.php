@@ -2,8 +2,6 @@
 
 namespace MVC\Classes;
 
-use Defuse\Crypto\Crypto;
-use MVC\Classes\App;
 use PragmaRX\Random\Random;
 
 class CSRF {
@@ -28,8 +26,8 @@ class CSRF {
      */
     private function getCSRF(): string
     {
-        if(Cookie::getCookie($this->name) !== null) {
-            $csrf_token = Cookie::getCookie($this->name);            
+        if(Cookie::getAndDecryptCookie($this->name) !== null) {
+            $csrf_token = Cookie::getAndDecryptCookie($this->name);
             
             return ($csrf_token);
         }
@@ -46,7 +44,7 @@ class CSRF {
 
         $csrf_token = (new Random)->size(128)->get();
         $expiry = time() + 86400;
-        Cookie::setCookie($this->name, $csrf_token, $expiry, '/');
+        Cookie::setAndEncryptCookie($this->name, $csrf_token, $expiry, '/');
         
         return ($csrf_token);
     }

@@ -9,13 +9,13 @@ use MVC\Classes\Middleware;
 
 class LocationConstraints extends Middleware{
 
-    /*
+    /**
     *   Refuses access to blacklisted IP addresses
     */
     public static function locationBlacklisted()
     {
         $blacklist = explode(',', APP::body()->env['LOCATION_BLACKLIST']);
-        $cuc = Cookie::getCookie('_cuc') ?? App::getCountry();
+        $cuc = Cookie::getAndDecryptCookie('_cuc') ?? App::body()->request->client->getClient()->geoplugin_countryName;
 
         if(in_array($cuc, $blacklist)) {
             return Controller::view('errors.error', [
@@ -27,13 +27,13 @@ class LocationConstraints extends Middleware{
         return self::next();
     }
     
-    /*
+    /**
     *   Only allows whitelisted IP addresses to continue
     */
     public static function locationWhitelisted()
     {
         $whitelist = explode(',', APP::body()->env['LOCATION_WHITELIST']);
-        $cuc = Cookie::getCookie('_cuc') ?? App::getCountry();
+        $cuc = Cookie::getAndDecryptCookie('_cuc') ?? App::getCountry();
 
         if(!in_array($cuc, $whitelist)) {
             return Controller::view('errors.error', [

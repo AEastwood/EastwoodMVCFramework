@@ -40,21 +40,22 @@ class Auth
 
     /**
      *  returns array if session[$key] exists
+     * @param $key
+     * @return array
      */
-    private function getSession($key): array
+    private function getSession(string $key): array
     {
-        if($this->hasSession($key)) {
+        if ($this->hasSession($key)) {
             return $_SESSION[$key];
         }
-
-        throw new NonExistentSessionException($key);
     }
 
-    /*
+    /**
      *  returns true if user has valid session
-     *  @return bool
+     * @param string $key
+     * @return bool
      */
-    private function hasSession($key = ''): bool {
+    private function hasSession(string $key = ''): bool {
         if (isset($_SESSION[$key])) {
             return true;
         }
@@ -62,33 +63,38 @@ class Auth
         return false;
     }
 
-    /*
+    /**
      *  validates user session
      */
     private function validateSession(): void
     {
+        $session = null;
         $key = 'EMVC.validity';
 
         if($this->hasSession($key)) {
             $session = $this->getSession($key);
         }
+
+        if($session !== null) {
+            $endOfSession = $session['EMVC.validity'];
+        }
     }
 
-    /*
+    /**
      *  set user from session
      */
     private function setUser()
     {
         $user = $this->getSession('EMVC.user');
 
-        $this->id = $user->id;
-        $this->name = $user->name;
-        $this->email = $user->email;
+        $this->id            = $user->id;
+        $this->name          = $user->name;
+        $this->email         = $user->email;
         $this->password_hash = $user->password_hash;
-        $this->token = $user->token;
-        $this->active = $user->active;
-        $this->created_at = $user->created_at;
-        $this->updated_at = $user->updated_at;
+        $this->token         = $user->token;
+        $this->active        = $user->active;
+        $this->created_at    = $user->created_at;
+        $this->updated_at    = $user->updated_at;
     }
 
 }

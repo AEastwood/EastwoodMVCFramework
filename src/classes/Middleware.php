@@ -11,9 +11,10 @@ class Middleware {
     public array $middlewares;
     private AppServiceProvider $appServiceProvider;
 
-    /*
-    *   set middleware
-    */
+    /**
+     *   set middleware
+     * @param $middlewares
+     */
     public function __construct($middlewares) 
     {
         $this->middlewares = $middlewares;
@@ -28,7 +29,7 @@ class Middleware {
         return function() {};
     }
 
-    /*
+    /**
     *   run middleware on request
     */
     public function run()
@@ -38,9 +39,11 @@ class Middleware {
         }
     }
 
-    /*
-    *   get provider action
-    */
+    /**
+     *   get provider action
+     * @param string $index
+     * @return
+     */
     private function runMiddlewareAction(string $index)
     {
         if(!array_key_exists($index, $this->appServiceProvider->providers)){

@@ -3,8 +3,6 @@
 namespace MVC\Classes;
 
 use DateTime;
-use Exception;
-use MVC\Classes\Controller;
 
 
 class Request
@@ -12,7 +10,7 @@ class Request
     public string $accept;
     public string $accept_language;
     public string $accept_encoding;
-    public object $client;
+    public Client $client;
     public string $connection;
     public string $content_type;
     public int $content_length;
@@ -42,6 +40,8 @@ class Request
         $this->method       = $_SERVER['REQUEST_METHOD'];
         $this->headers      = apache_request_headers();
         $this->defined_vars = get_defined_vars();
+
+        $this->client = new Client();
     }
 
 }

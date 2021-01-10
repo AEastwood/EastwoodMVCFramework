@@ -4,7 +4,6 @@ namespace MVC\Models;
 
 use MVC\Classes\Router;
 
-
 class Route extends Router
 {
     public $action;

@@ -11,14 +11,14 @@ class AppServiceProvider {
     
     public array $providers = array();
 
-    /*
+    /**
     *   constructor
     */
     public function __construct()
     {
         $this->providers = [
-            'auth:api'      => [Web::class, 'authenticated_api'],
-            'auth:web'      => [Web::class, 'authenticated_web'],
+            'auth:api'      => [Web::class, 'authenticatedApi'],
+            'auth:web'      => [Web::class, 'authenticatedWeb'],
             'ip:blacklist'  => [IPConstraints::class, 'ipBlacklisted'],
             'ip:whitelist'  => [IPConstraints::class, 'ipWhitelisted'],
             'location:blacklist'  => [LocationConstraints::class, 'locationBlacklisted'],

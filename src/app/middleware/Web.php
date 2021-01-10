@@ -7,10 +7,10 @@ use MVC\Classes\Response;
 
 class Auth {
 
-    /*
+    /**
     *   returns authorisation status
     */
-    public function authenticated_api()
+    public function authenticatedAPI()
     {
         if(!App::body()->request->headers['Authorization']) {
             return Response::json([
@@ -20,10 +20,10 @@ class Auth {
         }
     }
 
-    /*
+    /**
     *   returns authorisation status
     */
-    public function authenticated_web()
+    public function authenticatedWeb()
     {
         if(App::user()->authed) {
             header('Location: /login');

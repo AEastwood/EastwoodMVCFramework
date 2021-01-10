@@ -11,7 +11,6 @@ class Session {
     public array $session;
     private string $state;
     private bool $valid;
-    private string $valid_ip;
 
     /**
      *  constructor
@@ -59,9 +58,9 @@ class Session {
     {
         $expiry = time() + 86400;
 
-        Cookie::setCookie('_cip', App::getIP(), $expiry);
-        Cookie::setCookie('_cuc', App::getCountry(), $expiry);
-        Cookie::setCookie('_cloc', App::body()->locale, $expiry);
+        Cookie::setAndEncryptCookie('_cip', App::getIP(), $expiry);
+        Cookie::setAndEncryptCookie('_cuc', App::getCountry(), $expiry);
+        Cookie::setAndEncryptCookie('_cloc', App::body()->locale, $expiry);
     }
 
     /**

@@ -3,36 +3,60 @@
 namespace MVC\Classes;
 
 use Defuse\Crypto\Crypto;
-use MVC\Classes\App;
+use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
+use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
 
 class Cookie {
 
+    /**
+     * delete cookie
+     * @param string $name
+     */
     public static function delete(string $name): void
     {
         setCookie($name, '', -3600);
     }
 
-    /*
+    /**
      *  gets cookie
+     * @param $cookieName
+     * @return string|null
      */
-    public static function getCookie($name)
+    public static function getAndDecryptCookie($cookieName)
     {
-        if(isset($_COOKIE[$name])) {
-            try {
-                return Crypto::decrypt($_COOKIE[$name], App::body()->key);
-            }
-            catch(\Exception $e) {
-                return null;
-            }
+        if(!isset($_COOKIE[$cookieName])) {
+            App::body()->logger->info('[Cookie] Attempting to get cookie "' . $cookieName . '" but it does not exist.');
+            return;
+        }
+
+        try {
+            return Crypto::decrypt($_COOKIE[$cookieName], App::body()->key);
+        }
+        catch(EnvironmentIsBrokenException $e) {
+            App::body()->logger->error('[Cookie] Environment is broken, Error: ' . $e->getMessage());
+            return null;
+        }
+        catch (WrongKeyOrModifiedCiphertextException $e) {
+            App::body()->logger->error('[Cookie] The encryption key provided has been modified or is wrong, Error: ' . $e->getMessage());
+            return null;
         }
     }
 
-    /*
-    *   sets cookie
-    */
-    public static function setCookie(string $name, string $value, int $expiration, string $accessor = '/')
+    /**
+     *   sets cookie
+     * @param string $cookieName
+     * @param string $value
+     * @param int $expiration
+     * @param string $accessor
+     */
+    public static function setAndEncryptCookie(string $cookieName, string $value, int $expiration, string $accessor = '/')
     {
-        setcookie($name, Crypto::encrypt($value, App::body()->key), $expiration, $accessor);
+        try {
+            setcookie($cookieName, Crypto::encrypt($value, App::body()->key), $expiration, $accessor);
+        }
+        catch(EnvironmentIsBrokenException $e) {
+            App::body()->logger->error('[Cookie] Unable to set cookie, Error: ' . $e->getMessage());
+        }
     }
 
 }

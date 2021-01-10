@@ -2,56 +2,42 @@
 
 namespace Core;
 
-class Model
+use MVC\Classes\Database;
+
+abstract class Model extends Database
 {
     /*
      *  gets all matching information
      */
-    public function get()
-    {
-
-    }
+    abstract public function get();
 
     /*
      *  if no results it will throw an exception
      */
-    public function getOrFail()
-    {
-
-    }
+    abstract public function getOrFail();
 
     /*
      *  @returns first matching row
      */
-    public function first()
-    {
-
-    }
+    abstract public function first();
 
     /*
-     *  @returns first matching row,
-     *  if no results then it will throw an exception
+     * try to return a result. If it doesn't exist then create it
      */
-    public function firstOrFail()
-    {
+    abstract public function firstOrCreate();
 
-    }
+    /*
+     *  returns first matching row, if no results then it will throw an exception
+     */
+    abstract public function firstOrFail();
 
     /*
      *  updates row in database
      */
-    public function update()
-    {
-
-    }
+    abstract public function update();
 
     /*
-     *  updates row in database,
-     *  if no matching row then it will throw an exception
+     *  updates row in database, if no matching row then it will throw an exception
      */
-    public function updateOrFail()
-    {
-
-    }
-
+    abstract public function updateOrFail();
 }

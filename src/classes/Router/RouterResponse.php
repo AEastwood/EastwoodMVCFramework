@@ -10,6 +10,8 @@ class RouterResponse extends Router
 
     /**
      *  return action after running middleware
+     * @param object $route
+     * @return
      */
     private static function action(object $route)
     {
@@ -37,9 +39,11 @@ class RouterResponse extends Router
 
     /**
      *  process route, routes with parameters are checked first to avoid not being equal to the route
-     *  @param object $route
+     * @param object $route
+     * @param string $requestURL
+     * @return callable|null
      */
-    public static function callback(object $route, string $requestURL)
+    public static function callback(object $route)
     {
         $method = App::body()->request->method;
         $requestURL = App::body()->request->request_url;
@@ -52,7 +56,9 @@ class RouterResponse extends Router
             }
         }
 
-        if($requestURL !== $route->url || !in_array($method, $route->methods)) return null;
+        if($requestURL !== $route->url || !in_array($method, $route->methods)) {
+            return null;
+        }
 
         if($requestURL === $route->url && in_array($method, $route->methods)) {
             $action = self::action($route);
@@ -64,7 +70,7 @@ class RouterResponse extends Router
     }
 
     /**
-     *  check and return true if the route matches with dynamic indexes
+     *  returns true if matches an existing route with a dynamic index
      *  @param object $route
      *  @param string $requestURL
      */
@@ -72,10 +78,13 @@ class RouterResponse extends Router
     {
         $requestParts = explode('/', $requestURL);
         $requestPartsCount = count($requestParts);
+
         $routeParts = explode('/', $route->url);
         $routePartsCount = count($routeParts);
 
-        if($requestPartsCount !== $routePartsCount) return (false);
+        if($requestPartsCount !== $routePartsCount) {
+            return false;
+        }
 
         $routeParameters = $route->parameters;
         $dynamicIndexes = array();
@@ -88,7 +97,7 @@ class RouterResponse extends Router
 
             if(!in_array($partIndex, $dynamicIndexes)) {
                 if($requestParts[$partIndex] !== $routeParts[$partIndex]) {
-                    return (false);
+                    return false;
                 }
             }
 
@@ -102,10 +111,11 @@ class RouterResponse extends Router
         }
 
         self::bind($route->parameters);
-        return (true);
+
+        return true;
     }
            
-    /*
+    /**
     *   Apply middleware from routes
     *   @param array $middleware
     */

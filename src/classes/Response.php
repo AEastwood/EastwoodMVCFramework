@@ -2,30 +2,27 @@
 
 namespace MVC\Classes;
 
-use Closure;
-use MVC\Classes\App;
-use MVC\Classes\RouterResponse;
-
 class Response
 {
-    /*
-    *   indicates sucessful request
+    /**
+    *   indicates successful request
     */
     public bool $successful;
 
-    /*
+    /**
      *  constructor
      */
     public function __construct()
     {
         $this->successful = false;
     }
-    
-    /*
-    *   Runs application
-    *   @param  App $app
-    *   @returns    Action|Error-view
-    */
+
+    /**
+     *   Runs application
+     * @param App $app
+     * @returns    Action|Error-view
+     * @return callable
+     */
     public function get(App $app)
     {
         $requestURL = $app->request->request_url;
@@ -44,12 +41,12 @@ class Response
         };
     }
 
-    /*
+    /**
     *   return JSON response
     *   @param  array   $data
     *   @param  int     $code
     */
-    public static function json(array $data, int $code = 200)
+    public static function json(array $data, int $code = 200): void
     {
         header('Content-Type: application/json');
         header('HTTP/1.1 ' . $code);

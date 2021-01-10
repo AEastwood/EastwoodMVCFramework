@@ -9,13 +9,13 @@ use MVC\Classes\Middleware;
 
 class IPConstraints extends Middleware {
 
-    /*
+    /**
     *   Refuses access to blacklisted IP addresses
     */
     public static function ipBlacklisted()
     {
         $blacklist = explode(',', APP::body()->env['IP_BLACKLIST']);
-        $cip = Cookie::getCookie('_cip') ?? App::getIP();
+        $cip = Cookie::getAndDecryptCookie('_cip') ?? App::getIP();
 
         if(in_array($cip, $blacklist)) {
             return Controller::view('errors.error', [
@@ -27,13 +27,13 @@ class IPConstraints extends Middleware {
         return self::next();
     }
     
-    /*
+    /**
     *   Only allows whitelisted IP addresses to continue
     */
     public static function ipWhitelisted()
     {
         $whitelist = explode(',', APP::body()->env['IP_WHITELIST']);
-        $cip = Cookie::getCookie('_cip') ?? App::getIP();
+        $cip = Cookie::getAndDecryptCookie('_cip') ?? App::getIP();
 
         if(!in_array($cip, $whitelist)) {
             return Controller::view('errors.error', [

@@ -2,12 +2,13 @@
 
 namespace MVC\Classes;
 
-use Closure;
-
 class Controller
 {
-    /*
+    /**
      *  Create and compile view
+     * @param string $view
+     * @param array $variables
+     * @return
      */
     public static function view(string $view, array $variables = [])
     {
