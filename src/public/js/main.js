@@ -55,11 +55,7 @@ function handleResponse(response) {
             createAlert('success', response.message);
             break;
 
-        case 400:
-            createAlert('failed', response.message);
-            break;
-
-        case 500:
+        default:
             createAlert('failed', response.message);
             break;
     }

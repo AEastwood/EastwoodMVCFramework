@@ -52,7 +52,7 @@ class Response
         header('HTTP/1.1 ' . $code);
 
         $data = json_encode($data);
-        echo $data;
+        die($data);
     }
 
     
