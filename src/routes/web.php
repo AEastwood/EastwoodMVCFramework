@@ -5,5 +5,5 @@ use MVC\App\Controllers\DefaultController;
 
 # GET routes
 Route::get('/', [DefaultController::class, 'index'])->name('Index');
-Route::post('/message/send', [DefaultController::class, 'sendMessage'])->name('SendMessage');
+Route::post('/message/send', [DefaultController::class, 'sendMessage'])->middleware(['csrf'])->name('SendMessage');
 

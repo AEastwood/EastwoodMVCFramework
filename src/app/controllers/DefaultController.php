@@ -21,7 +21,7 @@ class DefaultController extends Controller
      */
     public static function sendMessage()
     {
-        if(!isset($_POST['name'], $_POST['email'], $_POST['message'])) {
+        if(!isset($_POST['name'], $_POST['email'], $_POST['message'], $_POST['csrf'])) {
             return Response::json(['code' => 400, 'message' => 'Please complete all form fields and try again'], 200);
         }
 
