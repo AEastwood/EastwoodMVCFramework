@@ -20,3 +20,13 @@ function assetFresh(string $path): string
 {
     return $_ENV['BASE_PROTOCOL'] . '://' . $_ENV['BASE_URL'] . '/' . $path . '?' . rand(0, getrandmax());
 }
+
+/**
+ * return absolute path for path
+ * @param string $path
+ * @return string
+ */
+function redirect(string $path): string
+{
+    return $_ENV['BASE_PROTOCOL'] . '://' . $_ENV['BASE_URL'] . $path;
+}
