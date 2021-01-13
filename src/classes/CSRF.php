@@ -18,6 +18,7 @@ class CSRF {
     public function __construct()
     {
         $this->name = 'X-CSRF-TOKEN';
+        $this->csrf_token = $this->getCSRF();
     }
 
     /**
@@ -26,10 +27,10 @@ class CSRF {
      */
     private function getCSRF(): string
     {
-        if(Cookie::getAndDecryptCookie($this->name) !== null) {
-            $csrf_token = Cookie::getAndDecryptCookie($this->name);
-            
-            return ($csrf_token);
+        $tokenFromCookie = Cookie::getAndDecryptCookie($this->name);
+
+        if($tokenFromCookie !== null) {
+            return $tokenFromCookie;
         }
 
         return $this->generateNewToken();
@@ -42,35 +43,16 @@ class CSRF {
     {
         $this->purge($this->name);
 
-        $csrf_token = (new Random)->size(128)->get();
+        $this->csrf_token = (new Random)->size(128)->get();
         $expiry = time() + 86400;
-        Cookie::setAndEncryptCookie($this->name, $csrf_token, $expiry, '/');
+        Cookie::setAndEncryptCookie($this->name, $this->csrf_token, $expiry, '/');
         
-        return ($csrf_token);
-    }
-
-    /**
-     *  returns true if CSRF is valid
-     */
-    public function hasValidCSRF(): bool
-    {
-        if($_POST['csrf'] === $this->csrf_token) {
-            return (true);
-        }
-
-        return (false);
-    }
-
-    /**
-     *  load csrf token
-     */
-    public function load(): void
-    {
-        $this->csrf_token = $this->getCSRF();
+        return $this->csrf_token;
     }
 
     /**
      *  purge existing CSRF cookies
+     * @param $name
      */
     private function purge($name): void
     {

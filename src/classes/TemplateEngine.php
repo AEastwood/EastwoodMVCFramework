@@ -76,7 +76,7 @@ class TemplateEngine
     private function directives(): object
     {
         $directives = [
-            '@csrf' => '<input type="hidden" id="CSRFToken" value="' . Cookie::getAndDecryptCookie('X-CSRF-TOKEN') .'">',
+            '@csrf' => '<input type="hidden" id="CSRFToken" value="' . App::body()->csrf->csrf_token .'">',
         ];
 
         foreach($directives as $directive => $value) {

@@ -12,7 +12,6 @@ class CSRF extends Middleware
 
     /**
      * checks CSRF token provided is valid
-     * @return bool
      */
     public static function validCSRF()
     {

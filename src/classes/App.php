@@ -5,6 +5,7 @@ namespace MVC\Classes;
 use Defuse\Crypto\Key;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+
 class App
 {
     private static App $app;
@@ -55,7 +56,6 @@ class App
 
         self::$user = $this->auth;
 
-        $this->csrf->load();
         $this->session->createUserInstanceCookies();
     }
 
