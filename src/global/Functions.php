@@ -22,7 +22,7 @@ function assetFresh(string $path): string
 }
 
 /**
- * return absolute path for path
+ * return absolute path for redirect
  * @param string $path
  * @return string
  */
