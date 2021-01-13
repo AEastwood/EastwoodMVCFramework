@@ -37,7 +37,7 @@ class Cookie {
             return null;
         }
         catch (WrongKeyOrModifiedCiphertextException $e) {
-            App::body()->logger->error('[Cookie] The encryption key provided has been modified or is wrong, Error: ' . $e->getMessage());
+            App::body()->logger->error('[Cookie] Decryption of cookie failed, potentially modified by user, Error: ' . $e->getMessage());
             return null;
         }
     }
