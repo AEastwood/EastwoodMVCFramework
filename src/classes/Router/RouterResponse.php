@@ -40,7 +40,6 @@ class RouterResponse extends Router
     /**
      *  process route, routes with parameters are checked first to avoid not being equal to the route
      * @param object $route
-     * @param string $requestURL
      * @return callable|null
      */
     public static function callback(object $route)
