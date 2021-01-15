@@ -3,7 +3,6 @@
 namespace MVC\Classes;
 
 use Closure;
-use MVC\Classes\Controller;
 use MVC\App\ServiceProviders\AppServiceProvider;
 
 class Middleware {
