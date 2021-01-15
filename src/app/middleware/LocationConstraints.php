@@ -15,7 +15,7 @@ class LocationConstraints extends Middleware{
     public static function locationBlacklisted()
     {
         $blacklist = explode(',', APP::body()->env['LOCATION_BLACKLIST']);
-        $cuc = Cookie::getAndDecryptCookie('_cuc') ?? App::body()->request->client->get()->geoplugin_countryName;
+        $cuc = Cookie::getAndDecrypt('_cuc') ?? App::body()->request->client->get()->geoplugin_countryName;
 
         if(in_array($cuc, $blacklist)) {
             return Controller::view('errors.error', [
@@ -33,7 +33,7 @@ class LocationConstraints extends Middleware{
     public static function locationWhitelisted()
     {
         $whitelist = explode(',', APP::body()->env['LOCATION_WHITELIST']);
-        $cuc = Cookie::getAndDecryptCookie('_cuc') ?? App::getCountry();
+        $cuc = Cookie::getAndDecrypt('_cuc') ?? App::getCountry();
 
         if(!in_array($cuc, $whitelist)) {
             return Controller::view('errors.error', [

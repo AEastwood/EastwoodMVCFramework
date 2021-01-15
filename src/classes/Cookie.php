@@ -22,7 +22,7 @@ class Cookie {
      * @param $cookieName
      * @return string|null
      */
-    public static function getAndDecryptCookie($cookieName)
+    public static function getAndDecrypt($cookieName): ?string
     {
         if(!isset($_COOKIE[$cookieName])) {
             App::body()->logger->info('[Cookie] Attempting to get cookie "' . $cookieName . '" but it does not exist.');
@@ -49,7 +49,7 @@ class Cookie {
      * @param int $expiration
      * @param string $accessor
      */
-    public static function setAndEncryptCookie(string $cookieName, string $value, int $expiration, string $accessor = '/')
+    public static function setEncrypted(string $cookieName, string $value, int $expiration, string $accessor = '/'): void
     {
         try {
             setcookie($cookieName, Crypto::encrypt($value, App::body()->key), $expiration, $accessor);

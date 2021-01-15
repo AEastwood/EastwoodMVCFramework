@@ -17,7 +17,7 @@ class CSRF extends Middleware
     {
         $token = $_POST['csrf'];
 
-        if($token !== App::body()->csrf->csrf_token) {
+        if($token !== App::body()->csrf->token) {
             return Response::json(['code' => 500, 'message' => 'Invalid CSRF token was provided, please try again.'], 200);
         }
 

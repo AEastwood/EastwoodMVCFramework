@@ -15,7 +15,7 @@ class IPConstraints extends Middleware {
     public static function ipBlacklisted()
     {
         $blacklist = explode(',', APP::body()->env['IP_BLACKLIST']);
-        $cip = Cookie::getAndDecryptCookie('_cip') ?? App::getIP();
+        $cip = Cookie::getAndDecrypt('_cip') ?? App::getIP();
 
         if(in_array($cip, $blacklist)) {
             return Controller::view('errors.error', [
@@ -33,7 +33,7 @@ class IPConstraints extends Middleware {
     public static function ipWhitelisted()
     {
         $whitelist = explode(',', APP::body()->env['IP_WHITELIST']);
-        $cip = Cookie::getAndDecryptCookie('_cip') ?? App::getIP();
+        $cip = Cookie::getAndDecrypt('_cip') ?? App::getIP();
 
         if(!in_array($cip, $whitelist)) {
             return Controller::view('errors.error', [

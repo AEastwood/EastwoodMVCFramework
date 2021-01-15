@@ -2,6 +2,8 @@
 
 namespace MVC\Classes;
 
+use Carbon\Carbon;
+
 class TemplateEngine
 {    
     private int $cache_length;
@@ -41,7 +43,7 @@ class TemplateEngine
     /**
      *  set cache file owner to www-data
      */
-    private function changeOwner(): object
+    private function changeOwner(): TemplateEngine
     {
         chown($this->view_cache, 'www-data');
 
@@ -51,7 +53,7 @@ class TemplateEngine
     /**
      *  set cache file permissions to 0644
      */
-    private function changePermissions(): object
+    private function changePermissions(): TemplateEngine
     {
         chmod($this->view_cache, 0600);
 
@@ -61,7 +63,7 @@ class TemplateEngine
     /**
      *  create cached version of the view
      */
-    private function createCache(): object
+    private function createCache(): TemplateEngine
     {
         if($this->use_cache) {
             file_put_contents($this->view_cache, $this->view);
@@ -73,7 +75,7 @@ class TemplateEngine
     private function directives(): object
     {
         $directives = [
-            '@csrf' => '<input type="hidden" id="CSRFToken" value="' . App::body()->csrf->csrf_token .'">',
+            '@csrf' => '<input type="hidden" id="CSRFToken" value="' . App::body()->csrf->token .'">',
         ];
 
         foreach($directives as $directive => $value) {
@@ -86,7 +88,7 @@ class TemplateEngine
     /**
      *  echo $var wrapped in htmlspecialchars
      */
-    private function escape(): object
+    private function escape(): TemplateEngine
     {
         $this->view = preg_replace($this->escapeRegex, '<?php echo htmlspecialchars($1, ENT_QUOTES) ?>', $this->view);
         
@@ -128,7 +130,7 @@ class TemplateEngine
      *  generate fresh version of the template
      *  create cache file if cache is enabled
      */
-    private function generateNew(array $variables = [])
+    private function generateNew(array $variables = []): TemplateEngine
     {
         if (file_exists($this->view)) {
             $this->view = file_get_contents($this->view);
@@ -162,7 +164,7 @@ class TemplateEngine
     /*
      *  run template engine against view contents
      */
-    public function init(array $variables = []): object
+    public function init(array $variables = []): TemplateEngine
     {
         if($this->use_cache && $this->hasValidCacheFile()) {
             $this->loadCacheFile();
@@ -190,7 +192,7 @@ class TemplateEngine
     /**
      *  echo $var without wrapping
      */
-    private function nonEscaped(): object 
+    private function nonEscaped(): TemplateEngine
     {
         $this->view = preg_replace($this->noneEscapeRegex, '<?php echo $1 ?>', $this->view);
         

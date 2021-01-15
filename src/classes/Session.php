@@ -76,9 +76,9 @@ class Session {
     {
         $expiry = time() + 86400;
 
-        Cookie::setAndEncryptCookie('_cip', App::getIP(), $expiry);
-        Cookie::setAndEncryptCookie('_cuc', App::getCountry(), $expiry);
-        Cookie::setAndEncryptCookie('_cloc', App::body()->locale, $expiry);
+        Cookie::setEncrypted('_cip', App::getIP(), $expiry);
+        Cookie::setEncrypted('_cuc', App::getCountry(), $expiry);
+        Cookie::setEncrypted('_cloc', App::body()->locale, $expiry);
     }
 
     /**
