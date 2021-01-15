@@ -10,7 +10,7 @@ class TemplateEngine
     private string $view;
     private string $view_cache;
     private string $view_name;
-    
+
     private string $escapeRegex;
     private string $noneEscapeRegex;
 
@@ -43,7 +43,7 @@ class TemplateEngine
      * replace all directives with their respective values
      * @return object
      */
-    private function directives(): object
+    private function directives(): void
     {
         $directives = [
             '@csrf' => '<input type="hidden" id="CSRFToken" value="' . App::body()->csrf->token .'">',
@@ -52,8 +52,6 @@ class TemplateEngine
         foreach($directives as $directive => $value) {
             $this->view = str_replace($directive, $value, $this->view);
         }
-
-        return ($this);
     }
 
     /**
@@ -91,7 +89,7 @@ class TemplateEngine
     {
         if (Storage::exists($this->view)) {
             $this->view = Storage::get($this->view);
-            $this->view = $this->directives()->escape()->nonEscaped()->asString();
+            $this->view = $this->escape()->nonEscaped()->asString();
 
             extract($this->parameters($variables), EXTR_SKIP);
 
@@ -178,6 +176,7 @@ class TemplateEngine
      */
     public function render()
     {
+        $this->directives();
         echo $this->view;
     }
 
