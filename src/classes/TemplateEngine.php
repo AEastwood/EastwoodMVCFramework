@@ -41,26 +41,6 @@ class TemplateEngine
     }
 
     /**
-     *  set cache file owner to www-data
-     */
-    private function changeOwner(): TemplateEngine
-    {
-        chown($this->view_cache, 'www-data');
-
-        return ($this);
-    }
-
-    /**
-     *  set cache file permissions to 0644
-     */
-    private function changePermissions(): TemplateEngine
-    {
-        chmod($this->view_cache, 0600);
-
-        return ($this);
-    }
-
-    /**
      *  create cached version of the view
      */
     private function createCache(): TemplateEngine
@@ -161,8 +141,10 @@ class TemplateEngine
         return (false);
     }
 
-    /*
+    /**
      *  run template engine against view contents
+     * @param array $variables
+     * @return TemplateEngine
      */
     public function init(array $variables = []): TemplateEngine
     {
@@ -175,7 +157,9 @@ class TemplateEngine
         $this->generateNew($variables);
 
         if($this->use_cache) {
-            $this->createCache()->changeOwner()->changePermissions();
+            $this->createCache();
+            Storage::changeOwner($this->view_cache);
+            Storage::changePermissions($this->view_cache, 0600);
         }
             
         return ($this);

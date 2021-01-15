@@ -7,6 +7,36 @@ class Storage {
     private static string $storageLocation = '../storage/public/';
 
     /**
+     *  change owner of file
+     * @param string $filename
+     * @param string $owner
+     */
+    public static function changeOwner(string $filename, string $owner = 'www-data')
+    {
+        if(!file_exists($filename)){
+            App::body()->logger->info('Tried to change owner of ' . $filename . ' but it does not exist.');
+            return;
+        }
+
+        chown($filename, $owner);
+    }
+
+    /**
+     *  change permissions of file
+     * @param string $filename
+     * @param int $permissions
+     */
+    public static function changePermissions(string $filename, int $permissions)
+    {
+        if(!file_exists($filename)){
+            App::body()->logger->info('Tried to change permissions of ' . $filename . ' but it does not exist.');
+            return;
+        }
+
+        chmod($filename, $permissions);
+    }
+
+    /**
      *  get file from local storage
      * @param string $file
      * @return string
