@@ -2,9 +2,6 @@
 
 namespace MVC\Classes;
 
-use Closure;
-use MVC\Classes\Cookie;
-
 class TemplateEngine
 {    
     private int $cache_length;
@@ -96,6 +93,11 @@ class TemplateEngine
         return ($this);
     }
 
+    /**
+     * extract all route parameters so they can be used inside the template code
+     * @param array $variables
+     * @return array
+     */
     private function extractParameters(array $variables): array
     {
         foreach($_SESSION['EMVC.parameters'] as $k => $v) {
@@ -150,7 +152,7 @@ class TemplateEngine
      */
     private function hasValidCacheFile(): bool
     {
-        if(file_exists($this->view_cache) && (filemtime($this->view_cache) > (time() - $$this->cache_length))) {
+        if(file_exists($this->view_cache) && (filemtime($this->view_cache) > (time() - $this->cache_length))) {
             return (true);
         }
 
