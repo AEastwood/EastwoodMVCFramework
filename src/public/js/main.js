@@ -15,11 +15,6 @@ function addEventListeners() {
             message: $('#message-text').val()
         };
 
-        if (!email.csrf || !email.name || !email.email || email.message) {
-            createAlert(500, 'Please complete all fields and try again.');
-            return;
-        }
-
         $.ajax({
             type: "POST",
             url: '/message/send',

@@ -107,28 +107,26 @@ class Storage {
             return 'Error: Unable to get file "' . $file .'" as it does not exist.';
         }
 
-        if(file_exists($file)) {
-            try {
-                return file_get_contents(self::$storageLocation . $file);
-            }
-            catch (\Exception $e) {
-                App::body()->logger->error('Unable to read file "' . $file . '", Error: ' . $e->getMessage());
-            }
+        try {
+            return file_get_contents(self::$storageLocation . $file);
+        }
+        catch (\Exception $e) {
+            App::body()->logger->error('Unable to read file "' . $file . '", Error: ' . $e->getMessage());
         }
     }
 
     /**
      * create file
-     * @param string $filename
+     * @param string $file
      * @param string $contents
      */
-    public static function put(string $filename, string $contents): void
+    public static function put(string $file, string $contents): void
     {
        try {
-           file_put_contents($filename, $contents);
+           file_put_contents(self::$storageLocation . $file, $contents);
        }
         catch(\Exception $e) {
-            App::body()->logger->info('[Storage] Unable to put contents in file ' . $filename .', Error: ' . $e->getMessage());
+            App::body()->logger->info('[Storage] Unable to put contents in file ' . $file .', Error: ' . $e->getMessage());
         }
     }
 
