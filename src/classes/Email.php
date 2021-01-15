@@ -82,6 +82,10 @@ class Email
         $this->setHeaders();
     }
 
+    /**
+     * send email
+     * @return bool#
+     */
     public function send(): bool
     {
         if(mail($this->to, $this->subject, $this->template, $this->headers)) {
