@@ -33,7 +33,7 @@ class Auth
         $this->maxAge = $maxAge;
 
         if ($this->hasSession()) {
-            $this->validateSession();
+            $this->validate();
             $this->setUser();
         }
     }
@@ -43,7 +43,7 @@ class Auth
      * @param $key
      * @return array
      */
-    private function getSession(string $key): array
+    private function get(string $key): array
     {
         if ($this->hasSession($key)) {
             return $_SESSION[$key];
@@ -66,13 +66,13 @@ class Auth
     /**
      *  validates user session
      */
-    private function validateSession(): void
+    private function validate(): void
     {
         $session = null;
         $key = 'EMVC.validity';
 
         if($this->hasSession($key)) {
-            $session = $this->getSession($key);
+            $session = $this->get($key);
         }
 
         if($session !== null) {
@@ -85,7 +85,7 @@ class Auth
      */
     private function setUser()
     {
-        $user = $this->getSession('EMVC.user');
+        $user = $this->get('EMVC.user');
 
         $this->id            = $user->id;
         $this->name          = $user->name;

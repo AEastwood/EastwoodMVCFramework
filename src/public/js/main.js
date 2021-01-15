@@ -1,23 +1,24 @@
-var email = {
-    csrf: null,
-    name: null,
-    email: null,
-    message: null
-}
-
 document.addEventListener('DOMContentLoaded', addEventListeners);
 
 function addEventListeners() {
     let sendMessageButton = document.getElementById('sendMessageButton');
+    let closeModalMessageButton = document.getElementById('closeMessageModalButton');
 
     sendMessageButton.addEventListener('click', () => {
 
         $('#modal-status').val();
 
-        email.csrf = $('#CSRFToken').val();
-        email.name = $('#sender-name').val();
-        email.email = $('#sender-email').val();
-        email.message = $('#message-text').val();
+        email = {
+            csrf: $('#CSRFToken').val(),
+            name: $('#sender-name').val(),
+            email: $('#sender-email').val(),
+            message: $('#message-text').val()
+        };
+
+        if (!email.csrf || !email.name || !email.email || email.message) {
+            createAlert(500, 'Please complete all fields and try again.');
+            return;
+        }
 
         $.ajax({
             type: "POST",
@@ -28,6 +29,10 @@ function addEventListeners() {
             },
             dataType: 'JSON'
         });
+    });
+
+    closeModalMessageButton.addEventListener('click', () => {
+        $('#modal-status').html('');
     });
 }
 

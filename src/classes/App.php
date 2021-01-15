@@ -98,7 +98,7 @@ class App
             }
         }
 
-        return self::body()->request->client->getClient()->geoplugin_countryCode;
+        return self::body()->request->client->get()->geoplugin_countryCode;
     }
 
     /**

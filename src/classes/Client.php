@@ -16,7 +16,7 @@ class Client {
      */
     public function __construct()
     {
-        $this->client = $this->resolveClient();
+        $this->client = $this->resolve();
 
         $this->logger = new Logger('Client');
         $this->logger->pushHandler(new StreamHandler('../storage/logs/client.log', Logger::WARNING));
@@ -26,7 +26,7 @@ class Client {
      * return client
      * @return object
      */
-    public function getClient(): object
+    public function get(): object
     {
         return $this->client;
     }
@@ -34,7 +34,7 @@ class Client {
     /**
      *  return object containing client
      */
-    private function resolveClient(): object
+    private function resolve(): object
     {
         try {
             $client = file_get_contents('http://www.geoplugin.net/json.gp');

@@ -17,22 +17,25 @@ class Session {
      */
     public function __construct()
     {
+        $prefix = 'EastwoodMVC-';
+
         $this->state = 'non_session';
         $this->valid = false;
 
         if(!isset($_SESSION)) {
             session_set_cookie_params(86400);
+            session_create_id($prefix);
             session_start();
 
-            $this->createSession();
-            self::preventFixation();
+            $this->create();
+            $this->preventHijack();
         }
     }
 
     /**
      *  session builder
      */
-    private function createSession(): void
+    private function create(): void
     {
         $this->id = $_COOKIE['PHPSESSID'] ?? 'CREATED_SESSION';
 
@@ -52,6 +55,21 @@ class Session {
     }
 
     /**
+     * securely wipe and destroy old session
+     */
+    private function destroy(): void
+    {
+        session_start();
+        session_unset();
+        session_destroy();
+        session_write_close();
+        setcookie(session_name(),'',0,'/');
+        session_regenerate_id(true);
+
+        $this->create();
+    }
+
+    /**
      *  create user instance cookies
      */
     public function createUserInstanceCookies(): void
@@ -64,16 +82,18 @@ class Session {
     }
 
     /**
-     *  used to prevent session fixation attacks
+     * check if the session has been hijacked
      */
-    public static function preventFixation(): void
+    public function preventHijack(): void
     {
-        $initiated = 'EMVC.initiated';
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
 
-        if (!isset($_SESSION[$initiated])) {
-            session_regenerate_id();
-            $_SESSION[$initiated] = true;
-         }
+        if($this->state !== 'has_session') {
+            return;
+        }
+
+        if(App::getIP() !== $_SESSION['EMVC.app.valid_ip'] || App::body()->request->user_agent !== $userAgent) {
+            $this->destroy();
+        }
     }
-
 }

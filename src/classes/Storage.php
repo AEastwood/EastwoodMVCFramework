@@ -52,7 +52,7 @@ class Storage {
     }
 
     /**
-     *  put contents in file in local storage
+     *  put contents in file in local storage if the file does not exist already
      * @param string $file
      * @param string $contents
      * @param array $config
