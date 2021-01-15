@@ -67,24 +67,6 @@ class TemplateEngine
     }
 
     /**
-     * extract all route parameters so they can be used inside the template code
-     * @param array $variables
-     * @return void
-     */
-    private function extractParameters(array $variables): void
-    {
-        foreach($_SESSION['EMVC.parameters'] as $k => $v) {
-            $variables[$k] = $v;
-        }
-
-        foreach($variables as $k => $v) {
-            $variables[$k] = str_replace('%20', ' ', $v);
-        }
-
-        extract($variables, EXTR_SKIP);
-    }
-
-    /**
      *  strip {{}} from dynamic indexes in the active view
      * @param string $match
      * @return string
@@ -110,8 +92,8 @@ class TemplateEngine
         if (Storage::exists($this->view)) {
             $this->view = Storage::get($this->view);
             $this->view = $this->directives()->escape()->nonEscaped()->asString();
-            
-            $this->extractParameters($variables);
+
+            extract($this->parameters($variables), EXTR_SKIP);
 
             ob_start();
             eval('?>'. $this->view);
@@ -161,6 +143,24 @@ class TemplateEngine
     private function loadCacheFile(): void
     {
         $this->view = Storage::get($this->view_cache);
+    }
+
+    /**
+     * extract all route parameters so they can be used inside the template code
+     * @param array $variables
+     * @return array
+     */
+    private function parameters(array $variables): array
+    {
+        foreach($_SESSION['EMVC.parameters'] as $k => $v) {
+            $variables[$k] = $v;
+        }
+
+        foreach($variables as $k => $v) {
+            $variables[$k] = str_replace('%20', ' ', $v);
+        }
+
+        return $variables;
     }
     
     /**
