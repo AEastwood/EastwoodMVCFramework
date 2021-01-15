@@ -26,7 +26,7 @@ class Cookie {
     {
         if(!isset($_COOKIE[$cookieName])) {
             App::body()->logger->info('[Cookie] Attempting to get cookie "' . $cookieName . '" but it does not exist.');
-            return;
+            return null;
         }
 
         try {
