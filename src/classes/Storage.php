@@ -124,12 +124,12 @@ class Storage {
      */
     public static function put(string $filename, string $contents): void
     {
-        if(file_exists($filename)){
-            App::body()->logger->info('Tried to create file ' . $filename . ' but it already exists.');
-            return;
+       try {
+           file_put_contents($filename, $contents);
+       }
+        catch(\Exception $e) {
+            App::body()->logger->info('[Storage] Unable to put contents in file ' . $filename .', Error: ' . $e->getMessage());
         }
-
-        file_put_contents($filename, $contents);
     }
 
     /**
