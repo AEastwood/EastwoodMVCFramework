@@ -2,8 +2,6 @@
 
 namespace MVC\Classes;
 
-use Carbon\Carbon;
-
 class TemplateEngine
 {    
     private int $cache_length;
@@ -16,8 +14,9 @@ class TemplateEngine
     private string $escapeRegex;
     private string $noneEscapeRegex;
 
-    /*
+    /**
      *  constructor
+     * @param $view
      */
     public function __construct($view)
     {
@@ -41,17 +40,9 @@ class TemplateEngine
     }
 
     /**
-     *  create cached version of the view
+     * replace all directives with their respective values
+     * @return object
      */
-    private function createCache(): TemplateEngine
-    {
-        if($this->use_cache) {
-            file_put_contents($this->view_cache, $this->view);
-        }
-        
-        return ($this);
-    }
-
     private function directives(): object
     {
         $directives = [
@@ -78,9 +69,9 @@ class TemplateEngine
     /**
      * extract all route parameters so they can be used inside the template code
      * @param array $variables
-     * @return array
+     * @return void
      */
-    private function extractParameters(array $variables): array
+    private function extractParameters(array $variables): void
     {
         foreach($_SESSION['EMVC.parameters'] as $k => $v) {
             $variables[$k] = $v;
@@ -90,11 +81,13 @@ class TemplateEngine
             $variables[$k] = str_replace('%20', ' ', $v);
         }
 
-        return ($variables);
+        extract($variables, EXTR_SKIP);
     }
 
-    /*
+    /**
      *  strip {{}} from dynamic indexes in the active view
+     * @param string $match
+     * @return string
      */
     private function format(string $match): string
     {
@@ -109,15 +102,16 @@ class TemplateEngine
     /**
      *  generate fresh version of the template
      *  create cache file if cache is enabled
+     * @param array $variables
+     * @return TemplateEngine
      */
-    private function generateNew(array $variables = []): TemplateEngine
+    private function generate(array $variables = []): TemplateEngine
     {
-        if (file_exists($this->view)) {
-            $this->view = file_get_contents($this->view);
+        if (Storage::exists($this->view)) {
+            $this->view = Storage::get($this->view);
             $this->view = $this->directives()->escape()->nonEscaped()->asString();
             
-            $variables = $this->extractParameters($variables);
-            extract($variables, EXTR_SKIP);
+            $this->extractParameters($variables);
 
             ob_start();
             eval('?>'. $this->view);
@@ -134,11 +128,7 @@ class TemplateEngine
      */
     private function hasValidCacheFile(): bool
     {
-        if(file_exists($this->view_cache) && (filemtime($this->view_cache) > (time() - $this->cache_length))) {
-            return (true);
-        }
-
-        return (false);
+        return Storage::existsYoungerThan($this->view_cache, $this->cache_length);
     }
 
     /**
@@ -154,10 +144,10 @@ class TemplateEngine
             return ($this);
         }
 
-        $this->generateNew($variables);
+        $this->generate($variables);
 
         if($this->use_cache) {
-            $this->createCache();
+            Storage::put($this->view_cache, $this->view);
             Storage::changeOwner($this->view_cache);
             Storage::changePermissions($this->view_cache, 0600);
         }
@@ -170,7 +160,7 @@ class TemplateEngine
      */
     private function loadCacheFile(): void
     {
-        $this->view = file_get_contents($this->view_cache);
+        $this->view = Storage::get($this->view_cache);
     }
     
     /**

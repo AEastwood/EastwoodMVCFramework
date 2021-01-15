@@ -4,7 +4,7 @@ namespace MVC\Classes;
 
 class Storage {
 
-    private static string $storageLocation = '../storage/public/';
+    private static string $storageLocation = '../storage/';
 
     /**
      *  change owner of file
@@ -22,6 +22,20 @@ class Storage {
     }
 
     /**
+     * delete file
+     * @param $filename
+     */
+    public static function delete($filename): void
+    {
+        if(!file_exists($filename)) {
+            App::body()->logger->info('Unable to delete file ' . $filename . ' as it does not exist');
+            return;
+        }
+
+        unlink($filename);
+    }
+
+    /**
      *  change permissions of file
      * @param string $filename
      * @param int $permissions
@@ -34,6 +48,50 @@ class Storage {
         }
 
         chmod($filename, $permissions);
+    }
+
+    /**
+     * check file exists
+     * @param $filename
+     * @return bool
+     */
+    public static function exists($filename): bool
+    {
+        if(file_exists($filename)){
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * check file exists and is older than $minutes
+     * @param string $filename
+     * @param int $minutes
+     * @return bool
+     */
+    public static function existsOlderThan(string $filename, int $minutes): bool
+    {
+        if(file_exists($filename) && (filemtime($filename) > (time() - $minutes))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * check file exists and is younger than $minutes
+     * @param string $filename
+     * @param int $minutes
+     * @return bool
+     */
+    public static function existsYoungerThan(string $filename, int $minutes): bool
+    {
+        if(file_exists($filename) && (filemtime($filename) < (time() - $minutes))) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -60,25 +118,18 @@ class Storage {
     }
 
     /**
-     *  put contents in file in local storage
-     * @param string $file
+     * create file
+     * @param string $filename
      * @param string $contents
-     * @param array $config
      */
-    public static function put(string $file, string $contents, array $config = []): void
+    public static function put(string $filename, string $contents): void
     {
-        if(!file_exists(self::$storageLocation . $file)) {
-            App::body()->logger->info('Unable to commit to file "' . $file .'" as it does not exist.');
+        if(file_exists($filename)){
+            App::body()->logger->info('Tried to create file ' . $filename . ' but it already exists.');
             return;
         }
 
-        try {
-            file_put_contents(self::$storageLocation . $file, $contents);
-            return;
-        }
-        catch (Exception $e) {
-            App::body()->logger->error('Unable to commit to file "' . $file .'", Error: ' . $e->getMessage());
-        }
+        file_put_contents($filename, $contents);
     }
 
     /**
