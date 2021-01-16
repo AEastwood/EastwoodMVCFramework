@@ -8,7 +8,7 @@ use Monolog\Logger;
 
 class Client {
 
-    public object $client;
+    private object $client;
     public Logger $logger;
 
     /**
@@ -29,6 +29,19 @@ class Client {
     public function get(): object
     {
         return $this->client;
+    }
+
+    /**
+     * returns true if user is in Europe
+     * @return bool
+     */
+    public function isEuropean(): bool
+    {
+        if($this->get()->geoplugin_continentCode === "EU") {
+            return true;
+        }
+
+        return false;
     }
     
     /**

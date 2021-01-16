@@ -6,6 +6,7 @@ use MVC\Models\User;
 
 class Auth
 {
+    public bool $authed;
     public int $id;
     public string $name;
     public string $email;
@@ -21,6 +22,7 @@ class Auth
     */
     public function __construct($maxAge)
     {
+        $this->authed = false;
         $this->id = -1;
         $this->name = '';
         $this->email = '';

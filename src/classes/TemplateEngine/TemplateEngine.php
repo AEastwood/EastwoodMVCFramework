@@ -28,7 +28,7 @@ class TemplateEngine
         $this->view_name       = str_replace('.', '/', $view);
 
         $this->cache_length    = App::body()->env['RENDER_MAX'] * 60;
-        $this->use_cache       = (App::body()->env['RENDER_CACHE'] === 'true') ? true : false;
+        $this->use_cache       = App::body()->env['RENDER_CACHE'] === 'true';
         
         $this->view            = '../resources/views/' . $this->view_name . '.view.php';
         $this->view_cache      = '../storage/cache/' . $this->view_name . '.view.cache';
@@ -48,12 +48,7 @@ class TemplateEngine
      */
     private function directives(): TemplateEngine
     {
-        $directives = [
-            '@test' => '<?php if(1 === 1): ?>',
-            '@endtest' => '<?php endif; ?>'
-        ];
-
-        foreach($directives as $directive => $value) {
+        foreach(TemplateDirectives::directives() as $directive => $value) {
             $this->view = str_replace($directive, $value, $this->view);
         }
 
@@ -68,21 +63,6 @@ class TemplateEngine
         $this->view = preg_replace($this->escapeRegex, '<?php echo htmlspecialchars($1, ENT_QUOTES) ?>', $this->view);
         
         return ($this);
-    }
-
-    /**
-     *  strip {{}} from dynamic indexes in the active view
-     * @param string $match
-     * @return string
-     */
-    private function format(string $match): string
-    {
-        $chars = ' ';
-        $match = preg_replace('/[{}]/', '', $match);
-        $match = ltrim($match, $chars);
-        $match = rtrim($match, $chars);
-
-        return ($match);
     }
 
     /**
@@ -174,7 +154,7 @@ class TemplateEngine
     {
         $this->view = preg_replace($this->noneEscapeRegex, '<?php echo $1 ?>', $this->view);
         
-        return ($this);
+        return $this;
     }
     
     /**
@@ -191,11 +171,7 @@ class TemplateEngine
      */
     private function security(): void
     {
-        $directives = [
-            '@csrf' => '<input type="hidden" id="CSRFToken" value="' . App::body()->csrf->token .'">',
-        ];
-
-        foreach($directives as $directive => $value) {
+        foreach(TemplateDirectives::nonCacheSafe() as $directive => $value) {
             $this->view = str_replace($directive, $value, $this->view);
         }
     }

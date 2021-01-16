@@ -14,8 +14,7 @@ class Controller
      */
     public static function view(string $view, array $variables = [])
     {
-        $templateEngine = new TemplateEngine($view);
-        return $templateEngine->init($variables)->render();
+        return (new TemplateEngine($view))->init($variables)->render();
     }
 
 }

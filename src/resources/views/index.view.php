@@ -39,11 +39,11 @@
         <div class="portfolio">
             
             <img src="{{ asset('imgs/me.jpg') }}" class="rounded img-fluid me pb-3" alt="Me" width="230px" height="240px">
-            
+
             <h1>Adam Eastwood</h1>
-            
+
             <p class="lead">Just me.</p>
-            
+
             <p class="lead pt-2">
                 <a class="clean-link" href="https://www.instagram.com/aeasywood/" target="_blank" title="instagram" rel="noreferrer">
                     <i class="text-dark clean-link fab fa-instagram pr-3 h3"></i>
