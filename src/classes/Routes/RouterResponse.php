@@ -2,8 +2,8 @@
 
 namespace MVC\Classes\Routes;
 
-use Closure;
 use MVC\Classes\App;
+use MVC\Classes\Middleware;
 use MVC\Classes\Routes\Router;
 
 class RouterResponse extends Router 
