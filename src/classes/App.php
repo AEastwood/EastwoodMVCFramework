@@ -5,6 +5,8 @@ namespace MVC\Classes;
 use Defuse\Crypto\Key;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use MVC\Classes\Database\Database;
+use MVC\Classes\Routes\Router;
 
 class App
 {

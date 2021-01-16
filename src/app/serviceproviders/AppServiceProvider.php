@@ -3,10 +3,10 @@
 namespace MVC\App\ServiceProviders;
 
 use App\MVC\Classes\Middleware;
+use MVC\App\Middleware\Auth;
 use MVC\App\Middleware\CSRF;
 use MVC\App\Middleware\IPConstraints;
 use MVC\App\Middleware\LocationConstraints;
-use MVC\App\Controllers\Auth\Web;
 
 class AppServiceProvider {
     
@@ -18,8 +18,8 @@ class AppServiceProvider {
     public function __construct()
     {
         $this->providers = [
-            'auth:api'      => [Web::class, 'authenticatedApi'],
-            'auth:web'      => [Web::class, 'authenticatedWeb'],
+            'auth:api'      => [Auth::class, 'authenticatedApi'],
+            'auth:web'      => [Auth::class, 'authenticatedWeb'],
             'csrf'          => [CSRF::class, 'validCSRF'],
             'ip:blacklist'  => [IPConstraints::class, 'ipBlacklisted'],
             'ip:whitelist'  => [IPConstraints::class, 'ipWhitelisted'],

@@ -2,6 +2,8 @@
 
 namespace MVC\Classes;
 
+use MVC\Classes\Routes\RouterResponse;
+
 class Response
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\Classes;
+namespace MVC\Classes\Routes;
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;

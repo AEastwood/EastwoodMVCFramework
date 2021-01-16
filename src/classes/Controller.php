@@ -2,6 +2,8 @@
 
 namespace MVC\Classes;
 
+use MVC\Classes\TemplateEngine\TemplateEngine;
+
 class Controller
 {
     /**

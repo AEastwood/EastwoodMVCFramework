@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\Classes;
+namespace MVC\Classes\Database;
 
 use MVC\Classes\Model;
 

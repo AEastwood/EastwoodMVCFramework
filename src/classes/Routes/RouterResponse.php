@@ -1,9 +1,10 @@
 <?php
 
-namespace MVC\Classes;
+namespace MVC\Classes\Routes;
 
 use Closure;
-use MVC\Classes\Router;
+use MVC\Classes\App;
+use MVC\Classes\Routes\Router;
 
 class RouterResponse extends Router 
 {

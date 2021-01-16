@@ -7,7 +7,7 @@ use MVC\Classes\Cookie;
 use MVC\Classes\Controller;
 use MVC\Classes\Middleware;
 
-class LocationConstraints extends Middleware{
+class LocationConstraints extends Middleware {
 
     /**
     *   Refuses access to blacklisted IP addresses

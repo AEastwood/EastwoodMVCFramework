@@ -2,7 +2,7 @@
 
 namespace MVC\Models;
 
-use MVC\Classes\Router;
+use MVC\Classes\Routes\Router;
 
 class Route extends Router
 {

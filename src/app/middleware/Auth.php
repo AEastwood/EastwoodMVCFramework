@@ -3,9 +3,10 @@
 namespace MVC\App\Middleware;
 
 use MVC\Classes\App;
+use MVC\Classes\Middleware;
 use MVC\Classes\Response;
 
-class Auth {
+class Auth extends Middleware {
 
     /**
     *   returns authorisation status

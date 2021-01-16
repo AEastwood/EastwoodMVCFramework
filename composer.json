@@ -11,9 +11,11 @@
     "autoload": {
         "psr-4": {
             "MVC\\Classes\\": "src/classes/",
+            "MVC\\Classes\\Database\\": "src/classes/Database",
+            "MVC\\Classes\\Routes\\": "src/classes/Routes",
+            "MVC\\Classes\\TemplateEngine\\": "src/classes/TemplateEngine",
             "MVC\\App\\ServiceProviders\\": "src/app/serviceproviders/",
             "MVC\\App\\Controllers\\": "src/app/controllers/",
-            "MVC\\App\\Exceptions\\": "src/app/exceptions/",
             "MVC\\App\\Middleware\\": "src/app/middleware/",
             "MVC\\Models\\": "src/resources/models/"
         }

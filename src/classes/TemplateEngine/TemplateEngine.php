@@ -1,6 +1,9 @@
 <?php
 
-namespace MVC\Classes;
+namespace MVC\Classes\TemplateEngine;
+
+use MVC\Classes\App;
+use MVC\Classes\Storage;
 
 class TemplateEngine
 {    
@@ -41,17 +44,20 @@ class TemplateEngine
 
     /**
      * replace all directives with their respective values
-     * @return object
+     * @return void
      */
-    private function directives(): void
+    private function directives(): TemplateEngine
     {
         $directives = [
-            '@csrf' => '<input type="hidden" id="CSRFToken" value="' . App::body()->csrf->token .'">',
+            '@test' => '<?php if(1 === 1): ?>',
+            '@endtest' => '<?php endif; ?>'
         ];
 
         foreach($directives as $directive => $value) {
             $this->view = str_replace($directive, $value, $this->view);
         }
+
+        return $this;
     }
 
     /**
@@ -89,7 +95,7 @@ class TemplateEngine
     {
         if (Storage::exists($this->view)) {
             $this->view = Storage::get($this->view);
-            $this->view = $this->escape()->nonEscaped()->asString();
+            $this->view = $this->directives()->escape()->nonEscaped()->asString();
 
             extract($this->parameters($variables), EXTR_SKIP);
 
@@ -98,7 +104,7 @@ class TemplateEngine
             $this->view = ob_get_clean();
             ob_flush();
 
-            return ($this);
+            return $this;
         }
     }
 
@@ -121,7 +127,7 @@ class TemplateEngine
         if($this->use_cache && $this->hasValidCacheFile()) {
             $this->loadCacheFile();
                 
-            return ($this);
+            return $this;
         }
 
         $this->generate($variables);
@@ -132,7 +138,7 @@ class TemplateEngine
             Storage::changePermissions($this->view_cache, 0600);
         }
             
-        return ($this);
+        return $this;
     }
 
     /**
@@ -176,8 +182,22 @@ class TemplateEngine
      */
     public function render()
     {
-        $this->directives();
+        $this->security();
         echo $this->view;
+    }
+
+    /**
+     * apply security to the template before rendering
+     */
+    private function security(): void
+    {
+        $directives = [
+            '@csrf' => '<input type="hidden" id="CSRFToken" value="' . App::body()->csrf->token .'">',
+        ];
+
+        foreach($directives as $directive => $value) {
+            $this->view = str_replace($directive, $value, $this->view);
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-use MVC\Classes\Router as Route;
+use MVC\Classes\Routes\Router as Route;
 use MVC\App\Controllers\DefaultController;
 
 # GET routes

@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\Classes;
+namespace MVC\Classes\Database;
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -65,7 +65,7 @@ class Database {
     /**
      *  serialize
      */
-    public function __serialize()
+    public function __serialize(): array
     {
         $data = [
             'exists'        => $this->exists,
