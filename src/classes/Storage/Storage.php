@@ -130,15 +130,22 @@ class Storage
 
     /**
      * Upload file and return array containing filepath, filesize and the result of the upload
-     * @param string $filename
      * @param array $mimetypes
      * @return array
      */
-    public static function publicUpload(string $filename, array $mimetypes): array
+    public static function publicUpload(array $mimetypes): array
     {
-        $filename = '../storage/processing/' . $filename;
-        move_uploaded_file($_FILES['file']['tmp_name'], $filename);
-        return (new FileSystem($mimetypes))->save(new File($filename));
+        $file = $_FILES['file']['name'] ?? '';
+
+        try {
+            $file = '../storage/processing/' . $file;
+            move_uploaded_file($_FILES['file']['tmp_name'], $file);
+            return (new FileSystem($mimetypes))->save(new File($file));
+        }
+        catch (\Exception $e) {
+            App::body()->logger->error('[Storage] Unable to upload file, Error: ' . $e->getMessage());
+            return [];
+        }
     }
 
     /**

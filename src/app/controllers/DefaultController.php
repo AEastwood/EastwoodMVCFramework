@@ -31,7 +31,7 @@ class DefaultController extends Controller
      */
     public static function uploadFile()
     {
-        var_dump(Storage::publicUpload($_FILES['file']['name'], MimeTypes::image()));
+        var_dump(Storage::publicUpload(MimeTypes::image()));
     }
 
     /**

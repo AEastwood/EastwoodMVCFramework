@@ -2,7 +2,6 @@
 
 namespace MVC\Classes\Storage;
 
-use MVC\Classes\App;
 use PragmaRX\Random\Random;
 
 class FileSystem
@@ -28,7 +27,7 @@ class FileSystem
      */
     public function __destruct()
     {
-        if(file_exists($this->file->path)) {
+        if(file_exists($this->file->path) && is_file($this->file->path)) {
             unlink($this->file->path);
         }
     }
@@ -53,7 +52,6 @@ class FileSystem
      * @param File $file
      * @return array
      * TODO: Need to implement more validation and more secure checks
-     * TODO: Need to implement way of retrieving files and making them publicly accessible in either views or download
      */
     public function save(File $file): array
     {
@@ -63,6 +61,16 @@ class FileSystem
 
         $this->file = $file;
 
+        if($file->size > $this->maxUploadSize) {
+            $result->setResult(FileSaveResult::UPLOAD_REJECTED_FILE_SIZE);
+            return $result->asArray();
+        }
+
+        if(empty($_FILES['file']['name'])) {
+            $result->setResult(FileSaveResult::UPLOAD_EMPTY_FILE);
+            return $result->asArray();
+        }
+
         if(!file_exists($file->path)) {
             $result->setResult(FileSaveResult::UPLOAD_EMPTY_FILE);
             return $result->asArray();
@@ -70,11 +78,6 @@ class FileSystem
 
         if(!in_array($file->mimetype, $this->allowedFileExtensions)) {
             $result->setResult(FileSaveResult::UPLOAD_REJECTED_MIME_TYPE);
-            return $result->asArray();
-        }
-
-        if($file->size > $this->maxUploadSize) {
-            $result->setResult(FileSaveResult::UPLOAD_REJECTED_FILE_SIZE);
             return $result->asArray();
         }
 
