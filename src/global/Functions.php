@@ -22,6 +22,41 @@ function assetFresh(string $path): string
 }
 
 /**
+ *   Die and Debug
+ *   @param  mixed  $data
+ */
+function dd(mixed $data)
+{
+    header('Content-Type: application/json');
+
+    $action = function() use ($data) {
+        echo print_r($data, true);
+        exit;
+    };
+
+    return $action();
+}
+
+/**
+ *  return client IP address
+ */
+function ipAddress(): string
+{
+    $keys = [
+        'CF-Connecting-IP',
+        'HTTP_X_FORWARDED_FOR',
+        'REMOTE_ADDR',
+        'HTTP_CLIENT_IP',
+    ];
+
+    foreach($keys as $key) {
+        if (!empty($_SERVER[$key])) {
+            return $_SERVER[$key];
+        }
+    }
+}
+
+/**
  * return absolute path for redirect
  * @param string $path
  * @return string

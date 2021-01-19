@@ -6,6 +6,8 @@ use Defuse\Crypto\Key;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use MVC\Classes\Database\Database;
+use MVC\Classes\Http\Request;
+use MVC\Classes\Http\Response;
 use MVC\Classes\Routes\Router;
 
 class App
@@ -13,7 +15,7 @@ class App
     private static App $app;
     private static Auth $user;
 
-    private Session $session;
+    public Session $session;
     private Auth $auth;
     public CSRF $csrf;
     public Database $database;
@@ -46,7 +48,7 @@ class App
 
         self::$app      = $this;
 
-        $this->key      = $this->loadKey();
+        $this->key      = $this->getKey();
         $this->request  = new Request();
         $this->session  = new Session();
 
@@ -70,62 +72,9 @@ class App
     }
 
     /**
-    *   Die and Debug
-    *   @param  mixed  $data
-    */
-    public static function dd(mixed $data)
-    {
-        header('Content-Type: application/json');
-        
-        $action = function() use ($data) {
-            echo print_r($data, true);
-            exit;
-        };
-
-        return $action();
-    }
-
-    /**
-     *  return client two digit country code
-     */
-    public static function getCountry(): string
-    {
-        $keys = [
-            'CF-IPCountry',
-        ];
-
-        foreach($keys as $key) {
-            if (!empty($_SERVER[$key])) {
-                return $_SERVER[$key];
-            }
-        }
-
-        return self::body()->request->client->get()->geoplugin_countryCode;
-    }
-
-    /**
-     *  return client IP address
-     */
-    public static function getIP(): string
-    {
-        $keys = [
-            'CF-Connecting-IP',
-            'HTTP_X_FORWARDED_FOR',
-            'REMOTE_ADDR',
-            'HTTP_CLIENT_IP',
-        ];
-
-        foreach($keys as $key) {
-            if (!empty($_SERVER[$key])) {
-                return $_SERVER[$key];
-            }
-        }
-   }
-
-    /**
      *  get decryption key from file
      */
-    private function loadKey(): Key
+    private function getKey(): Key
     {
         $key = $_ENV['SECRET'];
         $key = file_get_contents('../../' . $key);
@@ -145,14 +94,6 @@ class App
     public function run(): void
     {
         $this->response->get($this)();
-    }
-
-    /**
-     *  returns user if logged in
-     */
-    public static function user(): object
-    {
-        return self::$user;
     }
 
 }

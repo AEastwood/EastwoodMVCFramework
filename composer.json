@@ -9,9 +9,14 @@
         "sort-packages": true
     },
     "autoload": {
+        "files": [
+            "src/global/Functions.php",
+            "src/global/Location.php"
+        ],
         "psr-4": {
             "MVC\\Classes\\": "src/classes/",
             "MVC\\Classes\\Database\\": "src/classes/Database",
+            "MVC\\Classes\\Http\\": "src/classes/Http",
             "MVC\\Classes\\Routes\\": "src/classes/Routes",
             "MVC\\Classes\\Storage\\": "src/classes/Storage",
             "MVC\\Classes\\TemplateEngine\\": "src/classes/TemplateEngine",
@@ -24,6 +29,7 @@
     "require": {
         "defuse/php-encryption": "^2.2",
         "filp/whoops": "dev-master",
+        "guzzlehttp/guzzle": "^7.2",
         "monolog/monolog": "^2.2",
         "nesbot/carbon": "^2.41",
         "pragmarx/random": "^0.2.2",

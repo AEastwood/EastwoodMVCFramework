@@ -1,7 +1,8 @@
 <?php
 
-namespace MVC\Classes;
+namespace MVC\Classes\Http;
 
+use MVC\Classes\App;
 use MVC\Classes\Routes\RouterResponse;
 
 class Response
@@ -39,7 +40,7 @@ class Response
         }
         
         return function() {
-            Controller::view('errors.error', ['code' => 404,'message' => 'not found']);
+            Controller::view('errors.error', ['code' => 404, 'message' => 'not found']);
         };
     }
 
