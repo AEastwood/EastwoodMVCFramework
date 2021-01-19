@@ -5,7 +5,6 @@ namespace MVC\Classes;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Exception\GuzzleException;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -39,7 +38,7 @@ class Session
         }
 
         $this->logger = new Logger('Client');
-        $this->logger->pushHandler(new StreamHandler('../storage/logs/client.log', Logger::WARNING));
+        $this->logger->pushHandler(new StreamHandler('../storage/logs/session.log', Logger::WARNING));
 
         $this->client = $this->resolveClient();
     }
