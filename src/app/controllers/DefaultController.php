@@ -5,6 +5,8 @@ namespace MVC\App\Controllers;
 use MVC\Classes\Email;
 use MVC\Classes\Response;
 use MVC\Classes\Controller;
+use MVC\Classes\Storage\MimeTypes;
+use MVC\Classes\Storage\Storage;
 
 class DefaultController extends Controller
 {
@@ -14,6 +16,23 @@ class DefaultController extends Controller
     public static function index()
     {
         return Controller::view('index');
+    }
+
+    /**
+     * upload
+     */
+    public static function upload()
+    {
+        return Controller::view('upload');
+    }
+
+    /**
+     * process file upload
+     */
+    public static function uploadFile()
+    {
+        $filename = Storage::initUpload($_FILES['file']['name']);
+        var_dump(Storage::publicUpload($filename, MimeTypes::image()));
     }
 
     /**
