@@ -3,6 +3,7 @@
 
 namespace MVC\Classes;
 
+use MVC\Classes\Storage\Storage;
 
 class Email
 {
@@ -88,13 +89,12 @@ class Email
      */
     public function send(): bool
     {
-        if(mail($this->to, $this->subject, $this->template, $this->headers)) {
-            return true;
-        }
-        else {
+        if(!@mail($this->to, $this->subject, $this->template, $this->headers)) {
             App::body()->logger->error('[Email] Unable to send email to ' . $this->to);
             return false;
         }
+
+        return true;
     }
 
     /**

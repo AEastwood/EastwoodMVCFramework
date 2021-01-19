@@ -6,7 +6,7 @@ use MVC\Classes\Routes\Router;
 
 class Route extends Router
 {
-    public $action;
+    public mixed $action;
     public bool $hasMiddleware;
     public bool $hasParameters;
     public array $methods;

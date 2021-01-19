@@ -13,6 +13,7 @@
             "MVC\\Classes\\": "src/classes/",
             "MVC\\Classes\\Database\\": "src/classes/Database",
             "MVC\\Classes\\Routes\\": "src/classes/Routes",
+            "MVC\\Classes\\Storage\\": "src/classes/Storage",
             "MVC\\Classes\\TemplateEngine\\": "src/classes/TemplateEngine",
             "MVC\\App\\ServiceProviders\\": "src/app/serviceproviders/",
             "MVC\\App\\Controllers\\": "src/app/controllers/",

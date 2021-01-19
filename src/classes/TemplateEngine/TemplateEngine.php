@@ -3,7 +3,8 @@
 namespace MVC\Classes\TemplateEngine;
 
 use MVC\Classes\App;
-use MVC\Classes\Storage;
+use MVC\Classes\Controller;
+use MVC\Classes\Storage\Storage;
 
 class TemplateEngine
 {    
@@ -62,7 +63,7 @@ class TemplateEngine
     {
         $this->view = preg_replace($this->escapeRegex, '<?php echo htmlspecialchars($1, ENT_QUOTES) ?>', $this->view);
         
-        return ($this);
+        return $this;
     }
 
     /**
@@ -86,6 +87,11 @@ class TemplateEngine
 
             return $this;
         }
+
+        Controller::view('errors.error', [
+            'code' => 500,
+            'message' => 'The view file specified does not exist'
+        ]);
     }
 
     /**
@@ -137,18 +143,24 @@ class TemplateEngine
     private function parameters(array $variables): array
     {
         foreach($_SESSION['EMVC.parameters'] as $k => $v) {
-            $variables[$k] = $v;
-        }
-
-        foreach($variables as $k => $v) {
             $variables[$k] = str_replace('%20', ' ', $v);
         }
 
         return $variables;
     }
-    
+
     /**
-     *  echo $var without wrapping
+     * apply non cache safe directives to the template before rendering
+     */
+    private function nonCacheSafeDirectives(): void
+    {
+        foreach(TemplateDirectives::nonCacheSafe() as $directive => $value) {
+            $this->view = str_replace($directive, $value, $this->view);
+        }
+    }
+
+    /**
+     *  echo $var without escaping HTML
      */
     private function nonEscaped(): TemplateEngine
     {
@@ -162,18 +174,8 @@ class TemplateEngine
      */
     public function render()
     {
-        $this->security();
+        $this->nonCacheSafeDirectives();
         echo $this->view;
-    }
-
-    /**
-     * apply security to the template before rendering
-     */
-    private function security(): void
-    {
-        foreach(TemplateDirectives::nonCacheSafe() as $directive => $value) {
-            $this->view = str_replace($directive, $value, $this->view);
-        }
     }
 
 }

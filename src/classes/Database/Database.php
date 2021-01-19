@@ -5,11 +5,10 @@ namespace MVC\Classes\Database;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use PDOException;
-use MVC\App\Exceptions\DatabaseDoesntExistException;
 
 class Database {
 
-    public static \PDO $dbh;
+    protected static \PDO $dbh;
 
     private string $databaseName;
     private bool $isAvailable;
@@ -39,6 +38,7 @@ class Database {
         $this->exists       = false;
         $this->isPersistent = $_ENV['DATABASE_PERSIST'] === 'true';
         $this->tableList    = [];
+        $this->state        = 'disconnected';
         $this->timeout      = $_ENV['DATABASE_TIMEOUT'] ?? 15;
 
         if($this->hasRequiredDatabaseParametersDeclared()) {
@@ -111,7 +111,7 @@ class Database {
             return true;
         }
         catch(PDOEXception $e) {
-            App::body()->logger->error('Unable to connect to database, setting database availability to false. Error: ' . $e->getMessage());
+            $this->logger->error('Unable to connect to database, setting database availability to false. Error: ' . $e->getMessage());
             $this->isAvailable = false;
 
             return false;

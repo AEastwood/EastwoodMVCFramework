@@ -1,9 +1,9 @@
 <?php
 
-namespace MVC\Classes;
+namespace MVC\Classes\Storage;
 
-class Storage {
-
+class Storage
+{
     private static string $storageLocation = '../storage/';
 
     /**
@@ -103,7 +103,6 @@ class Storage {
     {
         if(!file_exists(self::$storageLocation . $file)) {
             App::body()->logger->info('Unable to commit to file "' . $file .'" as it doesn\'t exist.');
-
             return 'Error: Unable to get file "' . $file .'" as it does not exist.';
         }
 
@@ -113,6 +112,31 @@ class Storage {
         catch (\Exception $e) {
             App::body()->logger->error('Unable to read file "' . $file . '", Error: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * moves and processes file for upload. This will validate the mime type and return the
+     * absolute path of the newly upload file
+     * @param string $filename
+     * @return string
+     */
+    public static function initUpload(string $filename): string
+    {
+        $filename = '../storage/processing/' . $filename;
+        move_uploaded_file($_FILES['file']['tmp_name'], $filename);
+        return $filename;
+    }
+
+    /**
+     * Upload file
+     * @param string $filename
+     * @param array $mimetypes
+     * @return array
+     */
+    public static function publicUpload(string $filename, array $mimetypes): array
+    {
+        $fileSystem = new FileSystem($mimetypes);
+        return $fileSystem->save(new File($filename));
     }
 
     /**
@@ -150,8 +174,6 @@ class Storage {
         catch (Exception $e) {
             App::body()->logger->error('Unable to commit to file "' . $file .'", Error: ' . $e->getMessage());
         }
-
-        
     }
 
 }
