@@ -4,7 +4,6 @@ namespace MVC\Classes\Storage;
 
 class File
 {
-    public string $file;
     public string $path;
     private string $newPath;
     private string $extension;
@@ -18,7 +17,6 @@ class File
      */
     public function __construct(string $fileTmpName)
     {
-        $this->file = '';
         $this->extension = '';
         $this->path = $fileTmpName;
         $this->valid = false;
@@ -31,10 +29,10 @@ class File
      */
     private function getInformation(): void
     {
-        $this->mimetype = mime_content_type($this->path);
-        $this->size     = filesize($this->path);
-        $this->extension = pathinfo($this->path)['extension'] ?? '';
-        $this->newPath  = '../storage/public/' . FileSystem::getRandomName() . '.' . $this->extension;
+        $this->mimetype  = mime_content_type($this->path);
+        $this->size      = filesize($this->path) ?? -1;
+        $this->extension = pathinfo($this->path, PATHINFO_EXTENSION) ?? '';
+        $this->newPath   = '../storage/public/' . FileSystem::getRandomName() . '.' . $this->extension;
     }
 
     /**

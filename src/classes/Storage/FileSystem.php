@@ -2,6 +2,7 @@
 
 namespace MVC\Classes\Storage;
 
+use MVC\Classes\App;
 use PragmaRX\Random\Random;
 
 class FileSystem
@@ -9,6 +10,7 @@ class FileSystem
     private File $file;
     public string $filepath;
     public array $allowedFileExtensions;
+    private int $maxUploadSize;
 
     /**
      * FileSystem constructor.
@@ -18,6 +20,7 @@ class FileSystem
     {
         $this->filepath = $_ENV['UPLOADS_DIR'];
         $this->allowedFileExtensions = $allowedFileExtensions;
+        $this->maxUploadSize = (int)ini_get('upload_max_filesize') * 1024 * 1024;
     }
 
     /**
@@ -58,11 +61,20 @@ class FileSystem
 
         $result = new FileSaveResult($file->path);
 
-
         $this->file = $file;
+
+        if(!file_exists($file->path)) {
+            $result->setResult(FileSaveResult::UPLOAD_EMPTY_FILE);
+            return $result->asArray();
+        }
 
         if(!in_array($file->mimetype, $this->allowedFileExtensions)) {
             $result->setResult(FileSaveResult::UPLOAD_REJECTED_MIME_TYPE);
+            return $result->asArray();
+        }
+
+        if($file->size > $this->maxUploadSize) {
+            $result->setResult(FileSaveResult::UPLOAD_REJECTED_FILE_SIZE);
             return $result->asArray();
         }
 

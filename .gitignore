@@ -9,3 +9,5 @@
 *.cache
 *.log
 *.view.php
+/src/storage/public/
+/src/storage/processing/

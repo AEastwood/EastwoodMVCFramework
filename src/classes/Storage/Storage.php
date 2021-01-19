@@ -2,6 +2,8 @@
 
 namespace MVC\Classes\Storage;
 
+use MVC\Classes\App;
+
 class Storage
 {
     private static string $storageLocation = '../storage/';
@@ -122,21 +124,21 @@ class Storage
      */
     public static function initUpload(string $filename): string
     {
-        $filename = '../storage/processing/' . $filename;
-        move_uploaded_file($_FILES['file']['tmp_name'], $filename);
+
         return $filename;
     }
 
     /**
-     * Upload file
+     * Upload file and return array containing filepath, filesize and the result of the upload
      * @param string $filename
      * @param array $mimetypes
      * @return array
      */
     public static function publicUpload(string $filename, array $mimetypes): array
     {
-        $fileSystem = new FileSystem($mimetypes);
-        return $fileSystem->save(new File($filename));
+        $filename = '../storage/processing/' . $filename;
+        move_uploaded_file($_FILES['file']['tmp_name'], $filename);
+        return (new FileSystem($mimetypes))->save(new File($filename));
     }
 
     /**
