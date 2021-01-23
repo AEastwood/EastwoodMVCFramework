@@ -3,8 +3,8 @@
 namespace MVC\Classes;
 
 use Defuse\Crypto\Key;
-use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use MVC\Classes\Database\Database;
 use MVC\Classes\Http\Request;
 use MVC\Classes\Http\Response;
@@ -93,7 +93,7 @@ class App
      */
     public function run(): void
     {
-        $this->response->get($this)();
+        $this->response->get($this->request, $this->router)();
     }
 
 }

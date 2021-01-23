@@ -3,6 +3,7 @@
 namespace MVC\Classes\Storage;
 
 use MVC\Classes\App;
+use MVC\Classes\Storage\Uploads\FileUpload;
 
 class Storage
 {
@@ -140,7 +141,7 @@ class Storage
         try {
             $file = '../storage/processing/' . $file;
             move_uploaded_file($_FILES['file']['tmp_name'], $file);
-            return (new FileSystem($mimetypes))->save(new File($file));
+            return (new FileUpload($mimetypes))->save(new File($file));
         }
         catch (\Exception $e) {
             App::body()->logger->error('[Storage] Unable to upload file, Error: ' . $e->getMessage());

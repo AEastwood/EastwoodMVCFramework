@@ -2,7 +2,7 @@
 
 namespace Core;
 
-use MVC\Classes\Database;
+use MVC\Classes\Database\Database;
 
 abstract class Model extends Database
 {

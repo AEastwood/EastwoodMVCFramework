@@ -16,7 +16,6 @@ class Request
     public array $defined_vars;
     public array $headers;
     public string $host;
-    public string $log_file;
     public string $method;
     public int $port;
     public array $parameters;

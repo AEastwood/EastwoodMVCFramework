@@ -3,8 +3,8 @@
 namespace MVC\App\Middleware;
 
 use MVC\Classes\App;
-use MVC\Classes\Cookie;
 use MVC\Classes\Controller;
+use MVC\Classes\Cookie;
 use MVC\Classes\Middleware;
 
 class IPConstraints extends Middleware {

@@ -4,8 +4,8 @@ namespace MVC\Classes;
 
 use Carbon\Carbon;
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Request;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 

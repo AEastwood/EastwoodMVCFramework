@@ -2,6 +2,9 @@
 
 namespace MVC\Classes\Storage;
 
+use MVC\Classes\Storage\Uploads\FileUpload;
+use PragmaRX\Random\Random;
+
 class File
 {
     public string $path;
@@ -32,7 +35,7 @@ class File
         $this->mimetype  = mime_content_type($this->path);
         $this->size      = filesize($this->path) ?? -1;
         $this->extension = pathinfo($this->path, PATHINFO_EXTENSION) ?? '';
-        $this->newPath   = '../storage/public/' . FileSystem::getRandomName() . '.' . $this->extension;
+        $this->newPath   = '../storage/public/' . self::getRandomName() . '.' . $this->extension;
     }
 
     /**
@@ -42,6 +45,21 @@ class File
     public function getNewPath(): string
     {
         return $this->newPath;
+    }
+
+    /**
+     * get random name
+     * @return string
+     */
+    public static function getRandomName(): string
+    {
+        $filename = (new Random)->size(32)->get();
+
+        if(file_exists('../storage/public/' . $filename)) {
+            self::getRandomName();
+        }
+
+        return $filename;
     }
 
     /**

@@ -4,11 +4,12 @@ namespace MVC\Classes\Database;
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use PDO;
 use PDOException;
 
 class Database {
 
-    protected static \PDO $dbh;
+    protected static PDO $dbh;
 
     private string $databaseName;
     private bool $isAvailable;
@@ -25,6 +26,9 @@ class Database {
     private bool $usersExists;
     private Logger $logger;
 
+    private const CONNECTED     = 'connected';
+    private const DISCONNECTED  = 'disconnected';
+
     /**
      *  constructor
      */
@@ -38,7 +42,7 @@ class Database {
         $this->exists       = false;
         $this->isPersistent = $_ENV['DATABASE_PERSIST'] === 'true';
         $this->tableList    = [];
-        $this->state        = 'disconnected';
+        $this->state        = self::DISCONNECTED;
         $this->timeout      = $_ENV['DATABASE_TIMEOUT'] ?? 15;
 
         if($this->hasRequiredDatabaseParametersDeclared()) {
@@ -53,7 +57,7 @@ class Database {
                 return;
             }
 
-            if($this->state === 'connected' && $this->isPersistent && !$this->databaseExists($this->databaseName)) {
+            if($this->state === self::CONNECTED && $this->isPersistent && !$this->databaseExists($this->databaseName)) {
                 $this->createDatabase();
             }
 
@@ -98,15 +102,15 @@ class Database {
         try {
             $dsn = $this->connection . ":host=" . $this->host. ';dbname=' . $this->databaseName;
 
-            self::$dbh = new \PDO(
+            self::$dbh = new PDO(
                 $dsn, 
                 $this->username, 
                 $this->password
             );
 
-            self::$dbh->setAttribute(\PDO::ATTR_TIMEOUT, $this->timeout);
-            self::$dbh->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            $this->state = 'connected';
+            self::$dbh->setAttribute(PDO::ATTR_TIMEOUT, $this->timeout);
+            self::$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->state = self::CONNECTED;
 
             return true;
         }
@@ -202,10 +206,10 @@ class Database {
      */
     private function listTables(): array
     {
-        if($this->state === 'connected') {
+        if($this->state === self::CONNECTED) {
             $tableNames = self::$dbh->prepare('SHOW TABLES');
             $tableNames->execute();
-            $tableNames = $tableNames->fetchAll(\PDO::FETCH_COLUMN);
+            $tableNames = $tableNames->fetchAll(PDO::FETCH_COLUMN);
 
             return ($tableNames);
         }
@@ -221,7 +225,7 @@ class Database {
      */
     private function tableExists(string $tableName): bool
     {
-        if($this->state === 'connected' && in_array($tableName, $this->tableList)) {
+        if($this->state === self::CONNECTED && in_array($tableName, $this->tableList)) {
             return true;
         }
 

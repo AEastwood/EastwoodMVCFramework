@@ -45,7 +45,7 @@ class TemplateEngine
 
     /**
      * replace all directives with their respective values
-     * @return void
+     * @return TemplateEngine
      */
     private function directives(): TemplateEngine
     {
@@ -59,7 +59,7 @@ class TemplateEngine
     /**
      *  echo $var wrapped in htmlspecialchars
      */
-    private function escape(): TemplateEngine
+    private function escaped(): TemplateEngine
     {
         $this->view = preg_replace($this->escapeRegex, '<?php echo htmlspecialchars($1, ENT_QUOTES) ?>', $this->view);
         
@@ -76,7 +76,7 @@ class TemplateEngine
     {
         if (Storage::exists($this->view)) {
             $this->view = Storage::get($this->view);
-            $this->view = $this->directives()->escape()->nonEscaped()->asString();
+            $this->view = $this->directives()->escaped()->nonEscaped()->asString();
 
             extract($this->parameters($variables), EXTR_SKIP);
 

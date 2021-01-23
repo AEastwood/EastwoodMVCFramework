@@ -4,7 +4,6 @@ namespace MVC\Classes\Routes;
 
 use MVC\Classes\App;
 use MVC\Classes\Middleware;
-use MVC\Classes\Routes\Router;
 
 class RouterResponse extends Router 
 {
@@ -43,7 +42,7 @@ class RouterResponse extends Router
      * @param object $route
      * @return callable|null
      */
-    public static function callback(object $route)
+    public static function callback(object $route): ?callable
     {
         $method = App::body()->request->method;
         $requestURL = App::body()->request->request_url;
@@ -71,8 +70,9 @@ class RouterResponse extends Router
 
     /**
      *  returns true if matches an existing route with a dynamic index
-     *  @param object $route
-     *  @param string $requestURL
+     * @param object $route
+     * @param string $requestURL
+     * @return bool
      */
     private static function routeMatches(object $route, string $requestURL): bool
     {

@@ -57,6 +57,21 @@ function ipAddress(): string
 }
 
 /**
+ * return the value of a route parameter using the parameter id set in the route(s) file,
+ * duplicate params will return the first matching result
+ * @param string $parameter
+ * @return string
+ */
+function routeParam(string $parameter): string
+{
+    foreach($_SESSION['EMVC.parameters'] as $k => $v) {
+        if($k === $parameter) {
+            return $v;
+        }
+    }
+}
+
+/**
  * return absolute path for redirect
  * @param string $path
  * @return string

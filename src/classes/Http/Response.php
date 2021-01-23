@@ -2,7 +2,10 @@
 
 namespace MVC\Classes\Http;
 
+use Closure;
 use MVC\Classes\App;
+use MVC\Classes\Controller;
+use MVC\Classes\Routes\Router;
 use MVC\Classes\Routes\RouterResponse;
 
 class Response
@@ -22,14 +25,14 @@ class Response
 
     /**
      *   Runs application
-     * @param App $app
-     * @returns    Action|Error-view
-     * @return callable
+     * @param Request $request
+     * @param Router $router
+     * @return callable|Closure
      */
-    public function get(App $app)
+    public function get(Request $request, Router $router): callable|Closure
     {
-        $requestURL = $app->request->request_url;
-        $routes = $app->router->routes;
+        $requestURL = $request->request_url;
+        $routes = $router->routes;
 
         foreach($routes as $route) {
             $routerResponse = RouterResponse::callback($route, $requestURL);

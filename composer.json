@@ -10,8 +10,8 @@
     },
     "autoload": {
         "files": [
-            "src/global/Functions.php",
-            "src/global/Location.php"
+            "src/classes/GlobalScope/Functions.php",
+            "src/classes/GlobalScope/Location.php"
         ],
         "psr-4": {
             "MVC\\Classes\\": "src/classes/",
@@ -19,6 +19,8 @@
             "MVC\\Classes\\Http\\": "src/classes/Http",
             "MVC\\Classes\\Routes\\": "src/classes/Routes",
             "MVC\\Classes\\Storage\\": "src/classes/Storage",
+            "MVC\\Classes\\Storage\\Downloads\\": "src/classes/Storage/Downloads",
+            "MVC\\Classes\\Storage\\Uploads\\": "src/classes/Storage/Uploads",
             "MVC\\Classes\\TemplateEngine\\": "src/classes/TemplateEngine",
             "MVC\\App\\ServiceProviders\\": "src/app/serviceproviders/",
             "MVC\\App\\Controllers\\": "src/app/controllers/",
@@ -33,6 +35,7 @@
         "monolog/monolog": "^2.2",
         "nesbot/carbon": "^2.41",
         "pragmarx/random": "^0.2.2",
-        "vlucas/phpdotenv": "^5.2"
+        "vlucas/phpdotenv": "^5.2",
+      "ext-pdo": "*"
     }
 }
