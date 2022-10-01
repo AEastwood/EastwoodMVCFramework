@@ -13,24 +13,16 @@
     <link rel="icon" href="{{ asset('imgs/favicon.ico') }}">
     <link
             rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-            integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
             crossorigin="anonymous"
     >
     <link href="{{ asset('css/main.css') }}" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="{{ redirect('/') }}">
-        {{ $_ENV['APP_NAME'] }}
-    </a>
-</nav>
 
-<main role="main" class="container">
-
-    <div class="portfolio">
-
+<main role="main" class="container d-flex justify-content-center align-items-center">
+    <div>
         <img
                 src="{{ asset('imgs/me.jpg') }}"
                 class="rounded img-fluid me pb-3"
@@ -81,17 +73,9 @@
                 <i class="text-dark clean-link fas fa-envelope h3"></i>
             </a>
         </p>
-
     </div>
-
 </main>
+</body>
 
 <script src="https://kit.fontawesome.com/8bf1f276fe.js" crossorigin="anonymous"></script>
-<script
-        src="https://code.jquery.com/jquery-3.5.1.min.js"
-        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
-        crossorigin="anonymous"
->
-</script>
-
 </html>
