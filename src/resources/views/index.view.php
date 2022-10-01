@@ -25,18 +25,6 @@
     <a class="navbar-brand" href="{{ redirect('/') }}">
         {{ $_ENV['APP_NAME'] }}
     </a>
-
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <a role="button" class="btn btn-sm btn-danger">
-                <i class="fas fa-envelope pr-2"></i>
-                Email Me
-            </a>
-        </form>
-    </div>
 </nav>
 
 <main role="main" class="container">
