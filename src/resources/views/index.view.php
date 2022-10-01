@@ -9,19 +9,19 @@
     <meta name="framework" content="https://github.com/AEastwood/EastwoodMVCFramework">
     <title>{{ $_ENV['APP_NAME'] }}</title>
     <!--[if IE]>
-    <link rel="shortcut icon" href="imgs/favicon.ico"><![endif]-->
+    <link rel="shortcut icon" href="imgs/favicon.ico">
+    <![endif]-->
     <link rel="icon" href="{{ asset('imgs/favicon.ico') }}">
     <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
             crossorigin="anonymous"
     >
-    <link href="{{ asset('css/main.css') }}" rel="stylesheet" type="text/css">
 </head>
 
 <body>
 
-<main role="main" class="container d-flex justify-content-center align-items-center h-100 text-center">
+<main role="main" class="container d-flex justify-content-center align-items-center h-100 text-center align-middle">
     <div>
         <img
                 src="{{ asset('imgs/me.jpg') }}"
