@@ -36,7 +36,7 @@ class App
      */
     public function __construct()
     {
-        require_once '../../Autoloader.php';
+        require_once '../../autoloader.php';
 
         ini_set('session.use_strict_mode', 1);
 
@@ -66,7 +66,7 @@ class App
     /**
     *   returns App object
     */
-    public static function body()
+    public static function body(): App
     {
         return self::$app;
     }

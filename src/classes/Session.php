@@ -11,11 +11,29 @@ use Monolog\Logger;
 
 class Session
 {
+    /**
+     * @var object|null
+     */
     public ?object $client;
+
+    /**
+     * @var string
+     */
     public string $id;
+
+    /**
+     * @var array
+     */
     public array $session;
+
+    /**
+     * @var string
+     */
     private string $state;
-    private bool $valid;
+
+    /**
+     * @var Logger
+     */
     public Logger $logger;
 
     /**
@@ -26,9 +44,8 @@ class Session
         $prefix = 'EastwoodMVC-';
 
         $this->state = 'non_session';
-        $this->valid = false;
 
-        if(!isset($_SESSION)) {
+        if (!isset($_SESSION)) {
             session_set_cookie_params(86400);
             session_create_id($prefix);
             session_start();
@@ -53,16 +70,12 @@ class Session
         $this->session = $_SESSION;
         $this->state = 'has_session';
 
-        if($this->state === 'has_session') {
-            $_SESSION['EMVC.app.expires']       = Carbon::now()->addDay()->toDateTimeString();
-            $_SESSION['EMVC.app.valid_country'] = country();
-            $_SESSION['EMVC.app.valid_ip']      = ipAddress();
-            $_SESSION['EMVC.auth']              = [];
-            $_SESSION['EMVC.validity']          = true;
-            $_SESSION['EMVC.parameters']        = array();
-
-            $this->valid === $_SESSION['EMVC.validity'] ?? false;
-        }
+        $_SESSION['EMVC.app.expires'] = Carbon::now()->addDay()->toDateTimeString();
+        $_SESSION['EMVC.app.valid_country'] = country();
+        $_SESSION['EMVC.app.valid_ip'] = ipAddress();
+        $_SESSION['EMVC.auth'] = [];
+        $_SESSION['EMVC.validity'] = true;
+        $_SESSION['EMVC.parameters'] = array();
     }
 
     /**
@@ -99,11 +112,11 @@ class Session
     {
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
 
-        if($this->state !== 'has_session') {
+        if ($this->state !== 'has_session') {
             return;
         }
 
-        if(ipAddress() !== $_SESSION['EMVC.app.valid_ip'] || App::body()->request->user_agent !== $userAgent) {
+        if (ipAddress() !== $_SESSION['EMVC.app.valid_ip'] || App::body()->request->user_agent !== $userAgent) {
             $this->destroy();
         }
     }
@@ -119,8 +132,7 @@ class Session
             $guzzle = new Request('GET', 'http://www.geoplugin.net/json.gp');
 
             $client->sendAsync($guzzle)->then(function ($response) {
-                switch($response)
-                {
+                switch ($response) {
                     case 200:
                         return $response->getBody();
 
@@ -133,8 +145,7 @@ class Session
                         return new \stdClass();
                 }
             });
-        }
-        catch(GuzzleException $e) {
+        } catch (GuzzleException $e) {
             $this->logger->error('[Client] Unable to resolve client, Error: ' . $e->getMessage());
         }
 
