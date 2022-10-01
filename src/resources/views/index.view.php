@@ -86,7 +86,8 @@
             </a>
             <a
                     class="clean-link"
-                    href="#" title="Email Me"
+                    href="mailto:adam-3@live.co.uk"
+                    title="Email Me"
                     rel="noreferrer"
             >
                 <i class="text-dark clean-link fas fa-envelope h3"></i>
