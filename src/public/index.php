@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once '../../autoloader.php';
+require_once '../../Autoloader.php';
 
 use MVC\Classes\App;
 
