@@ -21,7 +21,9 @@
 
 <body>
 
-<main role="main" class="container d-flex justify-content-center align-items-center h-100 text-center align-middle">
+<main role="main"
+      class="container d-flex justify-content-center align-items-center h-100 d-inline-block text-center align-middle"
+>
     <div>
         <img
                 src="{{ asset('imgs/me.jpg') }}"
