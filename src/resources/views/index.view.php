@@ -38,44 +38,52 @@
 
         <p class="lead">Just me.</p>
 
-        <p class="lead pt-2">
-            <a
-                    class="clean-link"
-                    href="https://www.instagram.com/aeasywood/"
-                    target="_blank"
-                    title="instagram"
-                    rel="noreferrer"
-            >
-                <i class="text-dark clean-link fab fa-instagram pr-3 h3"></i>
-            </a>
-            <a
-                    class="clean-link"
-                    href="https://twitter.com/adeastwood"
-                    target="_blank"
-                    title="twitter"
-                    rel="noreferrer"
-            >
+        <div class="d-flex justify-content-evenly">
 
-                <i class="text-dark clean-link fab fa-twitter pr-3 h3"></i>
-            </a>
-            <a
-                    class="clean-link"
-                    href="https://github.com/aeastwood"
-                    target="_blank"
-                    title="Github"
-                    rel="noreferrer"
-            >
-                <i class="text-dark clean-link fab fa-github pr-3 h3"></i>
-            </a>
-            <a
-                    class="clean-link"
-                    href="mailto:adam-3@live.co.uk"
-                    title="Email Me"
-                    rel="noreferrer"
-            >
-                <i class="text-dark clean-link fas fa-envelope h3"></i>
-            </a>
-        </p>
+            <div>
+                <a
+                        href="https://www.instagram.com/aeasywood/"
+                        target="_blank"
+                        title="instagram"
+                        rel="noreferrer"
+                >
+                    <i class="text-dark clean-link fab fa-instagram pr-3 h3"></i>
+                </a>
+            </div>
+
+            <div>
+                <a
+                        href="https://twitter.com/adeastwood"
+                        target="_blank"
+                        title="twitter"
+                        rel="noreferrer"
+                >
+
+                    <i class="text-dark clean-link fab fa-twitter pr-3 h3"></i>
+                </a>
+            </div>
+
+            <div>
+                <a
+                        href="https://github.com/aeastwood"
+                        target="_blank"
+                        title="Github"
+                        rel="noreferrer"
+                >
+                    <i class="text-dark clean-link fab fa-github pr-3 h3"></i>
+                </a>
+            </div>
+
+            <div>
+                <a
+                        href="mailto:adam-3@live.co.uk"
+                        title="Email Me"
+                        rel="noreferrer"
+                >
+                    <i class="text-dark clean-link fas fa-envelope h3"></i>
+                </a>
+            </div>
+        </div>
     </div>
 </main>
 </body>
