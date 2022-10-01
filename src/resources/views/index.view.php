@@ -19,11 +19,9 @@
     >
 </head>
 
-<body>
+<body class="container d-flex justify-content-center align-items-center h-100 d-inline-block text-center align-middle">
 
-<main role="main"
-      class="container d-flex justify-content-center align-items-center h-100 d-inline-block text-center align-middle"
->
+<main role="main">
     <div>
         <img
                 src="{{ asset('imgs/me.jpg') }}"
