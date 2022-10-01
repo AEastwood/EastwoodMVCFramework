@@ -21,7 +21,11 @@ class Storage
             return;
         }
 
-        chown($filename, $owner);
+        try {
+            chown($filename, $owner);
+        }
+        catch (\Exception){}
+
     }
 
     /**
