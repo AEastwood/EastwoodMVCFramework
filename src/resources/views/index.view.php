@@ -19,7 +19,10 @@
     >
 </head>
 
-<body class="container d-flex justify-content-center align-items-center h-100 d-inline-block text-center align-middle">
+<body
+        class="container d-flex justify-content-center align-items-center d-inline-block text-center align-middle"
+        style="height:100vh; overflow:hidden;"
+>
 
 <main role="main">
     <div>
