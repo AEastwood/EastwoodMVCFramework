@@ -36,8 +36,6 @@ class App
      */
     public function __construct()
     {
-        require_once '../../autoloader.php';
-
         ini_set('session.use_strict_mode', 1);
 
         $this->logger = new Logger('APP');
