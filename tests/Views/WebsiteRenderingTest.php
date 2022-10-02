@@ -16,10 +16,8 @@ class WebsiteRenderingTest extends PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        echo env('base_url');
-
         $this->client = new Client([
-            'base_uri' => env('BASE_URL'),
+            'base_uri' => 'https://staging.adameastwood.com',
             'timeout' => 2.0,
         ]);
     }
