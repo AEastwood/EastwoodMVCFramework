@@ -1,6 +1,9 @@
 <?php
 
+namespace Views;
+
 use GuzzleHttp\Client;
+use PHPUnit;
 
 class WebsiteRenderingTest extends PHPUnit\Framework\TestCase
 {
@@ -16,7 +19,7 @@ class WebsiteRenderingTest extends PHPUnit\Framework\TestCase
             'timeout' => 2.0,
         ]);
 
-        $request = $client->get('/', ['verify' => false]);
+        $request = $client->get('/');
 
         $statusCode = $request->getStatusCode();
 
