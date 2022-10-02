@@ -5,7 +5,8 @@ namespace MVC\Classes;
 use Closure;
 use MVC\App\ServiceProviders\AppServiceProvider;
 
-class Middleware {
+class Middleware
+{
 
     public array $middlewares;
     private AppServiceProvider $appServiceProvider;
@@ -14,7 +15,7 @@ class Middleware {
      *   set middleware
      * @param $middlewares
      */
-    public function __construct($middlewares) 
+    public function __construct($middlewares)
     {
         $this->middlewares = $middlewares;
         $this->appServiceProvider = new AppServiceProvider;
@@ -25,15 +26,16 @@ class Middleware {
      */
     public static function next(): Closure
     {
-        return function() {};
+        return function () {
+        };
     }
 
     /**
-    *   run middleware on request
-    */
+     *   run middleware on request
+     */
     public function run()
     {
-        foreach($this->middlewares as $middleware) {
+        foreach ($this->middlewares as $middleware) {
             return $this->runMiddlewareAction($middleware);
         }
     }
@@ -45,21 +47,21 @@ class Middleware {
      */
     private function runMiddlewareAction(string $index)
     {
-        if(!array_key_exists($index, $this->appServiceProvider->providers)){
-            return Controller::view('errors.error',[
+        if (!array_key_exists($index, $this->appServiceProvider->providers)) {
+            Controller::view('errors.error', [
                 'code' => 500,
                 'message' => 'Invalid middleware action provided'
-            ]);
+            ], 500);
         }
 
-        if($this->appServiceProvider->providers[$index]() !== null) {
+        if ($this->appServiceProvider->providers[$index]() !== null) {
             return $this->appServiceProvider->providers[$index]();
         }
 
-        return Controller::view('errors.error',[
+        Controller::view('errors.error', [
             'code' => 500,
             'message' => 'An error has occurred whilst trying to run middleware, please check your provider actions'
-        ]);
+        ], 500);
     }
 
 }

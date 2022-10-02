@@ -10,11 +10,12 @@ class Controller
      *  Create and compile view
      * @param string $view
      * @param array $variables
+     * @param int $statusCode
      * @return void
      */
-    public static function view(string $view, array $variables = [])
+    public static function view(string $view, array $variables = [], int $statusCode = 200)
     {
-        return (new TemplateEngine($view))->init($variables)->render();
+        (new TemplateEngine($view))->init($variables)->render($statusCode);
     }
 
 }

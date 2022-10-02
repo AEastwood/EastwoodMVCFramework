@@ -88,10 +88,16 @@ class TemplateEngine
             return $this;
         }
 
-        Controller::view('errors.error', [
-            'code' => 500,
-            'message' => 'The view file specified does not exist'
-        ]);
+        $statusCode = 500;
+
+        Controller::view(
+            'errors.error',
+            [
+                'code' => $statusCode,
+                'message' => 'The view file specified does not exist'
+            ],
+            $statusCode
+        );
     }
 
     /**
@@ -172,9 +178,10 @@ class TemplateEngine
     /**
      *  render the view
      */
-    public function render()
+    public function render(int $statusCode)
     {
         $this->nonCacheSafeDirectives();
+        http_response_code($statusCode);
         echo $this->view;
     }
 

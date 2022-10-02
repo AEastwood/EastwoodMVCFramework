@@ -42,7 +42,7 @@ class Response
         }
 
         return function () {
-            Controller::view('errors.error', ['code' => 404, 'message' => 'not found']);
+            Controller::view('errors.error', ['code' => 404, 'message' => 'not found'], 404);
         };
     }
 
