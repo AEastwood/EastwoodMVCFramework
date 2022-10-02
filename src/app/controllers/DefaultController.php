@@ -15,15 +15,7 @@ class DefaultController extends Controller
      */
     public static function index()
     {
-        return Controller::view('index');
-    }
-
-    /**
-     * upload
-     */
-    public static function upload()
-    {
-        return Controller::view('upload');
+        Controller::view('index');
     }
 
     /**
@@ -39,8 +31,8 @@ class DefaultController extends Controller
      */
     public static function sendMessage()
     {
-        if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['message']) || empty($_POST['csrf'])) {
-            return Response::json(['code' => 400, 'message' => 'Please complete all form fields and try again'], 200);
+        if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['message']) || empty($_POST['csrf'])) {
+            Response::json(['code' => 400, 'message' => 'Please complete all form fields and try again'], 200);
         }
 
         $email = new Email(
@@ -53,11 +45,11 @@ class DefaultController extends Controller
 
         $email->setTemplate('emails/message.txt');
 
-        if($email->sendable() && $email->send()) {
-            return Response::json(['code' => 200, 'message' => 'Message has been sent'], 200);
+        if ($email->sendable() && $email->send()) {
+            Response::json(['code' => 200, 'message' => 'Message has been sent'], 200);
         }
 
-        return Response::json(['code' => 500, 'message' => 'An unknown error occurred, your message was not sent'], 200);
+        Response::json(['code' => 500, 'message' => 'An unknown error occurred, your message was not sent'], 200);
     }
 
 }

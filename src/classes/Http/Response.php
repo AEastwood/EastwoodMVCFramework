@@ -30,19 +30,17 @@ class Response
      */
     public function get(Request $request, Router $router): callable|Closure
     {
-        $requestURL = $request->request_url;
         $routes = $router->routes;
 
         foreach ($routes as $route) {
-            $routerResponse = RouterResponse::callback($route, $requestURL);
+            $routerResponse = RouterResponse::callback($route);
 
-            if ($routerResponse === null) continue;
-
-            return $routerResponse;
+            if ($routerResponse !== null)
+                return $routerResponse;
         }
 
         return function () {
-            Controller::view('errors.error', ['code' => 404, 'message' => 'not found']);
+            Controller::view('errors.error', ['code' => 404, 'message' => 'not found'], 404);
         };
     }
 

@@ -2,6 +2,8 @@
 
 namespace MVC\Classes\Storage\Downloads;
 
+use MVC\Classes\Storage\File;
+
 class FileDownload
 {
     private File $file;
@@ -50,7 +52,6 @@ class FileDownload
      */
     public function resumable(): FileDownload
     {
-
         $this->resumable = true;
 
         return $this;

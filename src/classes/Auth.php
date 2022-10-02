@@ -42,7 +42,7 @@ class Auth
 
     /**
      *  returns array if session[$key] exists
-     * @param $key
+     * @param string $key
      * @return array
      */
     private function get(string $key): array
@@ -57,12 +57,9 @@ class Auth
      * @param string $key
      * @return bool
      */
-    private function hasSession(string $key = ''): bool {
-        if (isset($_SESSION[$key])) {
-            return true;
-        }
-
-        return false;
+    private function hasSession(string $key = ''): bool
+    {
+        return isset($_SESSION[$key]);
     }
 
     /**
@@ -73,11 +70,11 @@ class Auth
         $session = null;
         $key = 'EMVC.validity';
 
-        if($this->hasSession($key)) {
+        if ($this->hasSession($key)) {
             $session = $this->get($key);
         }
 
-        if($session !== null) {
+        if ($session !== null) {
             $endOfSession = $session['EMVC.validity'];
         }
     }
@@ -89,14 +86,14 @@ class Auth
     {
         $user = $this->get('EMVC.user');
 
-        $this->id            = $user->id;
-        $this->name          = $user->name;
-        $this->email         = $user->email;
+        $this->id = $user->id;
+        $this->name = $user->name;
+        $this->email = $user->email;
         $this->password_hash = $user->password_hash;
-        $this->token         = $user->token;
-        $this->active        = $user->active;
-        $this->created_at    = $user->created_at;
-        $this->updated_at    = $user->updated_at;
+        $this->token = $user->token;
+        $this->active = $user->active;
+        $this->created_at = $user->created_at;
+        $this->updated_at = $user->updated_at;
     }
 
 }

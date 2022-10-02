@@ -5,8 +5,8 @@ namespace MVC\Classes\Storage\Uploads;
 use MVC\Classes\Storage\File;
 use MVC\Classes\Storage\FileSaveResult;
 use MVC\Classes\Storage\FileStorageResults;
+use MVC\Classes\Storage\MimeTypes;
 use MVC\Classes\Storage\Storage;
-use PragmaRX\Random\Random;
 
 class FileUpload
 {
@@ -31,7 +31,7 @@ class FileUpload
      */
     public function __destruct()
     {
-        if(is_file($this->file->path)) {
+        if (is_file($this->file->path)) {
             unlink($this->file->path);
         }
     }
@@ -48,17 +48,17 @@ class FileUpload
 
         $fileSaveResult = new FileSaveResult($this->file->path);
 
-        if($file->size > $this->maxUploadSize) {
+        if ($file->size > $this->maxUploadSize) {
             $fileSaveResult->setResult(FileStorageResults::UPLOAD_REJECTED_FILE_SIZE);
             return $fileSaveResult->asArray();
         }
 
-        if(!file_exists($file->path) || empty($_FILES['file']['name'])) {
+        if (!file_exists($file->path) || empty($_FILES['file']['name'])) {
             $fileSaveResult->setResult(FileStorageResults::UPLOAD_EMPTY_FILE);
             return $fileSaveResult->asArray();
         }
 
-        if(!in_array($file->mimetype, $this->allowedMimeTypes)) {
+        if (!in_array($file->mimetype, $this->allowedMimeTypes)) {
             $fileSaveResult->setResult(FileStorageResults::UPLOAD_REJECTED_MIME_TYPE);
             return $fileSaveResult->asArray();
         }
