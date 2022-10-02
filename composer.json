@@ -37,6 +37,7 @@
         "nesbot/carbon": "^2.41",
         "phpunit/phpunit": "^9.5",
         "pragmarx/random": "^0.2.2",
+        "symfony/dom-crawler": "^5.4",
         "vlucas/phpdotenv": "^5.2"
     }
 }

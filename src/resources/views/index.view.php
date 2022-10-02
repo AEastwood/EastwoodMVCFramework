@@ -25,7 +25,7 @@
 >
 
 <main role="main">
-    <div>
+    <div id="main-content">
         <img
                 src="{{ secure_asset('imgs/me.jpg') }}"
                 class="rounded img-fluid me pb-3"

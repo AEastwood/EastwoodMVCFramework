@@ -5,6 +5,7 @@ namespace Views;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use PHPUnit;
+use Symfony\Component\DomCrawler\Crawler;
 
 class WebsiteRenderingTest extends PHPUnit\Framework\TestCase
 {
@@ -30,9 +31,12 @@ class WebsiteRenderingTest extends PHPUnit\Framework\TestCase
     {
         $request = $this->client->get('/');
 
+        $crawler = new Crawler($request->getBody());
+
         $statusCode = $request->getStatusCode();
 
         $this->assertSame(200, $statusCode, "Website Status: {$statusCode}");
+        $this->assertEquals(1, $crawler->filter('div#main-content')->count());
     }
 
     /**
