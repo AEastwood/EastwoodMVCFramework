@@ -35,18 +35,4 @@ class WebsiteRenderingTest extends PHPUnit\Framework\TestCase
         $this->assertSame(200, $statusCode, "Website Status: {$statusCode}");
     }
 
-    /**
-     * @return void
-     * @throws GuzzleException
-     */
-    public function testUploadPageCanBeRenderedSuccessfully()
-    {
-        $this->
-        $request = $this->client->get('/upload');
-
-        $statusCode = $request->getStatusCode();
-
-        $this->assertSame(200, $statusCode, "Website Status: {$statusCode}");
-    }
-
 }
