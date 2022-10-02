@@ -29,13 +29,14 @@
         }
     },
     "require": {
+        "ext-pdo": "*",
         "defuse/php-encryption": "^2.2",
         "filp/whoops": "dev-master",
         "guzzlehttp/guzzle": "^7.2",
         "monolog/monolog": "^2.2",
         "nesbot/carbon": "^2.41",
+        "phpunit/phpunit": "^9.5",
         "pragmarx/random": "^0.2.2",
-        "vlucas/phpdotenv": "^5.2",
-      "ext-pdo": "*"
+        "vlucas/phpdotenv": "^5.2"
     }
 }
