@@ -11,7 +11,7 @@
     <!--[if IE]>
     <link rel="shortcut icon" href="imgs/favicon.ico">
     <![endif]-->
-    <link rel="icon" href="{{ asset('imgs/favicon.ico') }}">
+    <link rel="icon" href="{{ secure_asset('imgs/favicon.ico') }}">
     <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
@@ -27,7 +27,7 @@
 <main role="main">
     <div>
         <img
-                src="{{ asset('imgs/me.jpg') }}"
+                src="{{ secure_asset('imgs/me.jpg') }}"
                 class="rounded img-fluid me pb-3"
                 alt="Me"
                 width="230px"

@@ -89,3 +89,14 @@ function redirect(string $path): string
 {
     return $_ENV['BASE_PROTOCOL'] . '://' . $_ENV['BASE_URL'] . $path;
 }
+
+/**
+ * force an asset to be loaded over https
+ *
+ * @param string $path
+ * @return string
+ */
+function secure_asset(string $path): string
+{
+    return "https://" . env('BASE_URL') . "/{$path}";
+}
