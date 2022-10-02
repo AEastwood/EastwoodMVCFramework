@@ -3,4 +3,8 @@
     <testsuite name="Tests">
         <directory>tests</directory>
     </testsuite>
+    <php>
+        <ini name="display_errors" value="On"/>
+        <ini name="display_startup_errors" value="On"/>
+    </php>
 </phpunit>

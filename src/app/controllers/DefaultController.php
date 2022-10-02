@@ -3,7 +3,7 @@
 namespace MVC\App\Controllers;
 
 use MVC\Classes\Email;
-use MVC\Classes\Response;
+use MVC\Classes\Http\Response;
 use MVC\Classes\Controller;
 use MVC\Classes\Storage\MimeTypes;
 use MVC\Classes\Storage\Storage;

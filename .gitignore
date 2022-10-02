@@ -11,3 +11,4 @@
 *.view.php
 /src/storage/public/
 /src/storage/processing/
+/key.enc
