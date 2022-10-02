@@ -30,7 +30,7 @@
                 src="{{ secure_asset('imgs/me.jpg') }}"
                 class="rounded img-fluid me pb-3"
                 alt="Me"
-                width="220px"
+                width="200px"
                 height="240px"
         >
 
