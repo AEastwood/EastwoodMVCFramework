@@ -23,18 +23,27 @@ function assetFresh(string $path): string
 
 /**
  *   Die and Debug
- *   @param  mixed  $data
+ * @param mixed $data
  */
 function dd(mixed $data)
 {
     header('Content-Type: application/json');
 
-    $action = function() use ($data) {
+    $action = function () use ($data) {
         echo print_r($data, true);
         exit;
     };
 
     return $action();
+}
+
+/**
+ * @param string $path
+ * @return string|null
+ */
+function env(string $path): ?string
+{
+    return $_ENV[$path] ?? '';
 }
 
 /**
@@ -49,7 +58,7 @@ function ipAddress(): string
         'HTTP_CLIENT_IP',
     ];
 
-    foreach($keys as $key) {
+    foreach ($keys as $key) {
         if (!empty($_SERVER[$key])) {
             return $_SERVER[$key];
         }
@@ -64,8 +73,8 @@ function ipAddress(): string
  */
 function routeParam(string $parameter): string
 {
-    foreach($_SESSION['EMVC.parameters'] as $k => $v) {
-        if($k === $parameter) {
+    foreach ($_SESSION['EMVC.parameters'] as $k => $v) {
+        if ($k === $parameter) {
             return $v;
         }
     }

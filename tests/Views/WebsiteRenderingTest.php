@@ -16,8 +16,10 @@ class WebsiteRenderingTest extends PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
+        echo env('base_url');
+
         $this->client = new Client([
-            'base_uri' => 'https://adameastwood.com',
+            'base_uri' => env('BASE_URL'),
             'timeout' => 2.0,
         ]);
     }
@@ -41,7 +43,7 @@ class WebsiteRenderingTest extends PHPUnit\Framework\TestCase
      */
     public function testErrorPage()
     {
-        $request = $this->client->get('/random-non-existent-page');
+        $request = $this->client->get('/random-non-existent-page', ['http_errors' => false]);
 
         $statusCode = $request->getStatusCode();
 

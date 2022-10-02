@@ -35,8 +35,7 @@ class Router
         foreach ($this->route_files as $route_file) {
             try {
                 include_once('../routes/' . $route_file);
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $this->logger->error('Error occurred, Error: ' . $e->getMessage());
             }
         }
@@ -49,30 +48,32 @@ class Router
      * @param string $url
      * @param callable $action
      * @return Route
+     * @throws \Exception
      */
-    public function addRoute(array $methods, string $url, callable $action)
+    public function addRoute(array $methods, string $url, callable $action): Route
     {
         try {
-            if($this->isDuplicateRoute($url, $methods)) {
-                throw new DuplicateRouteException('duplicate route: ' . $url);
+            if ($this->isDuplicateRoute($url, $methods)) {
+                throw new \Exception("[Error]: Duplicate route: '$url'");
             }
 
-            $route              = new Route();
-            $route->methods     = $methods;
-            $route->url         = $this->clean($url);
-            $route->action      = $action;
-            $route->parameters  = $this->parameters($route->url);
+            $route = new Route();
+            $route->methods = $methods;
+            $route->url = $this->clean($url);
+            $route->action = $action;
+            $route->parameters = $this->parameters($route->url);
 
-            if(is_array($route->parameters) && count($route->parameters) > 0) {
+            if (is_array($route->parameters) && count($route->parameters) > 0) {
                 $route->hasParameters = true;
             }
 
             $this->routes[] = $route;
 
             return ($route);
-        }
-        catch(DuplicateRouteException $e) {
+        } catch (\Exception $e) {
             $this->logger->error('The route "' . $url . '" with methods [' . implode(', ', $methods) . '] has already been defined');
+            $methods = implode(', ', $methods);
+            $this->logger->error("The route '$url' with methods [{$methods}] has already been defined");
         }
     }
 
@@ -108,6 +109,7 @@ class Router
      * @param string $url
      * @param callable $action
      * @return object
+     * @throws \Exception
      */
     public function get(string $url, callable $action): object
     {
@@ -120,6 +122,7 @@ class Router
      * @param string $url
      * @param callable $action
      * @return object
+     * @throws \Exception
      */
     public function any(string $url, callable $action): object
     {
@@ -132,6 +135,7 @@ class Router
      * @param string $url
      * @param callable $action
      * @return object
+     * @throws \Exception
      */
     public function connect(string $url, callable $action): object
     {
@@ -144,6 +148,7 @@ class Router
      * @param string $url
      * @param callable $action
      * @return object
+     * @throws \Exception
      */
     public function delete(string $url, callable $action): object
     {
@@ -156,6 +161,7 @@ class Router
      * @param string $url
      * @param callable $action
      * @return object
+     * @throws \Exception
      */
     public function options(string $url, callable $action): object
     {
@@ -168,6 +174,7 @@ class Router
      * @param string $url
      * @param callable $action
      * @return object
+     * @throws \Exception
      */
     public function post(string $url, callable $action)
     {
@@ -180,6 +187,7 @@ class Router
      * @param string $url
      * @param callable $action
      * @return object
+     * @throws \Exception
      */
     public function patch(string $url, callable $action): object
     {
@@ -192,6 +200,7 @@ class Router
      * @param string $url
      * @param callable $action
      * @return object
+     * @throws \Exception
      */
     public function put(string $url, callable $action): object
     {
@@ -204,6 +213,7 @@ class Router
      * @param string $url
      * @param callable $action
      * @return object
+     * @throws \Exception
      */
     public function trace(string $url, callable $action): object
     {
@@ -242,14 +252,14 @@ class Router
     public function parameters(string $url): array
     {
         preg_match_all("/\{[^}]+\}/", $url, $matches);
-        
+
         $parameters = [];
         $exploded = explode('/', $url);
-        
-        foreach($matches[0] as $match) {
-            foreach($exploded as $index => $part) {
 
-                if($part === $match) {
+        foreach ($matches[0] as $match) {
+            foreach ($exploded as $index => $part) {
+
+                if ($part === $match) {
                     $parameters[] = [
                         'index' => $index,
                         'match' => $match,

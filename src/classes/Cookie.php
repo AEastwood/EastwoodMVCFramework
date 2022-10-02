@@ -6,7 +6,8 @@ use Defuse\Crypto\Crypto;
 use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
 use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
 
-class Cookie {
+class Cookie
+{
 
     /**
      * delete cookie
@@ -24,20 +25,20 @@ class Cookie {
      */
     public static function getAndDecrypt($cookieName): ?string
     {
-        if(!isset($_COOKIE[$cookieName])) {
-            App::body()->logger->info('[Cookie] Attempting to get cookie "' . $cookieName . '" but it does not exist.');
+        if (!isset($_COOKIE[$cookieName])) {
+            App::body()->logger->info("[Cookie] Attempting to get cookie '$cookieName' but it does not exist.");
             return null;
         }
 
         try {
             return Crypto::decrypt($_COOKIE[$cookieName], App::body()->key);
-        }
-        catch(EnvironmentIsBrokenException $e) {
+        } catch (EnvironmentIsBrokenException $e) {
             App::body()->logger->error('[Cookie] Environment is broken, Error: ' . $e->getMessage());
             return null;
-        }
-        catch (WrongKeyOrModifiedCiphertextException $e) {
-            App::body()->logger->error('[Cookie] Decryption of cookie failed, potentially modified by user, Error: ' . $e->getMessage());
+        } catch (WrongKeyOrModifiedCiphertextException $e) {
+            App::body()->logger->error(
+                '[Cookie] Decryption of cookie failed, potentially modified by user, Error: ' . $e->getMessage()
+            );
             return null;
         }
     }
@@ -53,8 +54,7 @@ class Cookie {
     {
         try {
             setcookie($cookieName, Crypto::encrypt($value, App::body()->key), $expiration, $accessor);
-        }
-        catch(EnvironmentIsBrokenException $e) {
+        } catch (EnvironmentIsBrokenException $e) {
             App::body()->logger->error('[Cookie] Unable to set cookie, Error: ' . $e->getMessage());
         }
     }

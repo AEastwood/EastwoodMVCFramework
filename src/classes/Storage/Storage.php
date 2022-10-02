@@ -16,15 +16,15 @@ class Storage
      */
     public static function changeOwner(string $filename, string $owner = 'www-data')
     {
-        if(!file_exists($filename)){
-            App::body()->logger->info('Tried to change owner of ' . $filename . ' but it does not exist.');
+        if (!file_exists($filename)) {
+            App::body()->logger->info("Tried to change owner of '$filename' but it does not exist.");
             return;
         }
 
         try {
             chown($filename, $owner);
+        } catch (\Exception) {
         }
-        catch (\Exception){}
 
     }
 
@@ -34,8 +34,8 @@ class Storage
      */
     public static function delete($filename): void
     {
-        if(!file_exists($filename)) {
-            App::body()->logger->info('Unable to delete file ' . $filename . ' as it does not exist');
+        if (!self::exists($filename)) {
+            App::body()->logger->info("Unable to delete file '$filename' as it does not exist");
             return;
         }
 
@@ -49,7 +49,7 @@ class Storage
      */
     public static function changePermissions(string $filename, int $permissions)
     {
-        if(!file_exists($filename)){
+        if (!file_exists($filename)) {
             App::body()->logger->info('Tried to change permissions of ' . $filename . ' but it does not exist.');
             return;
         }
@@ -64,11 +64,7 @@ class Storage
      */
     public static function exists($filename): bool
     {
-        if(file_exists($filename)){
-            return true;
-        }
-
-        return false;
+        return file_exists($filename);
     }
 
     /**
@@ -79,11 +75,7 @@ class Storage
      */
     public static function existsOlderThan(string $filename, int $minutes): bool
     {
-        if(file_exists($filename) && (filemtime($filename) > (time() - $minutes))) {
-            return true;
-        }
-
-        return false;
+        return file_exists($filename) && (filemtime($filename) > (time() - $minutes));
     }
 
     /**
@@ -94,11 +86,7 @@ class Storage
      */
     public static function existsYoungerThan(string $filename, int $minutes): bool
     {
-        if(file_exists($filename) && (filemtime($filename) < (time() - $minutes))) {
-            return true;
-        }
-
-        return false;
+        return file_exists($filename) && (filemtime($filename) < (time() - $minutes));
     }
 
     /**
@@ -108,15 +96,14 @@ class Storage
      */
     public static function get(string $file): string
     {
-        if(!file_exists(self::$storageLocation . $file)) {
-            App::body()->logger->info('Unable to commit to file "' . $file .'" as it doesn\'t exist.');
-            return 'Error: Unable to get file "' . $file .'" as it does not exist.';
+        if (!file_exists(self::$storageLocation . $file)) {
+            App::body()->logger->info('Unable to commit to file "' . $file . '" as it doesn\'t exist.');
+            return 'Error: Unable to get file "' . $file . '" as it does not exist.';
         }
 
         try {
             return file_get_contents(self::$storageLocation . $file);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             App::body()->logger->error('Unable to read file "' . $file . '", Error: ' . $e->getMessage());
         }
     }
@@ -146,8 +133,7 @@ class Storage
             $file = '../storage/processing/' . $file;
             move_uploaded_file($_FILES['file']['tmp_name'], $file);
             return (new FileUpload($mimetypes))->save(new File($file));
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             App::body()->logger->error('[Storage] Unable to upload file, Error: ' . $e->getMessage());
             return [];
         }
@@ -160,11 +146,10 @@ class Storage
      */
     public static function put(string $file, string $contents): void
     {
-       try {
-           file_put_contents(self::$storageLocation . $file, $contents);
-       }
-        catch(\Exception $e) {
-            App::body()->logger->info('[Storage] Unable to put contents in file ' . $file .', Error: ' . $e->getMessage());
+        try {
+            file_put_contents(self::$storageLocation . $file, $contents);
+        } catch (\Exception $e) {
+            App::body()->logger->info('[Storage] Unable to put contents in file ' . $file . ', Error: ' . $e->getMessage());
         }
     }
 
@@ -176,17 +161,16 @@ class Storage
      */
     public static function putIfNotExists(string $file, string $contents, array $config = []): void
     {
-        if(file_exists(self::$storageLocation . $file)) {
-            App::body()->logger->info('Unable to commit to file "' . $file .'" as it already exists.');
+        if (file_exists(self::$storageLocation . $file)) {
+            App::body()->logger->info('Unable to commit to file "' . $file . '" as it already exists.');
             return;
         }
 
         try {
             file_put_contents(self::$storageLocation . $file, $contents);
             return;
-        }
-        catch (Exception $e) {
-            App::body()->logger->error('Unable to commit to file "' . $file .'", Error: ' . $e->getMessage());
+        } catch (Exception $e) {
+            App::body()->logger->error('Unable to commit to file "' . $file . '", Error: ' . $e->getMessage());
         }
     }
 
