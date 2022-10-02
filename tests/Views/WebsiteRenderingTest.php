@@ -35,4 +35,17 @@ class WebsiteRenderingTest extends PHPUnit\Framework\TestCase
         $this->assertSame(200, $statusCode, "Website Status: {$statusCode}");
     }
 
+    /**
+     * @return void
+     * @throws GuzzleException
+     */
+    public function testErrorPage()
+    {
+        $request = $this->client->get('/random-non-existent-page');
+
+        $statusCode = $request->getStatusCode();
+
+        $this->assertSame(404, $statusCode, "Error Page Status: {$statusCode}");
+    }
+
 }
