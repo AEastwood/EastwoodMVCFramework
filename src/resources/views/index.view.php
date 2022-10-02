@@ -55,7 +55,7 @@
                 <a
                         href="https://twitter.com/adeastwood"
                         target="_blank"
-                        title="twitter"
+                        title="Twitter"
                         rel="noreferrer"
                 >
 
@@ -71,6 +71,17 @@
                         rel="noreferrer"
                 >
                     <i class="text-dark clean-link fab fa-github pr-3 h3"></i>
+                </a>
+            </div>
+
+            <div>
+                <a
+                        href="https://www.linkedin.com/in/adeastwood/"
+                        target="_blank"
+                        title="LinkedIn"
+                        rel="noreferrer"
+                >
+                    <i class="text-dark clean-link fab fa-linkedin pr-3 h3"></i>
                 </a>
             </div>
 

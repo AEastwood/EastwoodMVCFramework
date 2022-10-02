@@ -39,11 +39,11 @@ function dd(mixed $data)
 
 /**
  * @param string $path
- * @return string|null
+ * @return string
  */
-function env(string $path): ?string
+function env(string $path): string
 {
-    return $_ENV[$path] ?? '';
+    return $_ENV[$path];
 }
 
 /**

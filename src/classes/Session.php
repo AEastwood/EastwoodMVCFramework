@@ -41,23 +41,25 @@ class Session
      */
     public function __construct()
     {
-        $prefix = 'EastwoodMVC-';
+        try {
+            $prefix = 'EastwoodMVC-';
+            $this->state = 'non_session';
 
-        $this->state = 'non_session';
+            if (!isset($_SESSION)) {
+                session_set_cookie_params(86400);
+                session_create_id($prefix);
+                session_start();
 
-        if (!isset($_SESSION)) {
-            session_set_cookie_params(86400);
-            session_create_id($prefix);
-            session_start();
+                $this->create();
+                $this->preventHijack();
+            }
 
-            $this->create();
-            $this->preventHijack();
+            $this->logger = new Logger('Client');
+            $this->logger->pushHandler(new StreamHandler('../storage/logs/session.log', Logger::WARNING));
+
+            $this->client = $this->resolveClient();
+        } catch (\Exception) {
         }
-
-        $this->logger = new Logger('Client');
-        $this->logger->pushHandler(new StreamHandler('../storage/logs/session.log', Logger::WARNING));
-
-        $this->client = $this->resolveClient();
     }
 
     /**
@@ -138,11 +140,11 @@ class Session
 
                     case 429:
                         $this->logger->error('[Client] Unable to resolve client as rate limiting is being applied');
-                        return new \stdClass();
+                        return null;
 
                     default:
                         $this->logger->error('[Client] Unable to resolve client');
-                        return new \stdClass();
+                        return null;
                 }
             });
         } catch (GuzzleException $e) {

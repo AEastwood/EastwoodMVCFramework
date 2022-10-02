@@ -1,6 +1,6 @@
 <?php
 
-namespace Views;
+namespace Feature\Views;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;

@@ -12,3 +12,4 @@
 /src/storage/public/
 /src/storage/processing/
 /key.enc
+.env.testing
