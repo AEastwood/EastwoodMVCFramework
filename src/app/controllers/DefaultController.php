@@ -19,14 +19,6 @@ class DefaultController extends Controller
     }
 
     /**
-     * upload
-     */
-    public static function upload()
-    {
-        return Controller::view('upload');
-    }
-
-    /**
      * process file upload
      */
     public static function uploadFile()
