@@ -31,7 +31,7 @@ class WebsiteRenderingTest extends PHPUnit\Framework\TestCase
     {
         $request = $this->client->get('/');
 
-        $crawler = new Crawler($request->getBody());
+        $crawler = new Crawler($request->getBody()->getContents());
 
         $statusCode = $request->getStatusCode();
 
