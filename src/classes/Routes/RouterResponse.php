@@ -72,11 +72,11 @@ class RouterResponse extends Router
 
     /**
      *  returns true if matches an existing route with a dynamic index
-     * @param object $route
+     * @param Route $route
      * @param string $requestURL
      * @return bool
      */
-    private static function routeMatches(object $route, string $requestURL): bool
+    private static function routeMatches(Route $route, string $requestURL): bool
     {
         $requestParts = explode('/', $requestURL);
         $routeParts = explode('/', $route->url);
