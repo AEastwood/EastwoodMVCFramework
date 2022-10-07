@@ -47,6 +47,11 @@ class Request
     public array $headers;
 
     /**
+     * @var array
+     */
+    public array $get_variables;
+
+    /**
      * @var string|mixed
      */
     public string $host;
@@ -94,13 +99,35 @@ class Request
     {
         $timestamp = new DateTime();
         $this->timestamp = $timestamp->getTimestamp();
-        $this->request_url = $_SERVER['REQUEST_URI'] ?? '';
+        $this->request_url = $this->setRequestUrl($_SERVER['REQUEST_URI']);
         $this->host = $_SERVER['HTTP_HOST'] ?? $_ENV['BASE_URL'];
         $this->user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
         $this->port = $_SERVER['SERVER_PORT'] ?? 80;
         $this->method = $_SERVER['REQUEST_METHOD'] ?? '';
         $this->headers = (function_exists('apache_request_headers')) ? apache_request_headers() : [];
         $this->defined_vars = get_defined_vars();
+    }
+
+    /**
+     * Handle GET parameters breaking URLs
+     *
+     * @param string $requestUrl
+     * @return string#
+     */
+    private function setRequestUrl(string $requestUrl): string
+    {
+        $requestUrl = preg_replace('~/+~', '/', $requestUrl);
+
+        if (str_contains($requestUrl, '?')) {
+            $url = parse_url($requestUrl);
+
+            foreach (explode('&', $url['query']) as $variable) {
+                $exploded = explode('=', $variable);
+                $this->get_variables[] = [$exploded[0] => $exploded[1] ?? null];
+            }
+        }
+
+        return explode('?', $requestUrl)[0];
     }
 
 }

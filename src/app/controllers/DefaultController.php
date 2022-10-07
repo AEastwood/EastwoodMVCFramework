@@ -2,11 +2,7 @@
 
 namespace MVC\App\Controllers;
 
-use MVC\Classes\Email;
-use MVC\Classes\Http\Response;
 use MVC\Classes\Controller;
-use MVC\Classes\Storage\MimeTypes;
-use MVC\Classes\Storage\Storage;
 
 class DefaultController extends Controller
 {
@@ -19,37 +15,11 @@ class DefaultController extends Controller
     }
 
     /**
-     * process file upload
+     * @return void
      */
-    public static function uploadFile()
+    public static function mobLike()
     {
-        var_dump(Storage::publicUpload(MimeTypes::image()));
-    }
-
-    /**
-     *  send email to me
-     */
-    public static function sendMessage()
-    {
-        if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['message']) || empty($_POST['csrf'])) {
-            Response::json(['code' => 400, 'message' => 'Please complete all form fields and try again'], 200);
-        }
-
-        $email = new Email(
-            $_POST['email'],
-            $_ENV['APP_EMAIL'],
-            $_POST['name'],
-            'New message from ' . $_POST['name'] . '(' . $_POST['email'] . ')',
-            $_POST['message']
-        );
-
-        $email->setTemplate('emails/message.txt');
-
-        if ($email->sendable() && $email->send()) {
-            Response::json(['code' => 200, 'message' => 'Message has been sent'], 200);
-        }
-
-        Response::json(['code' => 500, 'message' => 'An unknown error occurred, your message was not sent'], 200);
+        Controller::view('moblike');
     }
 
 }

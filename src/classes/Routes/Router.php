@@ -4,8 +4,7 @@ namespace MVC\Classes\Routes;
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use MVC\App\Exceptions\DuplicateRouteException;
-use MVC\Models\Route;
+use MVC\App\Http\Models\Route;
 
 class Router
 {
@@ -59,11 +58,11 @@ class Router
 
             $route = new Route();
             $route->methods = $methods;
-            $route->url = $this->clean($url);
+            $route->url = $this->addSlash($url);
             $route->action = $action;
             $route->parameters = $this->parameters($route->url);
 
-            if (is_array($route->parameters) && count($route->parameters) > 0) {
+            if (count($route->parameters) > 0) {
                 $route->hasParameters = true;
             }
 
@@ -75,6 +74,17 @@ class Router
             $methods = implode(', ', $methods);
             $this->logger->error("The route '$url' with methods [{$methods}] has already been defined");
         }
+    }
+
+    /**
+     * automatically add slash to route url
+     *
+     * @param string $url
+     * @return string
+     */
+    private function addSlash(string $url): string
+    {
+        return str_starts_with($url, '/') ? $url : "/{$url}";
     }
 
     /**
@@ -94,15 +104,8 @@ class Router
         return false;
     }
 
-    /**
-     *  trim whitespace from url
-     * @param string $url
-     * @return string
-     */
-    private function clean(string $url): string
-    {
-        return trim($url);
-    }
+
+    // <editor-fold desc="Available Methods">
 
     /**
      *  add [GET, HEAD] method route
@@ -221,6 +224,10 @@ class Router
         return ($route);
     }
 
+    // </editor-fold>
+
+    // <editor-fold desc="Router functions">
+
     /**
      *  add middleware to the route
      * @param array $middleware
@@ -271,4 +278,5 @@ class Router
 
         return ($parameters);
     }
+    // </editor-fold>
 }
