@@ -45,8 +45,6 @@ class RouterResponse extends Router
         $method = App::body()->request->method;
         $request = App::body()->request;
 
-        dd($request);
-
         if (
             $route->hasParameters &&
             in_array($method, $route->methods) &&
