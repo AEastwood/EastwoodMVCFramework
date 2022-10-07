@@ -22,22 +22,6 @@ function assetFresh(string $path): string
 }
 
 /**
- *   Die and Debug
- * @param mixed $data
- */
-function dd(mixed $data)
-{
-    header('Content-Type: application/json');
-
-    $action = function () use ($data) {
-        echo print_r($data, true);
-        exit;
-    };
-
-    return $action();
-}
-
-/**
  * @param string $path
  * @return string
  */
@@ -91,6 +75,17 @@ function redirect(string $path): string
 }
 
 /**
+ * return route url based on name
+ *
+ * @param string $name
+ * @return string
+ */
+function route(string $name): string
+{
+
+}
+
+/**
  * force an asset to be loaded over https
  *
  * @param string $path
@@ -98,5 +93,5 @@ function redirect(string $path): string
  */
 function secure_asset(string $path): string
 {
-    return "https://" . env('BASE_URL') . "/{$path}";
+    return (env('BASE_URL') === "localhost" ? "http://" : "https://") . env('BASE_URL') . "/{$path}";
 }

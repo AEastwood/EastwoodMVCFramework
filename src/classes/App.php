@@ -136,7 +136,7 @@ class App
     private function getKey(): Key
     {
         $key = $_ENV['SECRET'];
-        $key = file_get_contents("$this->rootPath$key");
+        $key = file_get_contents("{$this->rootPath}{$key}");
         $key = rtrim($key);
 
         try {
@@ -151,7 +151,7 @@ class App
      */
     public function run(): void
     {
-        $this->response->get($this->request, $this->router)();
+        $this->response->get($this->router)();
     }
 
 }

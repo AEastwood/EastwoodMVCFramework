@@ -22,10 +22,10 @@
             "MVC\\Classes\\Storage\\Downloads\\": "src/classes/Storage/Downloads",
             "MVC\\Classes\\Storage\\Uploads\\": "src/classes/Storage/Uploads",
             "MVC\\Classes\\TemplateEngine\\": "src/classes/TemplateEngine",
-            "MVC\\App\\ServiceProviders\\": "src/app/serviceproviders/",
-            "MVC\\App\\Controllers\\": "src/app/controllers/",
-            "MVC\\App\\Middleware\\": "src/app/middleware/",
-            "MVC\\Models\\": "src/resources/models/"
+            "MVC\\App\\ServiceProviders\\": "src/app/ServiceProviders/",
+            "MVC\\App\\Controllers\\": "src/app/Controllers/",
+            "MVC\\App\\Middleware\\": "src/app/Middleware/",
+            "MVC\\App\\Http\\Models\\": "src/app/Http/Models/"
         }
     },
     "require": {
@@ -39,6 +39,7 @@
         "pragmarx/random": "^0.2.2",
         "symfony/css-selector": "^5.4",
         "symfony/dom-crawler": "^5.4",
+        "symfony/var-dumper": "^5.4",
         "vlucas/phpdotenv": "^5.2"
     }
 }

@@ -2,6 +2,7 @@
 
 namespace MVC\Classes\Routes;
 
+use MVC\App\Http\Models\Route;
 use MVC\Classes\App;
 use MVC\Classes\Middleware;
 
@@ -10,10 +11,10 @@ class RouterResponse extends Router
 
     /**
      *  return action after running middleware
-     * @param object $route
+     * @param Route $route
      * @return mixed
      */
-    private static function action(object $route): mixed
+    private static function action(Route $route): mixed
     {
         if ($route->hasMiddleware) {
             self::runMiddleware($route->middleware);
@@ -35,15 +36,20 @@ class RouterResponse extends Router
 
     /**
      *  process route, routes with parameters are checked first to avoid not being equal to the route
-     * @param object $route
+     *
+     * @param Route $route
      * @return callable|null
      */
-    public static function callback(object $route): ?callable
+    public static function callback(Route $route): ?callable
     {
         $method = App::body()->request->method;
-        $requestURL = App::body()->request->request_url;
+        $request = App::body()->request;
 
-        if ($route->hasParameters && in_array($method, $route->methods) && self::routeMatches($route, $requestURL)) {
+        if (
+            $route->hasParameters &&
+            in_array($method, $route->methods) &&
+            self::routeMatches($route, $request->request_url)
+        ) {
             $action = self::action($route);
 
             if (is_callable($action)) {
@@ -51,7 +57,7 @@ class RouterResponse extends Router
             }
         }
 
-        if ($requestURL !== $route->url || !in_array($method, $route->methods)) {
+        if ($request->request_url !== $route->url || !in_array($method, $route->methods)) {
             return null;
         }
 
@@ -73,12 +79,9 @@ class RouterResponse extends Router
     private static function routeMatches(object $route, string $requestURL): bool
     {
         $requestParts = explode('/', $requestURL);
-        $requestPartsCount = count($requestParts);
-
         $routeParts = explode('/', $route->url);
-        $routePartsCount = count($routeParts);
 
-        if ($requestPartsCount !== $routePartsCount) {
+        if (count($requestParts) !== count($routeParts)) {
             return false;
         }
 

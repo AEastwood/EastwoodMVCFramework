@@ -24,15 +24,12 @@ class Response
 
     /**
      *   Runs application
-     * @param Request $request
      * @param Router $router
      * @return callable|Closure
      */
-    public function get(Request $request, Router $router): callable|Closure
+    public function get(Router $router): callable|Closure
     {
-        $routes = $router->routes;
-
-        foreach ($routes as $route) {
+        foreach ($router->routes as $route) {
             $routerResponse = RouterResponse::callback($route);
 
             if ($routerResponse !== null)

@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\Models;
+namespace MVC\App\Http\Models;
 
 use MVC\Classes\Routes\Router;
 
@@ -11,7 +11,7 @@ class Route extends Router
     public bool $hasParameters;
     public array $methods;
     public array $middleware;
-    public string $name;
+    public $name;
     public array $parameters;
     public string $target;
     public string $url;
