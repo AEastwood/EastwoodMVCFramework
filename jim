@@ -24,6 +24,8 @@ switch ($args[0]) {
         break;
 
     case "build":
+        echo "Hi, I'm Jim and I want to build your resources :)\n";
+
         $basePath = './src/resources/';
 
         $dirs = array_filter(glob("{$basePath}*"), function ($item) {
@@ -33,6 +35,8 @@ switch ($args[0]) {
         foreach ($dirs as $resourcePath) {
             $resourcePath = (!$isWindows) ? $resourcePath : realpath($resourcePath);
             $publicPath = str_replace('resources', 'public', $resourcePath);
+
+            echo "I found {$resourcePath} to which I'm putting in {$publicPath} :)\n";
 
             if (!$isWindows) {
                 exec("cp -R {$resourcePath} {$publicPath}");
@@ -51,10 +55,9 @@ switch ($args[0]) {
 
                 }
             }
-
-            echo "Jim has built the resources :)\n";
         }
 
+        echo "Jim has built the resources :)\n";
         break;
 
     default:
