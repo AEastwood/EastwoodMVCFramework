@@ -36,22 +36,23 @@ switch ($args[0]) {
 
             if (!$isWindows) {
                 exec("cp -R {$resourcePath} {$publicPath}");
-                return;
+            } else {
+                mkdir($publicPath, 0755);
+
+                $iterator = new \RecursiveIteratorIterator(
+                    new \RecursiveDirectoryIterator($resourcePath, \RecursiveDirectoryIterator::SKIP_DOTS),
+                    \RecursiveIteratorIterator::SELF_FIRST
+                );
+
+                foreach ($iterator as $resource) {
+                    ($resource->isDir())
+                        ? mkdir($publicPath . DIRECTORY_SEPARATOR . $iterator->getSubPathname())
+                        : copy($resource, $publicPath . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
+
+                }
             }
 
-            mkdir($publicPath, 0755);
-
-            $iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($resourcePath, \RecursiveDirectoryIterator::SKIP_DOTS),
-                \RecursiveIteratorIterator::SELF_FIRST
-            );
-
-            foreach ($iterator as $resource) {
-                ($resource->isDir())
-                    ? mkdir($publicPath . DIRECTORY_SEPARATOR . $iterator->getSubPathname())
-                    : copy($resource, $publicPath . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
-
-            }
+            echo "Jim has built the resources :)\n";
         }
 
         break;
