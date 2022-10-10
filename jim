@@ -31,8 +31,13 @@ switch ($args[0]) {
         });
 
         foreach ($dirs as $resourcePath) {
-            $resourcePath = realpath($resourcePath);
+            $resourcePath = (!$isWindows) ? $resourcePath : realpath($resourcePath);
             $publicPath = str_replace('resources', 'public', $resourcePath);
+
+            if (!$isWindows) {
+                exec("cp -R {$resourcePath} {$publicPath}");
+                return;
+            }
 
             mkdir($publicPath, 0755);
 
