@@ -33,7 +33,7 @@ switch ($args[0]) {
         });
 
         foreach ($dirs as $resourcePath) {
-            $resourcePath = (!$isWindows) ? $resourcePath : realpath($resourcePath);
+            $resourcePath = realpath($resourcePath);
             $publicPath = str_replace('resources', 'public', $resourcePath);
 
             echo "\t\e[0;35m{$resourcePath}\e[0m -> \e[0;32m{$publicPath}\e[0m\n";
