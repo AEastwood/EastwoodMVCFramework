@@ -24,7 +24,7 @@ switch ($args[0]) {
         break;
 
     case "build":
-        echo "Hi, I'm Jim and I want to build your resources :)\n";
+        echo "\e[0;36;40m Hi, I'm Jim and I want to build your resources :) \e[0m\n";
 
         $basePath = './src/resources/';
 
@@ -36,7 +36,7 @@ switch ($args[0]) {
             $resourcePath = (!$isWindows) ? $resourcePath : realpath($resourcePath);
             $publicPath = str_replace('resources', 'public', $resourcePath);
 
-            echo "I found {$resourcePath} to which I'm putting in {$publicPath} :)\n";
+            echo "\t\e[0;35m{$resourcePath}\e[0m -> \e[0;32m{$publicPath}\e[0m\n";
 
             if (!$isWindows) {
                 exec("cp -R {$resourcePath} {$publicPath}");
@@ -57,10 +57,10 @@ switch ($args[0]) {
             }
         }
 
-        echo "Jim has built the resources :)\n";
+        echo "\e[0;32;40m Jim has built the resources :) \e[0m\n";
         break;
 
     default:
-        echo "Jim doesn't know this command :(";
+        echo "\e[0;31;40m Jim doesn't know this command :( \e[0m\n";
         return;
 }
