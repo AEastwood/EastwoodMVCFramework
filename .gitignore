@@ -3,13 +3,13 @@
 /etc/key.txt
 /.idea
 /.vscode
-/src/public/assets/
-/src/public/css
-/src/public/imgs
+/src/public/*
+!/src/public/index.php
+!/src/public/.htaccess
+!/src/public/robots.txt
 *.cache
 *.log
 *.view.php
 /src/storage/public/
-/src/storage/processing/
 /key.enc
 .env.testing

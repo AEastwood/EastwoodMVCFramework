@@ -13,6 +13,7 @@
     <link rel="shortcut icon" href="imgs/favicon.ico">
     <![endif]-->
     <link rel="icon" href="{{ secure_asset('imgs/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ secure_asset('css/style.css') }}">
     <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
