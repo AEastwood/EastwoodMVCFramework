@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="The homepage of Adam Eastwood. You can find my social media on here and stuff">
     <meta name="author" content="Adam Eastwood">
+    <meta name="keywords" content="AdamEastwood, Adam, Eastwood, AEastwood, AEasywood">
     <meta name="generator" content="EastwoodMVC">
     <meta name="framework" content="https://github.com/AEastwood/EastwoodMVCFramework">
     <title>{{ $_ENV['APP_NAME'] }}</title>
@@ -36,7 +37,7 @@
 
         <h1>Adam Eastwood</h1>
 
-        <p class="lead">Just me.</p>
+        <h2 class="lead py-2">Just me.</h2>
 
         <div class="d-flex justify-content-evenly">
 
