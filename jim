@@ -38,22 +38,18 @@ switch ($args[0]) {
 
             echo "\t\e[0;35m{$resourcePath}\e[0m -> \e[0;32m{$publicPath}\e[0m\n";
 
-            if (!$isWindows) {
-                exec("cp -R {$resourcePath} {$publicPath}");
-            } else {
-                mkdir($publicPath, 0755);
+            mkdir($publicPath, 0755);
 
-                $iterator = new \RecursiveIteratorIterator(
-                    new \RecursiveDirectoryIterator($resourcePath, \RecursiveDirectoryIterator::SKIP_DOTS),
-                    \RecursiveIteratorIterator::SELF_FIRST
-                );
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($resourcePath, \RecursiveDirectoryIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::SELF_FIRST
+            );
 
-                foreach ($iterator as $resource) {
-                    ($resource->isDir())
-                        ? mkdir($publicPath . DIRECTORY_SEPARATOR . $iterator->getSubPathname())
-                        : copy($resource, $publicPath . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
+            foreach ($iterator as $resource) {
+                ($resource->isDir())
+                    ? mkdir($publicPath . DIRECTORY_SEPARATOR . $iterator->getSubPathname())
+                    : copy($resource, $publicPath . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
 
-                }
             }
         }
 
