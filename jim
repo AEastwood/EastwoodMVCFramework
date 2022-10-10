@@ -1,0 +1,57 @@
+<?php
+
+error_reporting(0);
+
+$args = array_slice($argv, 1);
+$isWindows = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
+
+switch ($args[0]) {
+    case "serve":
+        $path = './src/public';
+        $port = 80;
+
+        foreach ($args as $arg) {
+            foreach (['path', 'port'] as $input) {
+                if (str_contains($arg, "--$input=")) {
+                    //Not secure, only should take Admin's input anyway :)
+                    $$input = explode("=", $arg)[1];
+                }
+            }
+        }
+
+
+        exec("php -S localhost:$port -t $path");
+        break;
+
+    case "build":
+        $basePath = './src/resources/';
+
+        $dirs = array_filter(glob("{$basePath}*"), function ($item) {
+            return (!str_contains($item, 'views'));
+        });
+
+        foreach ($dirs as $resourcePath) {
+            $resourcePath = realpath($resourcePath);
+            $publicPath = str_replace('resources', 'public', $resourcePath);
+
+            mkdir($publicPath, 0755);
+
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($resourcePath, \RecursiveDirectoryIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::SELF_FIRST
+            );
+
+            foreach ($iterator as $resource) {
+                ($resource->isDir())
+                    ? mkdir($publicPath . DIRECTORY_SEPARATOR . $iterator->getSubPathname())
+                    : copy($resource, $publicPath . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
+
+            }
+        }
+
+        break;
+
+    default:
+        echo "Jim doesn't know this command :(";
+        return;
+}
