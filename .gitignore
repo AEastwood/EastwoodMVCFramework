@@ -4,6 +4,9 @@
 /.idea
 /.vscode
 /src/public/*
+!/src/public/index.php
+!/src/public/.htaccess
+!/src/public/robots.txt
 *.cache
 *.log
 *.view.php
