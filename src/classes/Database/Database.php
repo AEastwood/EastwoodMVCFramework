@@ -7,7 +7,8 @@ use Monolog\Logger;
 use PDO;
 use PDOException;
 
-class Database {
+class Database
+{
 
     protected static PDO $dbh;
 
@@ -26,38 +27,38 @@ class Database {
     private bool $usersExists;
     private Logger $logger;
 
-    private const CONNECTED     = 'connected';
-    private const DISCONNECTED  = 'disconnected';
+    private const CONNECTED = 'connected';
+    private const DISCONNECTED = 'disconnected';
 
     /**
      *  constructor
      */
-    public function __construct() 
+    public function __construct()
     {
         $this->logger = new Logger('Database');
         $this->logger->pushHandler(new StreamHandler('../storage/logs/database.log', Logger::WARNING));
 
-        $this->isAvailable  = true;
-        $this->connection   = $_ENV['DATABASE_CONNECTION'];
-        $this->exists       = false;
+        $this->isAvailable = true;
+        $this->connection = $_ENV['DATABASE_CONNECTION'];
+        $this->exists = false;
         $this->isPersistent = $_ENV['DATABASE_PERSIST'] === 'true';
-        $this->tableList    = [];
-        $this->state        = self::DISCONNECTED;
-        $this->timeout      = $_ENV['DATABASE_TIMEOUT'] ?? 15;
+        $this->tableList = [];
+        $this->state = self::DISCONNECTED;
+        $this->timeout = $_ENV['DATABASE_TIMEOUT'] ?? 15;
 
-        if($this->hasRequiredDatabaseParametersDeclared()) {
-            
-            $this->host          = $_ENV['DATABASE_HOST'];
-            $this->username      = $_ENV['DATABASE_USER']; 
-            $this->password      = $_ENV['DATABASE_PASS'];
-            $this->port          = $_ENV['DATABASE_PORT'];
-            $this->databaseName  = $_ENV['DATABASE_NAME'];
-            
-            if(!$this->connect()) {
+        if ($this->hasRequiredDatabaseParametersDeclared()) {
+
+            $this->host = $_ENV['DATABASE_HOST'];
+            $this->username = $_ENV['DATABASE_USER'];
+            $this->password = $_ENV['DATABASE_PASS'];
+            $this->port = $_ENV['DATABASE_PORT'];
+            $this->databaseName = $_ENV['DATABASE_NAME'];
+
+            if (!$this->connect()) {
                 return;
             }
 
-            if($this->state === self::CONNECTED && $this->isPersistent && !$this->databaseExists($this->databaseName)) {
+            if ($this->state === self::CONNECTED && $this->isPersistent && !$this->databaseExists($this->databaseName)) {
                 $this->createDatabase();
             }
 
@@ -72,15 +73,15 @@ class Database {
     public function __serialize(): array
     {
         $data = [
-            'exists'        => $this->exists,
-            'host'          => $this->host,
-            'username'      => $this->username,
-            'password'      => $this->password,
-            'port'          => $this->port,
+            'exists' => $this->exists,
+            'host' => $this->host,
+            'username' => $this->username,
+            'password' => $this->password,
+            'port' => $this->port,
             'database_name' => $this->databaseName,
-            'persistent'    => $this->isPersistent,
-            'timeout'       => $this->timeout,
-            'state'         => $this->state,
+            'persistent' => $this->isPersistent,
+            'timeout' => $this->timeout,
+            'state' => $this->state,
         ];
 
         return ($data);
@@ -100,11 +101,11 @@ class Database {
     private function connect(): bool
     {
         try {
-            $dsn = $this->connection . ":host=" . $this->host. ';dbname=' . $this->databaseName;
+            $dsn = $this->connection . ":host=" . $this->host . ';dbname=' . $this->databaseName;
 
             self::$dbh = new PDO(
-                $dsn, 
-                $this->username, 
+                $dsn,
+                $this->username,
                 $this->password
             );
 
@@ -113,8 +114,7 @@ class Database {
             $this->state = self::CONNECTED;
 
             return true;
-        }
-        catch(PDOEXception $e) {
+        } catch (PDOEXception $e) {
             $this->logger->error('Unable to connect to database, setting database availability to false. Error: ' . $e->getMessage());
             $this->isAvailable = false;
 
@@ -124,17 +124,16 @@ class Database {
 
     /**
      *  create table if it doesn't exist
-     *  @returns bool
+     * @returns bool
      */
     private function createDatabase(): bool
     {
         try {
             $stmt = self::$dbh->prepare('CREATE DATABASE IF NOT EXISTS ' . $this->databaseName);
             $stmt->execute();
-            
+
             return true;
-        }
-        catch(PDOException $e) {
+        } catch (PDOException $e) {
             $this->logger->error('Unable to create database "' . $this->databaseName . '", Error: ' . $e->getMessage());
             return false;
         }
@@ -149,12 +148,12 @@ class Database {
      */
     private function createTable(string $tableName, string $schema = ''): bool
     {
-        if(!$this->databaseExists($this->databaseName)){
+        if (!$this->databaseExists($this->databaseName)) {
             $this->logger->error('Unable to create table "' . $tableName . '" as database "' . $this->databaseName . '" does not exist.');
             return false;
         }
 
-        if($this->tableExists($tableName)) {
+        if ($this->tableExists($tableName)) {
             $this->logger->info('Attempted to create table "' . $tableName . '" but it already exists.');
             return false;
         }
@@ -175,38 +174,40 @@ class Database {
         try {
             $stmt = self::$dbh->prepare("SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" . $database_name . "'");
 
-            if($stmt->fetchColumn()) {
+            if ($stmt->fetchColumn()) {
                 $this->exists = true;
                 return true;
             }
 
             return false;
-        }
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             $this->logger->error('Unable to check if database exists, Error: ' . $e->getMessage());
         }
     }
 
     /**
      *  checks if database is declared in the .env file
-     *  @returns bool
+     * @returns bool
      */
     private function hasRequiredDatabaseParametersDeclared(): bool
     {
-        if(!isset($_ENV['DATABASE_CONNECTION'], $_ENV['DATABASE_HOST'], $_ENV['DATABASE_USER'], $_ENV['DATABASE_PASS'], $_ENV['DATABASE_NAME'], $_ENV['DATABASE_PORT'])) {
-            return false;
-        }
-
-        return true;
+        return (isset(
+            $_ENV['DATABASE_CONNECTION'],
+            $_ENV['DATABASE_HOST'],
+            $_ENV['DATABASE_USER'],
+            $_ENV['DATABASE_PASS'],
+            $_ENV['DATABASE_NAME'],
+            $_ENV['DATABASE_PORT']
+        ));
     }
 
     /**
      *  return list of tables in database
-     *  @returns array of table names
+     * @returns array of table names
      */
     private function listTables(): array
     {
-        if($this->state === self::CONNECTED) {
+        if ($this->state === self::CONNECTED) {
             $tableNames = self::$dbh->prepare('SHOW TABLES');
             $tableNames->execute();
             $tableNames = $tableNames->fetchAll(PDO::FETCH_COLUMN);
@@ -225,7 +226,7 @@ class Database {
      */
     private function tableExists(string $tableName): bool
     {
-        if($this->state === self::CONNECTED && in_array($tableName, $this->tableList)) {
+        if ($this->state === self::CONNECTED && in_array($tableName, $this->tableList)) {
             return true;
         }
 

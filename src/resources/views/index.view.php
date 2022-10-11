@@ -14,11 +14,6 @@
     <![endif]-->
     <link rel="icon" href="{{ secure_asset('imgs/favicon.ico') }}">
     <link rel="stylesheet" href="{{ secure_asset('css/style.css') }}">
-    <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
-            crossorigin="anonymous"
-    >
 </head>
 
 <body
@@ -26,76 +21,71 @@
         style="height:90vh; overflow:hidden;"
 >
 
-<main role="main">
-    <div id="main-content">
-        <img
-                src="{{ secure_asset('imgs/me.jpg') }}"
-                class="rounded img-fluid me mb-3"
-                alt="Me"
-                width="200px"
-                height="240px"
-        >
+<main role="main" class="gradient-border">
+    <img
+            src="{{ secure_asset('imgs/me.jpg') }}"
+            class="me rounded img-fluid gradient-border"
+            alt="Me"
+    >
 
-        <h1>Adam Eastwood</h1>
+    <h1 class="mt-3">Adam Eastwood</h1>
 
-        <h2 class="lead py-2">Just me.</h2>
+    <h2 class="lead py-2">Just me.</h2>
 
-        <div class="d-flex justify-content-evenly">
+    <div class="d-flex justify-content-evenly">
+        <div>
+            <a
+                    href="https://www.instagram.com/aeasywood/"
+                    target="_blank"
+                    title="instagram"
+                    rel="noreferrer"
+            >
+                <i class="text-dark fab fa-instagram pr-3 h3"></i>
+            </a>
+        </div>
 
-            <div>
-                <a
-                        href="https://www.instagram.com/aeasywood/"
-                        target="_blank"
-                        title="instagram"
-                        rel="noreferrer"
-                >
-                    <i class="text-dark clean-link fab fa-instagram pr-3 h3"></i>
-                </a>
-            </div>
+        <div>
+            <a
+                    href="https://twitter.com/adeastwood"
+                    target="_blank"
+                    title="Twitter"
+                    rel="noreferrer"
+            >
 
-            <div>
-                <a
-                        href="https://twitter.com/adeastwood"
-                        target="_blank"
-                        title="Twitter"
-                        rel="noreferrer"
-                >
+                <i class="text-dark fab fa-twitter pr-3 h3"></i>
+            </a>
+        </div>
 
-                    <i class="text-dark clean-link fab fa-twitter pr-3 h3"></i>
-                </a>
-            </div>
+        <div>
+            <a
+                    href="https://github.com/aeastwood"
+                    target="_blank"
+                    title="Github"
+                    rel="noreferrer"
+            >
+                <i class="text-dark fab fa-github pr-3 h3"></i>
+            </a>
+        </div>
 
-            <div>
-                <a
-                        href="https://github.com/aeastwood"
-                        target="_blank"
-                        title="Github"
-                        rel="noreferrer"
-                >
-                    <i class="text-dark clean-link fab fa-github pr-3 h3"></i>
-                </a>
-            </div>
+        <div>
+            <a
+                    href="https://www.linkedin.com/in/adeastwood/"
+                    target="_blank"
+                    title="LinkedIn"
+                    rel="noreferrer"
+            >
+                <i class="text-dark fab fa-linkedin pr-3 h3"></i>
+            </a>
+        </div>
 
-            <div>
-                <a
-                        href="https://www.linkedin.com/in/adeastwood/"
-                        target="_blank"
-                        title="LinkedIn"
-                        rel="noreferrer"
-                >
-                    <i class="text-dark clean-link fab fa-linkedin pr-3 h3"></i>
-                </a>
-            </div>
-
-            <div>
-                <a
-                        href="mailto:adam-3@live.co.uk"
-                        title="Email Me"
-                        rel="noreferrer"
-                >
-                    <i class="text-dark clean-link fas fa-envelope h3"></i>
-                </a>
-            </div>
+        <div>
+            <a
+                    href="mailto:adam-3@live.co.uk"
+                    title="Email Me"
+                    rel="noreferrer"
+            >
+                <i class="text-dark fas fa-envelope h3"></i>
+            </a>
         </div>
     </div>
 </main>

@@ -5,6 +5,8 @@ require_once './Autoloader.php';
 $args = array_slice($argv, 1);
 $isWindows = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
 
+error_reporting(E_ALL);
+
 switch ($args[0]) {
     case "serve":
         $path = './src/public';
@@ -36,19 +38,17 @@ switch ($args[0]) {
 
         echo "\e[0;36;40m Hi, I'm Jim and I'm here to compile your resources :) \e[0m\n";
 
-        $dirs = array_filter(glob("{$path}*"), function ($item) {
-            return (!str_contains($item, 'views'));
-        });
+        $resourcePaths = array_filter(glob("{$path}*"), 'is_dir');
+        $resourcePaths = array_diff($resourcePaths, ['./src/resources/views', './src/resources/vendor']);
+        $pathsToDelete = array_filter(glob("{$publicPath}*"), 'is_dir');
+        $pathsToDelete = array_diff($pathsToDelete, ['index.php', '.htaccess', 'robots.txt', 'vendor']);
 
-        $deletes = array_filter(glob("{$publicPath}*"), 'is_dir');
-        $deletes = array_diff($deletes, ['index.php', '.htaccess', 'robots.txt']);
-
-        foreach ($deletes as $delete) {
+        foreach ($pathsToDelete as $delete) {
             $delete = realpath($delete);
             ($isWindows) ? exec("rd $delete /S /Q") : exec("rm -rf /$delete");
         }
 
-        foreach ($dirs as $resourcePath) {
+        foreach ($resourcePaths as $resourcePath) {
             $resourcePath = realpath($resourcePath);
             $publicPath = str_replace('resources', 'public', $resourcePath);
 
