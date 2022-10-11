@@ -182,6 +182,7 @@ class TemplateEngine
     {
         $this->nonCacheSafeDirectives();
         http_response_code($statusCode);
+        header('Cache-Control: max-age=31536000');
         echo $this->view;
     }
 
