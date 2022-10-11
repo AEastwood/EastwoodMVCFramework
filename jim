@@ -1,9 +1,11 @@
 <?php
 
-error_reporting(0);
+require_once './Autoloader.php';
 
 $args = array_slice($argv, 1);
 $isWindows = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
+
+error_reporting(E_ALL);
 
 switch ($args[0]) {
     case "serve":
@@ -19,45 +21,77 @@ switch ($args[0]) {
             }
         }
 
-
         exec("php -S localhost:$port -t $path");
         break;
 
     case "build":
-        echo "\e[0;36;40m Hi, I'm Jim and I want to build your resources :) \e[0m\n";
+        $path = './src/resources/';
+        $publicPath = './src/public/';
 
-        $basePath = './src/resources/';
+        foreach ($args as $arg) {
+            foreach (['path'] as $input) {
+                if (str_contains($arg, "--$input=")) {
+                    $$input = explode("=", $arg)[1]; //Not secure, only should take Admin's input anyway :)
+                }
+            }
+        }
 
-        $dirs = array_filter(glob("{$basePath}*"), function ($item) {
-            return (!str_contains($item, 'views'));
-        });
+        echo "\e[0;36;40m Hi, I'm Jim and I'm here to compile your resources :) \e[0m\n";
 
-        foreach ($dirs as $resourcePath) {
+        $resourcePaths = array_filter(glob("{$path}*"), 'is_dir');
+        $resourcePaths = array_diff($resourcePaths, ['./src/resources/views', './src/resources/vendor']);
+        $pathsToDelete = array_filter(glob("{$publicPath}*"), 'is_dir');
+        $pathsToDelete = array_diff($pathsToDelete, ['index.php', '.htaccess', 'robots.txt', 'vendor']);
+
+        foreach ($pathsToDelete as $delete) {
+            $delete = realpath($delete);
+            ($isWindows) ? exec("rd $delete /S /Q") : exec("rm -rf /$delete");
+        }
+
+        foreach ($resourcePaths as $resourcePath) {
             $resourcePath = realpath($resourcePath);
             $publicPath = str_replace('resources', 'public', $resourcePath);
 
             echo "\t\e[0;35m{$resourcePath}\e[0m -> \e[0;32m{$publicPath}\e[0m\n";
 
-            if (!$isWindows) {
-                exec("cp -R {$resourcePath} {$publicPath}");
-            } else {
-                mkdir($publicPath, 0755);
+            mkdir($publicPath, 0755);
 
-                $iterator = new \RecursiveIteratorIterator(
-                    new \RecursiveDirectoryIterator($resourcePath, \RecursiveDirectoryIterator::SKIP_DOTS),
-                    \RecursiveIteratorIterator::SELF_FIRST
-                );
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($resourcePath, \RecursiveDirectoryIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::SELF_FIRST
+            );
 
-                foreach ($iterator as $resource) {
-                    ($resource->isDir())
-                        ? mkdir($publicPath . DIRECTORY_SEPARATOR . $iterator->getSubPathname())
-                        : copy($resource, $publicPath . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
+            foreach ($iterator as $resource) {
+                $fileName = $iterator->getSubPathname();
+                $out = $publicPath . DIRECTORY_SEPARATOR . $fileName;
 
+                if ($resource->isDir()) {
+                    mkdir($out);
+                    continue;
+                }
+
+                $file = pathinfo($fileName);
+                $extension = $file['extension'];
+
+                if (in_array($extension, ['css', 'js'])) {
+                    switch ($extension) {
+                        case "css":
+                            echo "\t\t↣ Detected '\e[0;33m{$file['basename']}\e[0m' as '\e[0;31m{$extension}\e[0m', minifying: ";
+                            $minifier = new ("MatthiasMullie\\Minify\\" . strtoupper($extension))($resource);
+                            $minifier->minify($out);
+                            echo "\e[0;32mDone!\e[0m\n";
+                            break;
+
+                        default:
+                            break;
+                    }
+                } else {
+                    copy($resource, $out);
                 }
             }
         }
 
-        echo "\e[0;32;40m Jim has built the resources :) \e[0m\n";
+        echo "\e[0;32;40m Jim used compile, it was super effective \e[0m\n";
         break;
 
     default:

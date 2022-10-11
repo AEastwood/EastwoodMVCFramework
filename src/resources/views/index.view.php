@@ -14,11 +14,6 @@
     <![endif]-->
     <link rel="icon" href="{{ secure_asset('imgs/favicon.ico') }}">
     <link rel="stylesheet" href="{{ secure_asset('css/style.css') }}">
-    <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
-            crossorigin="anonymous"
-    >
 </head>
 
 <body
@@ -26,22 +21,19 @@
         style="height:90vh; overflow:hidden;"
 >
 
-<main role="main">
+<main role="main" class="gradient-border">
     <div id="main-content">
         <img
                 src="{{ secure_asset('imgs/me.jpg') }}"
-                class="rounded img-fluid me mb-3"
+                class="me rounded img-fluid gradient-border"
                 alt="Me"
-                width="200px"
-                height="240px"
         >
 
-        <h1>Adam Eastwood</h1>
+        <h1 class="mt-3">Adam Eastwood</h1>
 
         <h2 class="lead py-2">Just me.</h2>
 
         <div class="d-flex justify-content-evenly">
-
             <div>
                 <a
                         href="https://www.instagram.com/aeasywood/"
@@ -49,7 +41,7 @@
                         title="instagram"
                         rel="noreferrer"
                 >
-                    <i class="text-dark clean-link fab fa-instagram pr-3 h3"></i>
+                    <i class="text-dark fab fa-instagram pr-3 h3"></i>
                 </a>
             </div>
 
@@ -61,7 +53,7 @@
                         rel="noreferrer"
                 >
 
-                    <i class="text-dark clean-link fab fa-twitter pr-3 h3"></i>
+                    <i class="text-dark fab fa-twitter pr-3 h3"></i>
                 </a>
             </div>
 
@@ -72,7 +64,7 @@
                         title="Github"
                         rel="noreferrer"
                 >
-                    <i class="text-dark clean-link fab fa-github pr-3 h3"></i>
+                    <i class="text-dark fab fa-github pr-3 h3"></i>
                 </a>
             </div>
 
@@ -83,7 +75,7 @@
                         title="LinkedIn"
                         rel="noreferrer"
                 >
-                    <i class="text-dark clean-link fab fa-linkedin pr-3 h3"></i>
+                    <i class="text-dark fab fa-linkedin pr-3 h3"></i>
                 </a>
             </div>
 
@@ -93,7 +85,7 @@
                         title="Email Me"
                         rel="noreferrer"
                 >
-                    <i class="text-dark clean-link fas fa-envelope h3"></i>
+                    <i class="text-dark fas fa-envelope h3"></i>
                 </a>
             </div>
         </div>
