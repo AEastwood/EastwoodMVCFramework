@@ -46,9 +46,7 @@ class WebsiteRenderingTest extends PHPUnit\Framework\TestCase
     public function testErrorPage()
     {
         $request = $this->client->get('/random-non-existent-page', ['http_errors' => false]);
-
         $statusCode = $request->getStatusCode();
-
         $this->assertSame(404, $statusCode, "Error Page Status: {$statusCode}");
     }
 
