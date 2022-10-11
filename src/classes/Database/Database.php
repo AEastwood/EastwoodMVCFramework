@@ -191,14 +191,14 @@ class Database
      */
     private function hasRequiredDatabaseParametersDeclared(): bool
     {
-        return (isset(
+        return !isset(
             $_ENV['DATABASE_CONNECTION'],
             $_ENV['DATABASE_HOST'],
             $_ENV['DATABASE_USER'],
             $_ENV['DATABASE_PASS'],
             $_ENV['DATABASE_NAME'],
             $_ENV['DATABASE_PORT']
-        ));
+        );
     }
 
     /**

@@ -24,7 +24,7 @@
 <main role="main" class="gradient-border">
     <div id="main-content">
         <img
-                src="{{ secure_asset('imgs/me.jpg') }}"
+                src="{{ secure_asset('imgs/me.webp') }}"
                 class="me rounded img-fluid gradient-border"
                 alt="Me"
         >
