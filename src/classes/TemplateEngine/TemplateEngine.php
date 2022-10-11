@@ -5,17 +5,43 @@ namespace MVC\Classes\TemplateEngine;
 use MVC\Classes\App;
 use MVC\Classes\Controller;
 use MVC\Classes\Storage\Storage;
+use WyriHaximus\HtmlCompress\Factory;
 
 class TemplateEngine
 {
+    /**
+     * @var int|float
+     */
     private int $cache_length;
+
+    /**
+     * @var bool
+     */
     private bool $use_cache;
 
+    /**
+     * @var string
+     */
     private string $view;
+
+    /**
+     * @var string
+     */
     private string $view_cache;
+
+    /**
+     * @var string|array|string[]
+     */
     private string $view_name;
 
+    /**
+     * @var string
+     */
     private string $escapeRegex;
+
+    /**
+     * @var string
+     */
     private string $noneEscapeRegex;
 
     /**
@@ -183,7 +209,7 @@ class TemplateEngine
         $this->nonCacheSafeDirectives();
         http_response_code($statusCode);
         header('Cache-Control: max-age=31536000');
-        echo $this->view;
+        echo (Factory::constructSmallest())->compress($this->view);
     }
 
 }

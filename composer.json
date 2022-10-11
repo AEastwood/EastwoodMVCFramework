@@ -41,6 +41,7 @@
         "symfony/css-selector": "^5.4",
         "symfony/dom-crawler": "^5.4",
         "symfony/var-dumper": "^5.4",
-        "vlucas/phpdotenv": "^5.2"
+        "vlucas/phpdotenv": "^5.2",
+        "wyrihaximus/html-compress": "^4.2"
     }
 }
