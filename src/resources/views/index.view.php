@@ -31,7 +31,7 @@
 
         <h1 class="mt-3">Adam Eastwood</h1>
 
-        <h2 class="lead py-2">Just me.</h2>
+        <h2 class="lead py-3">Just me.</h2>
 
         <div class="d-flex justify-content-evenly">
             <div>
