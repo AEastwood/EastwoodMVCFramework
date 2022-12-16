@@ -207,9 +207,18 @@ class TemplateEngine
     public function render(int $statusCode)
     {
         $this->nonCacheSafeDirectives();
+        $this->setHeaders();
+
         http_response_code($statusCode);
-        header('Cache-Control: max-age=31536000');
         echo (Factory::constructSmallest())->compress($this->view);
+    }
+
+    /**
+     * @return void
+     */
+    private function setHeaders(): void
+    {
+        header('Cache-Control: max-age=31536000');
     }
 
 }
