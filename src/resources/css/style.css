@@ -1,11 +1,47 @@
 @import "../vendor/css/bootstrap/bootstrap.css";
 
+:root {
+    --background-color-light: #fff;
+    --background-color-dark: #202124;
+    --font-color-light: #202124;
+    --font-color-dark: #fff;
+}
+
 body {
     --height: 240px;
     --width: 200px;
+    height: 90vh;
+    overflow: hidden;
+    background-color: var(--background-color-light);
+}
+
+.link {
+    color: var(--font-color-light);
 }
 
 .me {
     height: var(--height);
     width: var(--width);
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: var(--background-color-dark);
+    }
+
+    .main-content {
+        background-color: var(--background-color-dark);
+    }
+
+    h1 {
+        color: var(--font-color-dark);
+    }
+
+    .lead {
+        color: var(--font-color-dark);
+    }
+
+    .link {
+        color: var(--font-color-dark);
+    }
 }
