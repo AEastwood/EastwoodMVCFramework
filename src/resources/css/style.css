@@ -17,6 +17,12 @@ body {
 
 .link {
     color: var(--font-color-light);
+    border: 10px #0a53be;
+}
+
+.link:hover {
+    transform: scale(1.3);
+    transition-duration: 300ms;
 }
 
 .me {
@@ -43,5 +49,10 @@ body {
 
     .link {
         color: var(--font-color-dark);
+    }
+
+    .link:hover {
+        color: rgb(29, 155, 240);
+        transition-duration: 300ms;
     }
 }
