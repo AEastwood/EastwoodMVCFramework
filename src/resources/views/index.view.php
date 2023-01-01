@@ -13,7 +13,7 @@
     <link rel="shortcut icon" href="imgs/favicon.ico">
     <![endif]-->
     <link rel="icon" href="{{ secure_asset('imgs/favicon.ico') }}">
-    <link rel="stylesheet" href="{{ secure_asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('css/style.css') }}?{{ rand(0, getrandmax()) }}">
 </head>
 
 <body class="container d-flex justify-content-center align-items-center d-inline-block text-center align-middle">
