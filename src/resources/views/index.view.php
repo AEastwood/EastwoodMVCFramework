@@ -13,15 +13,12 @@
     <link rel="shortcut icon" href="imgs/favicon.ico">
     <![endif]-->
     <link rel="icon" href="{{ secure_asset('imgs/favicon.ico') }}">
-    <link rel="stylesheet" href="{{ secure_asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('css/style.css') }}?{{ rand(0, getrandmax()) }}">
 </head>
 
-<body
-        class="container d-flex justify-content-center align-items-center d-inline-block text-center align-middle"
-        style="height:90vh; overflow:hidden;"
->
+<body class="container d-flex justify-content-center align-items-center d-inline-block text-center align-middle">
 
-<main role="main" class="gradient-border">
+<main role="main">
     <div id="main-content">
         <img
                 src="{{ secure_asset('imgs/me.webp') }}"
@@ -41,7 +38,7 @@
                         title="instagram"
                         rel="noreferrer"
                 >
-                    <i class="text-dark fab fa-instagram pr-3 h3"></i>
+                    <i class="fab fa-instagram pr-3 h3 link"></i>
                 </a>
             </div>
 
@@ -53,7 +50,7 @@
                         rel="noreferrer"
                 >
 
-                    <i class="text-dark fab fa-twitter pr-3 h3"></i>
+                    <i class="fab fa-twitter pr-3 h3 link"></i>
                 </a>
             </div>
 
@@ -64,7 +61,7 @@
                         title="Github"
                         rel="noreferrer"
                 >
-                    <i class="text-dark fab fa-github pr-3 h3"></i>
+                    <i class="fab fa-github pr-3 h3 link"></i>
                 </a>
             </div>
 
@@ -75,7 +72,7 @@
                         title="LinkedIn"
                         rel="noreferrer"
                 >
-                    <i class="text-dark fab fa-linkedin pr-3 h3"></i>
+                    <i class="fab fa-linkedin pr-3 h3 link"></i>
                 </a>
             </div>
 
@@ -85,7 +82,7 @@
                         title="Email Me"
                         rel="noreferrer"
                 >
-                    <i class="text-dark fas fa-envelope h3"></i>
+                    <i class="fas fa-envelope h3 link"></i>
                 </a>
             </div>
         </div>

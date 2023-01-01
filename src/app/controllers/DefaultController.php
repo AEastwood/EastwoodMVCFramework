@@ -14,12 +14,4 @@ class DefaultController extends Controller
         Controller::view('index');
     }
 
-    /**
-     * @return void
-     */
-    public static function mobLike()
-    {
-        Controller::view('moblike');
-    }
-
 }
