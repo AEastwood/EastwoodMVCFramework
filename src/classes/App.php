@@ -45,6 +45,8 @@ class App
      */
     public Database $database;
 
+    private array $debugBacktrace;
+
     /**
      * @var Key
      */
@@ -102,6 +104,7 @@ class App
             $whoops = new Run;
             $whoops->pushHandler(new PrettyPageHandler);
             $whoops->register();
+            $this->debugBacktrace = debug_backtrace();
         }
 
         $this->logger = new Logger('APP');
