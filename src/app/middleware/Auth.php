@@ -4,7 +4,7 @@ namespace MVC\App\Middleware;
 
 use MVC\Classes\App;
 use MVC\Classes\Middleware;
-use MVC\Classes\Response;
+use MVC\Classes\Http\Response;
 
 class Auth extends Middleware {
 
@@ -17,7 +17,7 @@ class Auth extends Middleware {
             return Response::json([
                 'code' => 500,
                 'message' => 'Invalid authentication token'
-            ], 500);
+            ], 401);
         }
     }
 
