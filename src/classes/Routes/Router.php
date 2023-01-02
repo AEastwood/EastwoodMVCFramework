@@ -5,6 +5,7 @@ namespace MVC\Classes\Routes;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use MVC\App\Http\Models\Route;
+use MVC\Classes\App;
 
 class Router
 {
@@ -32,11 +33,7 @@ class Router
     public function loadRouteFiles(): void
     {
         foreach ($this->route_files as $route_file) {
-            try {
-                include_once('../routes/' . $route_file);
-            } catch (\Exception $e) {
-                $this->logger->error('Error occurred, Error: ' . $e->getMessage());
-            }
+            include_once('../routes/' . $route_file);
         }
     }
 
@@ -51,29 +48,21 @@ class Router
      */
     public function addRoute(array $methods, string $url, callable $action): Route
     {
-        try {
-            if ($this->isDuplicateRoute($url, $methods)) {
-                throw new \Exception("[Error]: Duplicate route: '$url'");
-            }
+        $route = new Route();
+        $route->methods = $methods;
+        $route->methodsAsString = implode(', ', $methods);
+        $route->url = $this->addSlash($url);
+        $route->action = $action;
+        $route->parameters = $this->parameters($route->url);
 
-            $route = new Route();
-            $route->methods = $methods;
-            $route->url = $this->addSlash($url);
-            $route->action = $action;
-            $route->parameters = $this->parameters($route->url);
-
-            if (count($route->parameters) > 0) {
-                $route->hasParameters = true;
-            }
-
-            $this->routes[] = $route;
-
-            return ($route);
-        } catch (\Exception $e) {
-            $this->logger->error('The route "' . $url . '" with methods [' . implode(', ', $methods) . '] has already been defined');
-            $methods = implode(', ', $methods);
-            $this->logger->error("The route '$url' with methods [{$methods}] has already been defined");
+        if ($this->isDuplicateRoute($route)) {
+            throw new \Exception("[Router] Duplicate route: '$url'");
         }
+
+        $route->hasParameters = count($route->parameters) > 0;
+        $this->routes[$route->methodsAsString][] = $route;
+
+        return $route;
     }
 
     /**
@@ -89,14 +78,16 @@ class Router
 
     /**
      *   Checks for duplicate routes
-     * @param string $route
-     * @param array $methods
+     * @param Route $route
      * @return bool
      */
-    private function isDuplicateRoute(string $route, array $methods): bool
+    private function isDuplicateRoute(Route $route): bool
     {
-        foreach ($this->routes as $existingRoute) {
-            if ($route == $existingRoute->url && count(array_intersect($methods, $existingRoute->methods)) > 0) {
+        foreach ($this->routes[$route->methodsAsString] ?? [] as $existingRoute) {
+            if (
+                $route->url == $existingRoute->url &&
+                count(array_intersect($route->methods, $existingRoute->methods)) > 0
+            ) {
                 return true;
             }
         }
@@ -104,17 +95,16 @@ class Router
         return false;
     }
 
-
     // <editor-fold desc="Available Methods">
 
     /**
      *  add [GET, HEAD] method route
      * @param string $url
      * @param callable $action
-     * @return object
+     * @return Route|null
      * @throws \Exception
      */
-    public function get(string $url, callable $action): object
+    public function get(string $url, callable $action): ?Route
     {
         $route = $this->addRoute(['GET', 'HEAD'], $url, $action);
         return ($route);
@@ -176,10 +166,10 @@ class Router
      *  Add POST Route and associated action to execute
      * @param string $url
      * @param callable $action
-     * @return object
+     * @return Route
      * @throws \Exception
      */
-    public function post(string $url, callable $action)
+    public function post(string $url, callable $action): Route
     {
         $route = $this->addRoute(['POST'], $url, $action);
         return ($route);
@@ -248,7 +238,7 @@ class Router
     public function name(string $name = ''): ?object
     {
         $this->name = $name;
-        return ($this);
+        return $this;
     }
 
     /**

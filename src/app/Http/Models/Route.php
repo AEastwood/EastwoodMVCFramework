@@ -10,6 +10,7 @@ class Route extends Router
     public bool $hasMiddleware;
     public bool $hasParameters;
     public array $methods;
+    public string $methodsAsString;
     public array $middleware;
     public $name;
     public array $parameters;
