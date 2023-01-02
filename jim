@@ -8,21 +8,6 @@ $isWindows = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
 error_reporting(E_ALL);
 
 switch ($args[0]) {
-    case "serve":
-        $path = './src/public';
-        $port = 80;
-
-        foreach ($args as $arg) {
-            foreach (['path', 'port'] as $input) {
-                if (str_contains($arg, "--$input=")) {
-                    //Not secure, only should take Admin's input anyway :)
-                    $$input = explode("=", $arg)[1];
-                }
-            }
-        }
-
-        exec("php -S localhost:$port -t $path");
-        break;
 
     case "build":
         $path = './src/resources/';
@@ -31,7 +16,7 @@ switch ($args[0]) {
         foreach ($args as $arg) {
             foreach (['path'] as $input) {
                 if (str_contains($arg, "--$input=")) {
-                    $$input = explode("=", $arg)[1]; //Not secure, only should take Admin's input anyway :)
+                    $$input = explode("=", $arg)[1];
                 }
             }
         }
@@ -76,7 +61,8 @@ switch ($args[0]) {
                 if (in_array($extension, ['css', 'js'])) {
                     switch ($extension) {
                         case "css":
-                            echo "\t\t↣ Detected '\e[0;33m{$file['basename']}\e[0m' as '\e[0;31m{$extension}\e[0m', minifying: ";
+                        case "js":
+                            echo "\t\t↣ Detected '\e[0;33m{$file['basename']}\e[0m' as \e[0;31m{$extension}\e[0m, minifying: ";
                             $minifier = new ("MatthiasMullie\\Minify\\" . strtoupper($extension))($resource);
                             $minifier->minify($out);
                             echo "\e[0;32mDone!\e[0m\n";
@@ -92,6 +78,45 @@ switch ($args[0]) {
         }
 
         echo "\e[0;32;40m Jim used compile, it was super effective \e[0m\n";
+        break;
+
+    case "invalidate-caches":
+            $caches = [];
+        break;
+
+    case "serve":
+        $path = './src/public';
+        $port = 80;
+
+        foreach ($args as $arg) {
+            foreach (['path', 'port'] as $input) {
+                if (str_contains($arg, "--$input=")) {
+                    $$input = explode("=", $arg)[1];
+                }
+            }
+        }
+
+        exec("php -S localhost:$port -t $path");
+        break;
+
+    case "test":
+        $verbose = false;
+
+        foreach ($args as $arg) {
+            foreach (['verbose'] as $input) {
+
+                if (str_contains($arg, "--$input=")) {
+                    $$input = explode("=", $arg)[1];
+                }
+            }
+        }
+
+        $cmd = "php ./vendor/bin/phpunit";
+
+        if($verbose) $cmd .= " --verbose";
+
+        system($cmd);
+
         break;
 
     default:
