@@ -54,12 +54,12 @@ class Router
         $route->url = $this->addSlash($url);
         $route->action = $action;
         $route->parameters = $this->parameters($route->url);
+        $route->hasParameters = count($route->parameters) > 0;
 
         if ($this->isDuplicateRoute($route)) {
             throw new \Exception("[Router] Duplicate route: '$url'");
         }
 
-        $route->hasParameters = count($route->parameters) > 0;
         $this->routes[$route->methodsAsString][] = $route;
 
         return $route;
