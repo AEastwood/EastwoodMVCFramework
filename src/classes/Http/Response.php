@@ -3,6 +3,7 @@
 namespace MVC\Classes\Http;
 
 use Closure;
+use MVC\Classes\App;
 use MVC\Classes\Controller;
 use MVC\Classes\Routes\Router;
 use MVC\Classes\Routes\RouterResponse;
@@ -29,12 +30,13 @@ class Response
      */
     public function get(Router $router): callable|Closure
     {
-        foreach ($router->routes as $route) {
-            $routerResponse = RouterResponse::callback($route);
+        $method = (in_array(App::body()->request->method, ['GET', 'HEAD']))
+            ? 'GET, HEAD'
+            : app::body()->request->method;
 
-            if ($routerResponse !== null)
-                return $routerResponse;
-        }
+        $routerResponse = RouterResponse::callback($router->routes[$method] ?? []);
+
+        if ($routerResponse !== null) return $routerResponse;
 
         return function () {
             Controller::view('errors.error', ['code' => 404, 'message' => 'not found'], 404);

@@ -37,31 +37,30 @@ class RouterResponse extends Router
     /**
      *  process route, routes with parameters are checked first to avoid not being equal to the route
      *
-     * @param Route $route
+     * @param array $routes
      * @return callable|null
      */
-    public static function callback(Route $route): ?callable
+    public static function callback(array $routes): ?callable
     {
-        $method = App::body()->request->method;
         $request = App::body()->request;
 
-        if (
-            $route->hasParameters &&
-            in_array($method, $route->methods) &&
-            self::routeMatches($route, $request->request_url)
-        ) {
-            $action = self::action($route);
+        if(empty($routes)) return null;
 
-            if (is_callable($action)) {
-                return $action;
+        foreach ($routes as $route) {
+            if($route->hasParameters && self::routeMatches($route, $request->request_url)) {
+                $action = self::action($route);
+                if (is_callable($action)) return $action;
+            }
+
+            if ($route->url === $request->request_url) {
+                $action = self::action($route);
+                if (is_callable($action)) return $action;
             }
         }
 
-        if ($request->request_url !== $route->url || !in_array($method, $route->methods)) {
-            return null;
-        }
+        if ($request->request_url !== $route->url)  return null;
 
-        if (in_array($method, $route->methods)) {
+        if (in_array($route->method, $route->methods)) {
             $action = self::action($route);
 
             if (is_callable($action)) {

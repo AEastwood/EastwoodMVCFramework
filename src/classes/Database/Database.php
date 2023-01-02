@@ -115,7 +115,7 @@ class Database
 
             return true;
         } catch (PDOEXception $e) {
-            $this->logger->error('Unable to connect to database, setting database availability to false. Error: ' . $e->getMessage());
+            $this->logger->error('[Database] Unable to connect to database, setting database availability to false. Error: ' . $e->getMessage());
             $this->isAvailable = false;
 
             return false;

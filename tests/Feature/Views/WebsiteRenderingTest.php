@@ -18,7 +18,7 @@ class WebsiteRenderingTest extends PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->client = new Client([
-            'base_uri' => 'https://staging.adameastwood.com',
+            'base_uri' => 'https://staging.adameastwood.com/',
             'timeout' => 2.0,
         ]);
     }
@@ -27,27 +27,25 @@ class WebsiteRenderingTest extends PHPUnit\Framework\TestCase
      * @return void
      * @throws GuzzleException
      */
-    public function testIndexPageCanBeRenderedSuccessfully()
+    public function testIndexPageCanBeRenderedSuccessfully(): void
     {
         $request = $this->client->get('/');
 
         $crawler = new Crawler($request->getBody()->getContents());
 
-        $statusCode = $request->getStatusCode();
-
-        $this->assertSame(200, $statusCode, "Website Status: {$statusCode}");
+        $this->assertSame(200, $request->getStatusCode());
         $this->assertEquals(1, $crawler->filter('div#main-content')->count());
+        $this->assertEquals(1, $crawler->filter('div#main-content>img')->count());
     }
 
     /**
      * @return void
      * @throws GuzzleException
      */
-    public function testErrorPage()
+    public function testErrorPage(): void
     {
         $request = $this->client->get('/random-non-existent-page', ['http_errors' => false]);
-        $statusCode = $request->getStatusCode();
-        $this->assertSame(404, $statusCode, "Error Page Status: {$statusCode}");
+        $this->assertSame(404, $request->getStatusCode());
     }
 
 }
