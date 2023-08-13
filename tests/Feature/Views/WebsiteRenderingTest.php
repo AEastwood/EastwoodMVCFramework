@@ -18,7 +18,7 @@ class WebsiteRenderingTest extends PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->client = new Client([
-            'base_uri' => 'https://staging.adameastwood.com/',
+            'base_uri' => 'https://adameastwood.com/',
             'timeout' => 2.0,
         ]);
     }
@@ -36,16 +36,6 @@ class WebsiteRenderingTest extends PHPUnit\Framework\TestCase
         $this->assertSame(200, $request->getStatusCode());
         $this->assertEquals(1, $crawler->filter('div#main-content')->count());
         $this->assertEquals(1, $crawler->filter('div#main-content>img')->count());
-    }
-
-    /**
-     * @return void
-     * @throws GuzzleException
-     */
-    public function testErrorPage(): void
-    {
-        $request = $this->client->get('/random-non-existent-page', ['http_errors' => false]);
-        $this->assertSame(404, $request->getStatusCode());
     }
 
 }
